@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.ListItemCallback
-import com.haizo.generaladapter.adapter.GeneralListAdapter
 import com.haizo.generaladapter.loadmore.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
@@ -26,10 +25,6 @@ class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    private val adapter : GeneralListAdapter by lazy {
-        GeneralListAdapter(context = this)
-    }
-
     private lateinit var activityBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +35,6 @@ class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
         viewModel.items.observe(this, Observer {
             activityBinding.recyclerView2.updateList(it)
         })
-
-
     }
 
     private fun initRecyclerView() {

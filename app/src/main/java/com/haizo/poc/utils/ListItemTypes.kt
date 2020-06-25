@@ -1,7 +1,6 @@
 package com.haizo.poc.utils
 
 import com.haizo.generaladapter.model.ListItemType
-import com.haizo.generaladapter.viewholders.BlankViewHolder
 import com.haizo.poc.R
 import com.haizo.poc.ui.viewholder.list.HorizontalStoriesVH
 import com.haizo.poc.ui.viewholder.row.Type1ViewHolder
@@ -9,11 +8,6 @@ import com.haizo.poc.ui.viewholder.row.Type2ViewHolder
 import com.haizo.poc.ui.viewholder.row.Type3ViewHolder
 
 object ListItemTypes {
-    //////////////
-    // Keep this at first, so in case there is a listItem with no type then this will be the default
-    var NONE = ListItemType(BlankViewHolder::class.java, 0, "NONE")
-    //////////////
-
     // row
     val ITEM_TYPE_1 =
         ListItemType(Type1ViewHolder::class.java, R.layout.row_type_1,
