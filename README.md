@@ -1,3 +1,12 @@
+<p align="center"><img src="/device-2020-06-25-105017.png" width="250" align="right" vspace="24"></p>
+
+Recyclerview General Adapter
+=================
+[![](https://jitpack.io/v/Haizo94/recyclerview-general-adapter.svg)](https://jitpack.io/#Haizo94/recyclerview-general-adapter)
+[![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
+
+Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. You won't have to code any adapter again!
+
 ## Gradle
 
 **Step 1.** Add the JitPack repository to your root build.gradle at the end of repositories:
@@ -20,10 +29,10 @@ dependencies {
 ## Sample code:
 
 ### Types file
-Create a object class and name it 'MyListItemTypes' (Name it as you like), this class will hold the types the viewholders that will be used in the app.
+Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types the viewholders that will be used in the app.
 Note that you can create many files of this
 ```
-object MyListItemTypes {
+object ListItemTypes {
     // Keep this at first, so in case there is a listItem with no type then this will be the default
     var NONE = ListItemType(BlankViewHolder::class.java, 0, "NONE")
     
