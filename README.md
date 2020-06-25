@@ -33,9 +33,6 @@ Create a object class and name it 'ListItemTypes' (Name it as you like), this cl
 Note that you can create many files of this
 ```
 object ListItemTypes {
-    // Keep this at first, so in case there is a listItem with no type then this will be the default
-    var NONE = ListItemType(BlankViewHolder::class.java, 0, "NONE")
-    
     // Your types
     val ITEM_TYPE_1 = ListItemType(Type1ViewHolder::class.java, R.layout.row_type_1, "ITEM_TYPE_1")
     val ITEM_TYPE_2 = ListItemType(Type2ViewHolder::class.java, R.layout.row_type_2, "ITEM_TYPE_2")
