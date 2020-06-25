@@ -29,10 +29,10 @@ dependencies {
 ## Sample code:
 
 ### Types file
-Create a object class and name it 'MyListItemTypes' (Name it as you like), this class will hold the types the viewholders that will be used in the app.
+Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types the viewholders that will be used in the app.
 Note that you can create many files of this
 ```
-object MyListItemTypes {
+object ListItemTypes {
     // Keep this at first, so in case there is a listItem with no type then this will be the default
     var NONE = ListItemType(BlankViewHolder::class.java, 0, "NONE")
     
