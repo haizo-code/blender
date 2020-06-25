@@ -1,7 +1,8 @@
-package com.haizo.poc.utils
+package com.haizo.poc.binding
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import com.haizo.poc.util.GlideImageUtils
 
 @BindingAdapter("imageUrl")
 fun loadImage(view: ImageView, url: String?) {

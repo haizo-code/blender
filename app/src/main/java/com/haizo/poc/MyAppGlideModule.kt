@@ -1,4 +1,4 @@
-package com.haizo.poc.utils
+package com.haizo.poc
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

@@ -8,10 +8,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.screen.main.MainActivity">
 
-        <com.haizo.poc.ui.view.RecyclerView2
-            android:id="@+id/recyclerView2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -8,7 +8,7 @@ object ItemTypesPool {
     private val sTypeItemMap = SparseArray<ListItemType>()
 
     fun getItemType(type: Int): ListItemType {
-        return sTypeItemMap.get(type)
+        return sTypeItemMap.get(type) ?: MainListItemTypes.NONE
     }
 
     fun put(itemViewType: Int, listItemType: ListItemType) {

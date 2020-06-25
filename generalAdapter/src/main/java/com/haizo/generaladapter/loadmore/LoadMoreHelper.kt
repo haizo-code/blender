@@ -9,7 +9,7 @@ import java.util.ArrayList
  */
 class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize: Int = 10) {
 
-    private var mItems: MutableList<Any?>? = ArrayList<Any?>()
+    private var mItems: MutableList<Any?>? = ArrayList()
     private val loadingThreshold = 3
     private var currentPage = 1
     private var recyclerView: RecyclerView? = null

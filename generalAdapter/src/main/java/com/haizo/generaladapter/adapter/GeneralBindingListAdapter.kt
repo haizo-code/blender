@@ -5,46 +5,44 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.ItemTypesPool
-import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.ListItemCallback
-import com.haizo.generaladapter.viewholders.BaseViewHolder
-import com.haizo.generaladapter.viewholders.BlankViewHolder
+import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import kotlin.math.roundToInt
-import kotlin.reflect.KClass
 
-class GeneralListAdapter(context: Context?, var listItemCallback: ListItemCallback? = null)
-    : BaseRecyclerAdapter<ListItem, BaseViewHolder<ListItem>>(context) {
+class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListItemCallback? = null)
+    : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
 
     // This variable will be used when the item width is being set programmatically
     private var itemWidth: Float? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ListItem> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ListItem> {
         val listItemType = ItemTypesPool.getItemType(viewType)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(mInflater, listItemType.layoutResId, parent, false)
         if (itemWidth != null) binding.root.layoutParams.width = (itemWidth!!).roundToInt()
         try {
             val types = arrayOf(ViewDataBinding::class.java, ListItemCallback::class.java)
             val cons = listItemType.viewHolderClass.getConstructor(*types)
-            return cons.newInstance(binding, listItemCallback) as BaseViewHolder<ListItem>
+            return cons.newInstance(binding, listItemCallback) as BaseBindingViewHolder<ListItem>
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-        return BlankViewHolder(binding, listItemCallback)
+        return BaseBindingViewHolder(binding, listItemCallback)
     }
 
-    override fun onBindViewHolder(viewHolder: BaseViewHolder<ListItem>, position: Int) {
-        viewHolder.draw(mItems!![position])
+    override fun onBindViewHolder(bindingViewHolder: BaseBindingViewHolder<ListItem>, position: Int) {
+        bindingViewHolder.draw(mItems!![position])
     }
 
-    override fun onViewAttachedToWindow(holder: BaseViewHolder<ListItem>) {
-        super.onViewAttachedToWindow(holder)
-        holder.onViewAttachedToWindow()
+    override fun onViewAttachedToWindow(holderBinding: BaseBindingViewHolder<ListItem>) {
+        super.onViewAttachedToWindow(holderBinding)
+        holderBinding.onViewAttachedToWindow()
     }
 
-    override fun onViewDetachedFromWindow(holder: BaseViewHolder<ListItem>) {
-        super.onViewDetachedFromWindow(holder)
-        holder.onViewDetachedFromWindow()
+    override fun onViewDetachedFromWindow(holderBinding: BaseBindingViewHolder<ListItem>) {
+        super.onViewDetachedFromWindow(holderBinding)
+        holderBinding.onViewDetachedFromWindow()
     }
 
     /**
@@ -57,7 +55,6 @@ class GeneralListAdapter(context: Context?, var listItemCallback: ListItemCallba
         } catch (e: ArithmeticException) {
             e.printStackTrace()
         }
-
     }
 
     fun setItemWidthPercentage(context: Context, percentage: Float) {
@@ -65,4 +62,3 @@ class GeneralListAdapter(context: Context?, var listItemCallback: ListItemCallba
         itemWidth = dm.widthPixels * percentage
     }
 }
- fun <T: Any> cast(any: Any, clazz: KClass<out T>): T = clazz.javaObjectType.cast(any)!!

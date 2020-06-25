@@ -6,10 +6,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.haizo.poc.ui.view.RecyclerView2
-            android:id="@+id/recyclerView2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:layout_marginBottom="18dp"/>
 

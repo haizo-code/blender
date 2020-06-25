@@ -2,11 +2,12 @@ package com.haizo.poc.ui.viewholder.row
 
 import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.ListItemCallback
-import com.haizo.generaladapter.viewholders.BaseViewHolder
+import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.BR
-import com.haizo.poc.data.model.ModelType1
+import com.haizo.poc.model.ModelType1
 
-class Type1ViewHolder(private val binding: ViewDataBinding, callback: ListItemCallback?) : BaseViewHolder<ModelType1>(binding, callback) {
+class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
+    BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
 
     init {
         attachClickListener(itemView)
@@ -14,7 +15,7 @@ class Type1ViewHolder(private val binding: ViewDataBinding, callback: ListItemCa
 
     override fun draw(listItem: ModelType1) {
         super.draw(listItem)
-        binding.setVariable(BR.model, listItem)
-        binding.executePendingBindings()
+        viewDataBinding.setVariable(BR.model, listItem)
+        viewDataBinding.executePendingBindings()
     }
 }

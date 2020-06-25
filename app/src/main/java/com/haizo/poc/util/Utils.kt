@@ -1,4 +1,4 @@
-package com.haizo.poc.utils
+package com.haizo.poc.util
 
 import android.content.Context
 import androidx.core.content.ContextCompat

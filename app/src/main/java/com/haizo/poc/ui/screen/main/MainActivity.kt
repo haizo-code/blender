@@ -1,69 +1,57 @@
 package com.haizo.poc.ui.screen.main
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.ListItemCallback
-import com.haizo.generaladapter.loadmore.LoadMoreListener
+import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.poc.R
-import com.haizo.poc.data.model.ModelType1
-import com.haizo.poc.data.model.ModelType3
 import com.haizo.poc.databinding.ActivityMainBinding
+import com.haizo.poc.model.ModelType1
+import com.haizo.poc.model.ModelType2
+import com.haizo.poc.util.toast
 
-class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
+class MainActivity : AppCompatActivity(), ListItemCallback {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
-    private lateinit var activityBinding: ActivityMainBinding
+    private val adapter: GeneralBindingListAdapter by lazy {
+        GeneralBindingListAdapter(context = this, listItemCallback = this)
+    }
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        initRecyclerView()
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setupRecyclerView()
+    }
 
+    override fun onStart() {
+        super.onStart()
         viewModel.items.observe(this, Observer {
-            activityBinding.recyclerView2.updateList(it)
+            adapter.updateList(it)
         })
     }
 
-    private fun initRecyclerView() {
-        activityBinding.recyclerView2.setup(
-            layoutManager = LinearLayoutManager(this),
-            listItemCallback = this,
-            loadMoreListener = this,
-            onRefreshListener = {Handler().postDelayed({ activityBinding.recyclerView2.removeLoadingViews() }, 2000)},
-            onEmptyListListener = {hasContent -> Toast.makeText(this, "Has content: $hasContent", Toast.LENGTH_SHORT).show()}
-        )
-        activityBinding.recyclerView2.get()?.addItemDecoration(
-            ItemPaddingDecoration(5, 5))
-    }
-
-    private fun showDialog(text: String) {
-        AlertDialog.Builder(this)
-            .setTitle("Triggered")
-            .setMessage(text)
-            .show()
-    }
-
-    override fun onItemClicked(view: View, listItem: ListItem?, position: Int, actionId: Int?) {
+    override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
         when (listItem) {
-            is ModelType1 -> showDialog(listItem.text ?: "")
-            is ModelType3 -> showDialog(listItem.text ?: "")
+            is ModelType1 -> toast(listItem.text)
+            is ModelType2 -> toast(listItem.imageUrl)
         }
     }
 
-    override fun onLoadMore(pageToLoad: Int) {
-        Handler().postDelayed({ activityBinding.recyclerView2.removeLoadingViews() }, 2000)
+    private fun setupRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.addItemDecoration(ItemPaddingDecoration(10, 10))
+        binding.recyclerView.adapter = adapter
     }
 }

@@ -3,8 +3,8 @@ package com.haizo.generaladapter.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.loadmore.LoadMoreAdapter
+import com.haizo.generaladapter.model.ListItem
 import java.util.ArrayList
 
 abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(context: Context?) :

@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.haizo.poc.data.model.ModelType2"/>
+            type="com.haizo.poc.model.ModelType2"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -27,7 +27,7 @@
                 android:layout_height="200dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                imageUrl="@{model.image}"
+                imageUrl="@{model.imageUrl}"
                 tools:srcCompat="@tools:sample/backgrounds/scenic"/>
         </FrameLayout>
     </androidx.cardview.widget.CardView>

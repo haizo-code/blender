@@ -24,6 +24,6 @@ class ListItemType(
     }
 
     companion object {
-        var type: Int = 0
+        var type: Int = 1
     }
 }
