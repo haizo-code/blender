@@ -1,4 +1,4 @@
-<p align="center"><img src="/device-2020-06-25-105017.png" width="250" align="right" vspace="24"></p>
+<p align="center"><img src="/preview.png" width="250" align="right" vspace="24"></p>
 
 Recyclerview General Adapter
 =================
@@ -29,7 +29,7 @@ dependencies {
 ## Sample code:
 
 ### Types file
-Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types the viewholders that will be used in the app.
+Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types of the *ViewHolders* that will be used in the app.
 Note that you can create many files of this
 ```
 object ListItemTypes {
@@ -40,17 +40,24 @@ object ListItemTypes {
 ```
 
 ### Models
-Let your model extend Listitem and pass the ItemType in the constructor
+Let your model implements ListItem and override the ListItemType
 ```
-class ModelType1(val text: String? = "") : ListItem(ListItemTypes.ITEM_TYPE_1)
-class ModelType2(val image: String? = "") : ListItem(ListItemTypes.ITEM_TYPE_2)
+class ModelType1(val text: String?) : ListItem {
+    override var listItemType: ListItemType? = ListItemTypes.ITEM_TYPE_1
+}
+
+class ModelType2(val imageUrl: String?) : ListItem {
+    override var listItemType: ListItemType? = ListItemTypes.ITEM_TYPE_2
+}
 ...
 ```
+**NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only without any *CRASH* :)**
 
 ### ViewHolder
 Create your viewholder and extend it with BaseViewHolder<YourModelHere>
 ```
-class Type1ViewHolder(private val binding: ViewDataBinding, callback: ListItemCallback?) : BaseViewHolder<ModelType1>(binding, callback) {
+class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
+    BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
 
     init {
         attachClickListener(itemView)
@@ -58,16 +65,16 @@ class Type1ViewHolder(private val binding: ViewDataBinding, callback: ListItemCa
 
     override fun draw(listItem: ModelType1) {
         super.draw(listItem)
-        binding.setVariable(BR.model, listItem)
-        binding.executePendingBindings()
+        viewDataBinding.setVariable(BR.model, listItem)
+        viewDataBinding.executePendingBindings()
     }
 }
 ```
 
-### Initalize adapter
+### Initializing the adapter
 ```
-private val adapter: GeneralListAdapter by lazy {
-    GeneralListAdapter(context = context, listItemCallback = this)
+private val adapter: GeneralBindingListAdapter by lazy {
+    GeneralBindingListAdapter(context = this, listItemCallback = this)
 }
 ```
 
@@ -78,7 +85,7 @@ recyclerview?.adapter = adapter
 ```
 
 ### Display
-Now you just need to add any model to the adpater and it will be added to the adapter with its viewholder
+Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
 ```
 val myList =  listOf(
     ModelType1(text = "Hello :)"),
@@ -89,10 +96,10 @@ adapter.addAll(myList)
 
 ### Callback listener
 ```
-override fun onItemClicked(view: View, listItem: ListItem?, position: Int, actionId: Int?) {
+override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
     when (listItem) {
-        is ModelType1 -> showDialog(listItem.text ?: "")
-        is ModelType2 -> showDialog(listItem.text ?: "")
+        is ModelType1 -> toast(listItem.text)
+        is ModelType2 -> toast(listItem.imageUrl)
     }
 }
 ```
