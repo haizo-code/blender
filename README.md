@@ -1,4 +1,4 @@
-<p align="center"><img src="/2020-06-25-105017.png" width="250" align="right" vspace="24"></p>
+<p align="center"><img src="/device-2020-06-25-105017.png" width="250" align="right" vspace="24"></p>
 
 Recyclerview General Adapter
 =================
