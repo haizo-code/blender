@@ -1,3 +1,8 @@
+Recyclerview General Adapter
+=================
+[![](https://jitpack.io/v/Haizo94/recyclerview-general-adapter.svg)](https://jitpack.io/#Haizo94/recyclerview-general-adapter)
+[![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
+
 ## Gradle
 
 **Step 1.** Add the JitPack repository to your root build.gradle at the end of repositories:
