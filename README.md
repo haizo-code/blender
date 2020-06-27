@@ -4,13 +4,15 @@ Recyclerview General Adapter
 =================
 [![](https://jitpack.io/v/Haizo94/recyclerview-general-adapter.svg)](https://jitpack.io/#Haizo94/recyclerview-general-adapter)
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
+[![API](https://img.shields.io/badge/API-19%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=19)
+[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](NOTICE)
 
 Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. You won't have to code any adapter again!
 
 ## Gradle
 
 **Step 1.** Add the JitPack repository to your root build.gradle at the end of repositories:
-```
+```gradle
 allprojects {
     repositories {
         ...
@@ -20,7 +22,7 @@ allprojects {
 ```
 
 **Step 2.** Add the library dependency to your project build.gradle:
-```
+```gradle
 dependencies {
     implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.1.0'
 }
@@ -31,7 +33,7 @@ dependencies {
 ### Types file
 Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types of the *ViewHolders* that will be used in the app.
 Note that you can create many files of this
-```
+```kotlin
 object ListItemTypes {
     // Your types
     val ITEM_TYPE_1 = ListItemType(Type1ViewHolder::class.java, R.layout.row_type_1, "ITEM_TYPE_1")
@@ -41,7 +43,7 @@ object ListItemTypes {
 
 ### Models
 Let your model implements ListItem and override the ListItemType
-```
+```kotlin
 class ModelType1(val text: String?) : ListItem {
     override var listItemType: ListItemType? = ListItemTypes.ITEM_TYPE_1
 }
@@ -55,7 +57,7 @@ class ModelType2(val imageUrl: String?) : ListItem {
 
 ### ViewHolder
 Create your viewholder and extend it with BaseViewHolder<YourModelHere>
-```
+```kotlin
 class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
     BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
 
@@ -72,7 +74,7 @@ class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: Li
 ```
 
 ### Initializing the adapter
-```
+```kotlin
 private val adapter: GeneralBindingListAdapter by lazy {
     GeneralBindingListAdapter(context = this, listItemCallback = this)
 }
@@ -80,13 +82,13 @@ private val adapter: GeneralBindingListAdapter by lazy {
 
 ### Recyclerview
 Bind your recyclerview with the adapter
-```
+```kotlin
 recyclerview?.adapter = adapter
 ```
 
 ### Display
 Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
-```
+```kotlin
 val myList =  listOf(
     ModelType1(text = "Hello :)"),
     ModelType2(image = sampleBackgrounds.random())
@@ -95,7 +97,7 @@ adapter.addAll(myList)
 ```
 
 ### Callback listener
-```
+```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
     when (listItem) {
         is ModelType1 -> toast(listItem.text)
