@@ -1,5 +1,6 @@
 package com.haizo.generaladapter.loadmore
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -15,19 +16,23 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
         loadMoreHelper?.setupLoadMore(recyclerView, items, loadMoreListener)
     }
 
-    fun addMoreItems(list: Collection<Any>) {
+    fun addMoreItems(list: Collection<Any>?) {
+        if (loadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         loadMoreHelper?.addMoreItems(list)
     }
 
     fun removeLoadMoreIfExists() {
+        if (loadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         loadMoreHelper?.removeLoadMoreIfExists()
     }
 
     fun resetPageNumber() {
+        if (loadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         loadMoreHelper?.resetPage()
     }
 
     fun setCurrentPageNumber(pageNumber: Int) {
+        if (loadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         loadMoreHelper?.setCurrentPage(pageNumber)
     }
 
@@ -38,4 +43,8 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
         }
 
     protected abstract val items: MutableList<*>
+
+    companion object{
+        private const val ERROR_NOT_INITIALIZED = "You forgot to setup the LoadMore helper, Please set it up and try again"
+    }
 }

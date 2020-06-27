@@ -68,11 +68,13 @@ class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize:
         }
     }
 
-    fun addMoreItems(collection: Collection<Any>) {
+    fun addMoreItems(collection: Collection<Any>?) {
         removeLoadMoreIfExists()
-        val positionStart = mItems.size + 1
-        mItems.addAll(collection)
-        adapter.notifyItemRangeInserted(positionStart, mItems.size)
+        if (collection != null) {
+            val positionStart = mItems.size + 1
+            mItems.addAll(collection)
+            adapter.notifyItemRangeInserted(positionStart, mItems.size)
+        }
     }
 
     fun resetPage() {

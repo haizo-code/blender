@@ -17,7 +17,7 @@ class ItemPaddingDecoration : RecyclerView.ItemDecoration {
     private var mBottomOffset: Int = 0
     private var mStartOffset: Int = 0
     private var mEndOffset: Int = 0
-    private var topStartPaddingIndex: Int = 0
+    private var startingIndex: Int = 0
 
     /**
      * This Method adds margin for each item in the list
@@ -47,11 +47,12 @@ class ItemPaddingDecoration : RecyclerView.ItemDecoration {
      * @param [startEndOffset] offset from (Start and End) for the item
      * @param [topBottomOffset] offset from (Top and Bottom) for the item
      */
-    constructor(startEndOffset: Int, topBottomOffset: Int) {
+    constructor(startEndOffset: Int, topBottomOffset: Int, startingIndex: Int = 0) {
         this.mStartOffset = dpToPx(startEndOffset)
         this.mEndOffset = dpToPx(startEndOffset)
         this.mTopOffset = dpToPx(topBottomOffset)
         this.mBottomOffset = dpToPx(topBottomOffset)
+        this.startingIndex = startingIndex
     }
 
     /**
@@ -60,22 +61,19 @@ class ItemPaddingDecoration : RecyclerView.ItemDecoration {
      * @param [end] offset from the end only for the item
      * @param [top] offset from the top only for the item
      * @param [bottom] offset from the bottom only for the item
-     * @param [topStartPaddingIndex] the index of the item that will be included with the top offset
      */
-    constructor(start: Int = 0, end: Int = 0, top: Int = 0, bottom: Int = 0, topStartPaddingIndex: Int = 0) {
+    constructor(start: Int = 0, end: Int = 0, top: Int = 0, bottom: Int = 0, startingIndex: Int = 0) {
         this.mStartOffset = dpToPx(start)
         this.mEndOffset = dpToPx(end)
         this.mTopOffset = dpToPx(top)
         this.mBottomOffset = dpToPx(bottom)
-        this.topStartPaddingIndex = topStartPaddingIndex
+        this.startingIndex = startingIndex
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
-        if (parent.getChildAdapterPosition(view) >= topStartPaddingIndex) {
+        if (parent.getChildAdapterPosition(view) >= startingIndex) {
             outRect.set(mStartOffset, mTopOffset, mEndOffset, mBottomOffset)
-        } else {
-            outRect.set(mStartOffset, 0, mEndOffset, mBottomOffset)
         }
     }
 

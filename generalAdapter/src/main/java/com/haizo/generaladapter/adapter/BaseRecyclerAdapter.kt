@@ -20,6 +20,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     fun clear() {
         mItems.clear()
         notifyDataSetChanged()
+        resetPageNumber()
     }
 
     /**
@@ -81,7 +82,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
      * @param listItems
      */
     fun updateList(listItems: List<M>?) {
-        mItems.clear()
+        clear()
         mItems.addAll(listItems ?: ArrayList())
         notifyDataSetChanged()
     }
