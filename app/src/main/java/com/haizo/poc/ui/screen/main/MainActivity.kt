@@ -1,6 +1,7 @@
 package com.haizo.poc.ui.screen.main
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
+import com.haizo.generaladapter.loadmore.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.poc.R
@@ -17,7 +19,7 @@ import com.haizo.poc.model.ModelType1
 import com.haizo.poc.model.ModelType2
 import com.haizo.poc.util.toast
 
-class MainActivity : AppCompatActivity(), ListItemCallback {
+class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
@@ -49,9 +51,31 @@ class MainActivity : AppCompatActivity(), ListItemCallback {
         }
     }
 
+    override fun onLoadMore(pageToLoad: Int) {
+        demoLoadMore(pageToLoad)
+    }
+
     private fun setupRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.addItemDecoration(ItemPaddingDecoration(10, 10))
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.let {
+            it.layoutManager = LinearLayoutManager(this)
+            it.adapter = adapter
+            it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
+            adapter.setupLoadMore(recyclerView = it, loadMoreListener = this, pageSize = 9)
+        }
+    }
+
+    private fun demoLoadMore(pageToLoad: Int) {
+        Handler().postDelayed({
+            var list: List<ModelType1>? = null
+
+            // lets say the last page is 3 and the next page returned null list
+            if (pageToLoad <= 3) {
+                list = ArrayList<ModelType1>().also {
+                    for (i in 1..10) it.add(
+                        com.haizo.poc.model.ModelType1(text = "LoadMore item $i of page: $pageToLoad"))
+                }
+            }
+            adapter.addMoreItems(list)
+        }, 500)
     }
 }

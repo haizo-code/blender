@@ -30,9 +30,11 @@ class HorizontalImagesViewHolder(viewDataBinding: ViewDataBinding, callback: Lis
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerView.addItemDecoration(ItemPaddingDecoration(5, 5))
-        binding.recyclerView.adapter = adapterBinding
+        binding.recyclerView.let {
+            it.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
+            it.addItemDecoration(ItemPaddingDecoration(5))
+            it.adapter = adapterBinding
+        }
         adapterBinding.setItemsToFitInScreen(context, 2.6f)
     }
 }
