@@ -86,7 +86,7 @@ Bind your recyclerview with the adapter
 recyclerview?.adapter = adapter
 ```
 
-### Display
+### Display the items
 Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
 ```kotlin
 val myList =  listOf(
@@ -96,13 +96,24 @@ val myList =  listOf(
 adapter.addAll(myList)
 ```
 
-### Callback listener
+### Item click Callback listener
 ```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
     when (listItem) {
         is ModelType1 -> toast(listItem.text)
         is ModelType2 -> toast(listItem.imageUrl)
     }
+}
+```
+
+### Loadmore callback listener
+```kotlin
+// Setup the loadmore
+adapter.setupLoadMore(recyclerView, loadMoreListener, pageSize)
+
+// Callback of the loadmore
+override fun onLoadMore(pageToLoad: Int) {
+    // Your code...
 }
 ```
 
