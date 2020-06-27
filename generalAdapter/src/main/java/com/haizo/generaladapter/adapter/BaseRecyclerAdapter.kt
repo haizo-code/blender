@@ -10,115 +10,181 @@ import java.util.ArrayList
 abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(context: Context?) :
     LoadMoreAdapter<VH>() {
 
-    protected var mItems: ArrayList<M>? = null
-    protected var mInflater: LayoutInflater
+    protected var mItems: ArrayList<M> = ArrayList()
+    protected var mInflater: LayoutInflater = LayoutInflater.from(context)
+    protected var itemWidth: Float? = null
 
-    init {
-        mItems = ArrayList()
-        mInflater = LayoutInflater.from(context)
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return mItems?.get(position)?.listItemType?.itemViewType ?: 0
-    }
-
-    fun add(`object`: M) {
-        if (mItems == null) {
-            mItems = ArrayList()
-        }
-        mItems?.add(`object`)
-        notifyItemInserted(mItems!!.size - 1)
-        notifyDataSetChanged()
-    }
-
-    fun add(index: Int, `object`: M) {
-        if (mItems == null) {
-            mItems = ArrayList()
-        }
-        mItems?.add(index, `object`)
-        notifyItemInserted(index)
-        notifyDataSetChanged()
-    }
-
-    fun addAll(collection: Collection<M>?) {
-        if (collection != null) {
-            mItems?.addAll(collection)
-        }
-    }
-
-    fun addAll(index: Int, collection: Collection<M>?) {
-        if (collection != null && index >= 0) {
-            mItems?.addAll(index, collection)
-        }
-    }
-
-    fun addAll(items: List<M>) {
-        mItems?.addAll(items)
-    }
-
-    operator fun set(position: Int, item: M) {
-        if (mItems == null) {
-            mItems = ArrayList()
-        }
-        mItems?.set(position, item)
-        notifyItemChanged(position)
-    }
-
-    fun updateList(collection: Collection<M>?) {
-        mItems?.clear()
-        mItems?.addAll(collection ?: ArrayList())
-        notifyDataSetChanged()
-    }
-
-    fun indexOf(`object`: M): Int {
-        return mItems?.indexOf(`object`) ?: 0
-    }
-
-    operator fun contains(`object`: M): Boolean {
-        return mItems?.contains(`object`) == true
-    }
-
+    /**
+     * Clear all the list
+     */
     fun clear() {
-        mItems?.clear()
+        mItems.clear()
         notifyDataSetChanged()
     }
 
-    fun remove(`object`: M) {
-        mItems?.remove(`object`)
+    /**
+     * Add item to the adapter
+     * @param listItem
+     */
+    fun add(listItem: M) {
+        mItems.add(listItem)
+        notifyItemInserted(mItems.size - 1)
     }
 
-    fun remove(position: Int) {
-        if (position >= 0 && position < mItems?.size ?: position) {
-            mItems?.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
+    /**
+     * Add item to the adapter in a specific index
+     * @param index
+     * @param listItem
+     */
+    fun add(index: Int, listItem: M) {
+        if (index in 0 until mItems.size) {
+            mItems.add(index, listItem)
+            notifyItemInserted(index)
+        } else add(listItem)
+    }
+
+    /**
+     * Add list of items to the adapter
+     * @param listItems
+     */
+    fun addAll(listItems: List<M>) {
+        mItems.addAll(listItems)
+        notifyItemRangeInserted(mItems.size, mItems.size)
+    }
+
+    /**
+     * Add list of items to the adapter in a specific index
+     * @param index
+     * @param listItems
+     */
+    fun addAll(index: Int, listItems: List<M>) {
+        if (index in 0 until mItems.size) {
+            mItems.addAll(index, listItems)
+            notifyItemRangeInserted(index, listItems.size)
+        }else addAll(listItems)
+    }
+
+    /**
+     * Update a specific index
+     * @param index
+     * @param listItem
+     */
+    operator fun set(index: Int, listItem: M) {
+        if (index in 0 until mItems.size){
+            mItems[index] = listItem
+            notifyItemChanged(index)
         }
     }
 
-    fun removeItem(position: Int) {
-        if (position >= 0 && position < mItems?.size ?: position) {
-            mItems?.removeAt(position)
-            notifyItemRemoved(position)
+    /**
+     * Update the whole list with a new list
+     * @param listItems
+     */
+    fun updateList(listItems: List<M>?) {
+        mItems.clear()
+        mItems.addAll(listItems ?: ArrayList())
+        notifyDataSetChanged()
+    }
+
+    /**
+     * Remove listItem at index
+     * @param [index]
+     */
+    fun remove(index: Int) {
+        if (index in 0 until mItems.size) {
+            mItems.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    /**
+     * Remove the passed listItem from the main list
+     * @param [listItem]
+     */
+    fun remove(listItem: M) {
+        val indexOfItem = indexOf(listItem)
+        if (indexOfItem != -1) {
+            mItems.remove(listItem)
+            notifyItemRemoved(indexOfItem)
+        }
+    }
+
+    /**
+     * Remove the passed listItems list from the main list
+     * @param [items]: ListItems
+     * TODO: Enhance: in case the list spreads in the main list (not ordered)
+     */
+    fun removeAll(items: List<M>) {
+        if (items.isNotEmpty()) {
+//            val startIndex = mItems.indexOf(items[0])
+//            if (startIndex != -1){
+//                mItems.removeAll(items)
+//                notifyItemRangeRemoved(startIndex, items.count())
+//            }
+            mItems.removeAll(items)
             notifyDataSetChanged()
         }
     }
 
-    fun removeAll(items: List<M>) {
-        mItems?.removeAll(items)
+    /**
+     * @return index of the passed item (-1 if not found)
+     * @param [listItem]
+     */
+    fun indexOf(listItem: M): Int {
+        return mItems.indexOf(listItem)
     }
 
-    fun getItem(position: Int): M? {
-        return mItems?.get(position)
+    /**
+     * @return true if the main list contains a specific listItem
+     * @param [listItem]
+     */
+    operator fun contains(listItem: M): Boolean {
+        return mItems.contains(listItem)
     }
 
-    override val items: MutableList<*>?
+    /**
+     * return the Item at index
+     * @param [index]
+     */
+    fun getItem(index: Int): M? {
+        return mItems[index]
+    }
+
+    /**
+     * Set the number of the items that will fit in the screen (Horizontally), so for ex, 1.5 will show 1 and (half item/quarter of 2 items).
+     * Note: Any added margin to the view will not be counted in the formula
+     * @param context
+     * @param itemsToFit
+     */
+    fun setItemsToFitInScreen(context: Context, itemsToFit: Float) {
+        try {
+            val dm = context.resources.displayMetrics
+            itemWidth = dm.widthPixels / itemsToFit
+        } catch (e: ArithmeticException) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * Set the item width percentage for the screen width
+     */
+    fun setItemWidthPercentage(context: Context, percentage: Float) {
+        val dm = context.resources.displayMetrics
+        itemWidth = dm.widthPixels * percentage
+    }
+
+    override fun getItemViewType(index: Int): Int {
+        return mItems[index].listItemType?.itemViewType ?: 0
+    }
+
+    override val items: MutableList<*>
         get() = mItems
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    override fun getItemId(index: Int): Long {
+        return index.toLong()
     }
 
     override fun getItemCount(): Int {
-        return mItems?.size ?: 0
+        return mItems.size
     }
 }

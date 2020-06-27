@@ -15,7 +15,7 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
         loadMoreHelper?.setupLoadMore(recyclerView, items, loadMoreListener)
     }
 
-    fun addMoreItems(list: List<*>?) {
+    fun addMoreItems(list: Collection<Any>) {
         loadMoreHelper?.addMoreItems(list)
     }
 
@@ -37,5 +37,5 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
             loadMoreHelper?.isLoadMoreEnabled = isEnabled
         }
 
-    protected abstract val items: MutableList<*>?
+    protected abstract val items: MutableList<*>
 }

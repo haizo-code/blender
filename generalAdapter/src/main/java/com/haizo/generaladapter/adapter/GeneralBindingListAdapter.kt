@@ -13,9 +13,6 @@ import kotlin.math.roundToInt
 class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListItemCallback? = null)
     : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
 
-    // This variable will be used when the item width is being set programmatically
-    private var itemWidth: Float? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ListItem> {
         val listItemType = ItemTypesPool.getItemType(viewType)
         val binding = DataBindingUtil.inflate<ViewDataBinding>(mInflater, listItemType.layoutResId, parent, false)
@@ -32,7 +29,7 @@ class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListIte
     }
 
     override fun onBindViewHolder(bindingViewHolder: BaseBindingViewHolder<ListItem>, position: Int) {
-        bindingViewHolder.draw(mItems!![position])
+        bindingViewHolder.draw(mItems[position])
     }
 
     override fun onViewAttachedToWindow(holderBinding: BaseBindingViewHolder<ListItem>) {
@@ -43,22 +40,5 @@ class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListIte
     override fun onViewDetachedFromWindow(holderBinding: BaseBindingViewHolder<ListItem>) {
         super.onViewDetachedFromWindow(holderBinding)
         holderBinding.onViewDetachedFromWindow()
-    }
-
-    /**
-     * Set the number of the items that will fit in the screen, so for ex, 1.5 will show 1 and (half item/quarter of 2 items).
-     */
-    fun setItemsToFitInScreen(context: Context, itemsToFit: Float) {
-        try {
-            val dm = context.resources.displayMetrics
-            itemWidth = dm.widthPixels / itemsToFit
-        } catch (e: ArithmeticException) {
-            e.printStackTrace()
-        }
-    }
-
-    fun setItemWidthPercentage(context: Context, percentage: Float) {
-        val dm = context.resources.displayMetrics
-        itemWidth = dm.widthPixels * percentage
     }
 }
