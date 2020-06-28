@@ -24,7 +24,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-    implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.1.0'
+    implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.1.1'
 }
 ```
 
@@ -86,7 +86,7 @@ Bind your recyclerview with the adapter
 recyclerview?.adapter = adapter
 ```
 
-### Display
+### Display the items
 Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
 ```kotlin
 val myList =  listOf(
@@ -96,13 +96,24 @@ val myList =  listOf(
 adapter.addAll(myList)
 ```
 
-### Callback listener
+### Item click callback
 ```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
     when (listItem) {
         is ModelType1 -> toast(listItem.text)
         is ModelType2 -> toast(listItem.imageUrl)
     }
+}
+```
+
+### Loadmore callback
+```kotlin
+// Setup the loadmore
+adapter.setupLoadMore(recyclerView, loadMoreListener, pageSize)
+
+// Callback of the loadmore
+override fun onLoadMore(pageToLoad: Int) {
+    // Your code...
 }
 ```
 
