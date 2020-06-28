@@ -96,7 +96,7 @@ val myList =  listOf(
 adapter.addAll(myList)
 ```
 
-### Item click Callback listener
+### Item click callback
 ```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
     when (listItem) {
@@ -106,7 +106,7 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, action
 }
 ```
 
-### Loadmore callback listener
+### Loadmore callback
 ```kotlin
 // Setup the loadmore
 adapter.setupLoadMore(recyclerView, loadMoreListener, pageSize)
