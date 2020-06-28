@@ -42,7 +42,7 @@ object ListItemTypes {
 ```
 
 ### Models
-Let your model implements ListItem and override the ListItemType
+Let your *Model* implements *ListItem* and override the *ListItemType*
 ```kotlin
 class ModelType1(val text: String?) : ListItem {
     override var listItemType: ListItemType? = ListItemTypes.ITEM_TYPE_1
@@ -56,7 +56,7 @@ class ModelType2(val imageUrl: String?) : ListItem {
 **NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only without any *CRASH* :)**
 
 ### ViewHolder
-Create your viewholder and extend it with BaseViewHolder<YourModelHere>
+Create your *ViewHolder* and extend it with *BaseViewHolder<YourModelHere>*
 ```kotlin
 class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
     BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
@@ -106,13 +106,33 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, action
 }
 ```
 
-### Loadmore callback
+### LoadMore Callback
 ```kotlin
 // Setup the loadmore
 adapter.setupLoadMore(recyclerView, loadMoreListener, pageSize)
 
 // Callback of the loadmore
 override fun onLoadMore(pageToLoad: Int) {
+    // Your code...
+}
+```
+
+### Custom LoadMore behavior
+if you want to add your own behavior when loadmore triggers then you can do as below
+
+```kotlin
+// Setup the loadmore
+adapter.setupLoadMore(recyclerView = it, loadMoreListener = this, autoShowLoadingItem = true, pageSize = 20)
+
+// Callback of the loadmore
+override fun onLoadMore(pageToLoad: Int) {
+    // Show Loading
+    // Your code...
+}
+
+override fun onLoadMoreFinished() {
+    super.onLoadMoreFinished()
+    // Hide Loading
     // Your code...
 }
 ```
