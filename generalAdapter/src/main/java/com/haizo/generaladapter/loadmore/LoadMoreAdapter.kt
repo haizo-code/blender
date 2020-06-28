@@ -48,7 +48,6 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
      * Remove the loading indicator if exists and triggers the callback for @see [LoadMoreListener.onLoadMoreFinished]
      */
     fun removeLoadMoreIfExists() {
-        if (mLoadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         mLoadMoreHelper?.removeLoadMoreIfExists()
     }
 
@@ -56,7 +55,6 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
      * Reset the current page number to Page = 1
      */
     fun resetPageNumber() {
-        if (mLoadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         mLoadMoreHelper?.resetPage()
     }
 

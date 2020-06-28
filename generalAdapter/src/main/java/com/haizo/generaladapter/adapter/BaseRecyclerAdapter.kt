@@ -16,6 +16,7 @@
 package com.haizo.generaladapter.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.loadmore.LoadMoreAdapter
@@ -77,7 +78,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
         if (index in 0 until mItems.size) {
             mItems.addAll(index, listItems)
             notifyItemRangeInserted(index, listItems.size)
-        }else addAll(listItems)
+        } else addAll(listItems)
     }
 
     /**
@@ -86,7 +87,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
      * @param listItem
      */
     operator fun set(index: Int, listItem: M) {
-        if (index in 0 until mItems.size){
+        if (index in 0 until mItems.size) {
             mItems[index] = listItem
             notifyItemChanged(index)
         }
@@ -154,7 +155,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
      * @return true if the main list contains a specific listItem
      * @param [listItem]
      */
-    operator fun contains(listItem: M): Boolean {
+    fun contains(listItem: M): Boolean {
         return mItems.contains(listItem)
     }
 
@@ -190,6 +191,10 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     }
 
     override fun getItemViewType(index: Int): Int {
+        if (mItems[index].listItemType == null) {
+            val message = "The listItemType in (${mItems[index].javaClass}) is NULL. Item index $index"
+            Log.e(this.javaClass.name, "======== $message ======== ")
+        }
         return mItems[index].listItemType?.mItemViewType ?: 0
     }
 
