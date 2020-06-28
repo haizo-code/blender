@@ -10,10 +10,10 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
 
     private var loadMoreHelper: LoadMoreHelper? = null
 
-    fun setupLoadMore(recyclerView: RecyclerView?, loadMoreListener: LoadMoreListener?, pageSize: Int = 10) {
+    fun setupLoadMore(recyclerView: RecyclerView?, loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10) {
         if (recyclerView == null || loadMoreListener == null) return
         loadMoreHelper = LoadMoreHelper(this,pageSize)
-        loadMoreHelper?.setupLoadMore(recyclerView, items, loadMoreListener)
+        loadMoreHelper?.setupLoadMore(recyclerView, items, loadMoreListener, autoShowLoadingItem)
     }
 
     fun addMoreItems(list: Collection<Any>?) {

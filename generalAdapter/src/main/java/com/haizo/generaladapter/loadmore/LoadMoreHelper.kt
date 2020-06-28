@@ -12,12 +12,13 @@ class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize:
     private var mItems: MutableList<Any> = ArrayList()
     private val loadingThreshold = 3
     private var currentPage = 1
-    private var recyclerView: RecyclerView? = null
+    private lateinit var recyclerView: RecyclerView
     var isLoadMoreEnabled = true
+    var loadMoreListener: LoadMoreListener? = null
 
-    fun setupLoadMore(recyclerView: RecyclerView, mItems: MutableList<*>, loadMoreListener: LoadMoreListener?) {
+    fun setupLoadMore(recyclerView: RecyclerView, mItems: MutableList<*>, loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true) {
         this.recyclerView = recyclerView
-        if (this.recyclerView == null) return
+        this.loadMoreListener = loadMoreListener
         this.mItems = mItems as MutableList<Any>
         if (recyclerView.layoutManager is LinearLayoutManager) {
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
@@ -30,7 +31,7 @@ class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize:
                         if (isLoadMoreEnabled && loadMoreListener != null && !isLoadingItemAdded) {
                             if (isSpammingCalls) return
                             if (mItems.size >= currentPage * pageSize) {
-                                addLoadMoreView()
+                                if (autoShowLoadingItem) addLoadMoreView()
                                 loadMoreListener.onLoadMore(++currentPage)
                             }
                         }
@@ -44,7 +45,7 @@ class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize:
         val loadingObj = LoadingObj()
         if (!isLoadingItemAdded) {
             mItems.add(loadingObj)
-            recyclerView?.post { adapter.notifyItemInserted(mItems.size - 1) }
+            recyclerView.post { adapter.notifyItemInserted(mItems.size - 1) }
         }
     }
 
@@ -66,6 +67,7 @@ class LoadMoreHelper(private val adapter: RecyclerView.Adapter<*>, val pageSize:
                 adapter.notifyItemRemoved(lastIndex)
             }
         }
+        loadMoreListener?.onLoadMoreFinished()
     }
 
     fun addMoreItems(collection: Collection<Any>?) {

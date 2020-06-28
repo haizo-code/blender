@@ -11,7 +11,7 @@ open class BaseBindingViewHolder<T: ListItem>(binding: ViewDataBinding, private 
     RecyclerView.ViewHolder(binding.root), View.OnClickListener {
     private lateinit var mListItem: T
 
-    private val mPosition: Int
+    protected val mPosition: Int
         get() = adapterPosition
 
     protected val context: Context
@@ -27,15 +27,13 @@ open class BaseBindingViewHolder<T: ListItem>(binding: ViewDataBinding, private 
         }
     }
 
-    /*** Special Adapter Callbacks  */
+    open fun onViewAttachedToWindow() {}
 
-    fun onViewAttachedToWindow() {}
-
-    fun onViewDetachedFromWindow() {
+    open fun onViewDetachedFromWindow() {
         itemView.clearAnimation()
     }
 
     override fun onClick(view: View) {
-        callback?.onItemClicked(view, mListItem, mPosition)
+        callback?.onItemClicked(view, mListItem, adapterPosition)
     }
 }
