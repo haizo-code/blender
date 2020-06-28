@@ -62,5 +62,8 @@ val sampleBackgrounds = listOf(
     "https://img.freepik.com/free-vector/abstract-colorful-flow-shapes-background_23-2148258092.jpg?size=626&ext=jpg",
     "https://thumbs.dreamstime.com/b/colorful-rainbow-holi-paint-color-powder-explosion-isolated-white-wide-panorama-background-colorful-rainbow-holi-paint-color-143749617.jpg",
     "https://i.ytimg.com/vi/D5nYYkTHCCg/maxresdefault.jpg",
-    "https://cache.desktopnexus.com/thumbseg/374/374776-bigthumbnail.jpg"
+    "https://cache.desktopnexus.com/thumbseg/374/374776-bigthumbnail.jpg",
+    "https://irishfree.com/wp-content/uploads/2020/04/doctorstrange_01-1920x1080_copy.jpg",
+    "https://cdn.dribbble.com/users/4250227/screenshots/10875160/mandala-12c.png",
+    "https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX10557177.jpg"
 )

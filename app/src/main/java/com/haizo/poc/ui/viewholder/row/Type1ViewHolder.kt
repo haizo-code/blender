@@ -7,7 +7,7 @@ import com.haizo.poc.BR
 import com.haizo.poc.model.ModelType1
 
 class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
-    BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
+    BaseBindingViewHolder<ModelType1>(viewDataBinding, callback) {
 
     init {
         attachClickListener(itemView)
