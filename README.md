@@ -30,8 +30,8 @@ dependencies {
 
 ## Sample code:
 
-### Types file
-Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types of the *ViewHolders* that will be used in the app.
+### ListItemTypes file
+Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types of the ViewHolders that will be used in the app.
 Note that you can create many files of this
 ```kotlin
 object ListItemTypes {
@@ -42,7 +42,7 @@ object ListItemTypes {
 ```
 
 ### Models
-Let your *Model* implements *ListItem* and override the *ListItemType*
+Let your **Model** implements **ListItem** and override the **ListItemType**
 ```kotlin
 class ModelType1(val text: String?) : ListItem {
     override var listItemType: ListItemType? = ListItemTypes.ITEM_TYPE_1
@@ -56,7 +56,7 @@ class ModelType2(val imageUrl: String?) : ListItem {
 **NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only without any *CRASH* :)**
 
 ### ViewHolder
-Create your *ViewHolder* and extend it with *BaseViewHolder<YourModelHere>*
+Create your **ViewHolder** and extend it with **BaseViewHolder<YourModelHere>**
 ```kotlin
 class Type1ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
     BaseBindingViewHolder<ModelType1>(binding = viewDataBinding, callback = callback) {
