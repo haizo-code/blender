@@ -22,6 +22,7 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
 
     private var mLoadMoreHelper: LoadMoreHelper? = null
     protected abstract val items: MutableList<*>
+    private var recyclerView: RecyclerView? = null
 
     /**
      * @param recyclerView
@@ -29,10 +30,10 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
      * @param pageSize: the page size for the list, this is used to know when to trigger the next page
      */
-    fun setupLoadMore(recyclerView: RecyclerView?, loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10) {
+    fun setupLoadMore(loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10) {
         if (recyclerView == null || loadMoreListener == null) return
         mLoadMoreHelper = LoadMoreHelper(this,pageSize)
-        mLoadMoreHelper?.setupLoadMore(recyclerView, items, loadMoreListener, autoShowLoadingItem)
+        mLoadMoreHelper?.setupLoadMore(recyclerView!!, items, loadMoreListener, autoShowLoadingItem)
     }
 
     /**
@@ -75,6 +76,11 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
         set(isEnabled) {
             mLoadMoreHelper?.isLoadMoreEnabled = isEnabled
         }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
 
     companion object{
         private const val ERROR_NOT_INITIALIZED = "You forgot to setup the LoadMore helper, Please set it up and try again"
