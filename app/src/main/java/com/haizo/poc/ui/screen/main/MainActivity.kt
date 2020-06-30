@@ -15,9 +15,9 @@ import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.poc.R
 import com.haizo.poc.databinding.ActivityMainBinding
-import com.haizo.poc.model.ModelType1
-import com.haizo.poc.model.ModelType2
-import com.haizo.poc.util.toast
+import com.haizo.poc.model.StoryModel
+import com.haizo.poc.model.UserCardModel
+import com.haizo.poc.util.showAlert
 
 class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
 
@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
 
     override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
         when (listItem) {
-            is ModelType1 -> toast(listItem.text)
-            is ModelType2 -> toast(listItem.imageUrl)
+            is UserCardModel -> showAlert(message = listItem.name)
+            is StoryModel -> showAlert(message = listItem.imageUrl)
         }
     }
 
@@ -60,21 +60,21 @@ class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
             it.layoutManager = LinearLayoutManager(this)
             it.adapter = adapter
             it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
-            adapter.setupLoadMore(recyclerView = it, loadMoreListener = this, pageSize = 9)
+            adapter.setupLoadMore(loadMoreListener = this, pageSize = 9)
         }
     }
 
     private fun demoLoadMore(pageToLoad: Int) {
         Handler().postDelayed({
-            var list: List<ModelType1>? = null
-
             // lets say the last page is 3 and the next page returned null list
-            if (pageToLoad <= 3) {
-                list = ArrayList<ModelType1>().also {
-                    for (i in 1..10) it.add(
-                        com.haizo.poc.model.ModelType1(text = "LoadMore item $i of page: $pageToLoad"))
-                }
-            }
+            val list: List<UserCardModel>? =
+                if (pageToLoad <= 3) {
+                    ArrayList<UserCardModel>().also {
+                        for (i in 1..10) {
+                            it.add(UserCardModel.getRandomUser())
+                        }
+                    }
+                } else null
             adapter.addMoreItems(list)
         }, 500)
     }

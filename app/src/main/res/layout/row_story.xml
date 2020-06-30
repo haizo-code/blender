@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.haizo.poc.model.ModelType2"/>
+            type="com.haizo.poc.model.StoryModel"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -23,11 +23,11 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imageView"
+                imageUrl="@{model.imageUrl}"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                imageUrl="@{model.imageUrl}"
                 tools:srcCompat="@tools:sample/backgrounds/scenic"/>
         </FrameLayout>
     </androidx.cardview.widget.CardView>

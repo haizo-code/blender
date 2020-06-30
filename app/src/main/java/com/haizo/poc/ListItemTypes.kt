@@ -1,18 +1,18 @@
 package com.haizo.poc
 
 import com.haizo.generaladapter.model.ListItemType
-import com.haizo.poc.ui.viewholder.list.GridImagesViewHolder
-import com.haizo.poc.ui.viewholder.list.HorizontalImagesViewHolder
-import com.haizo.poc.ui.viewholder.row.Type1ViewHolder
-import com.haizo.poc.ui.viewholder.row.Type2ViewHolder
+import com.haizo.poc.ui.viewholder.list.GridStoriesViewHolder
+import com.haizo.poc.ui.viewholder.list.HorizontalStoriesViewHolder
+import com.haizo.poc.ui.viewholder.row.StoryViewHolder
+import com.haizo.poc.ui.viewholder.row.UserCardViewHolder
 
 object ListItemTypes {
 
     // Row
-    val ITEM_TYPE_1 = ListItemType(Type1ViewHolder::class.java, R.layout.row_type_1, "ITEM_TYPE_1")
-    val ITEM_TYPE_2 = ListItemType(Type2ViewHolder::class.java, R.layout.row_type_2, "ITEM_TYPE_2")
+    val ITEM_USER_CARD = ListItemType(UserCardViewHolder::class.java, R.layout.row_user_card, "ITEM_USER_CARD")
+    val ITEM_STORY = ListItemType(StoryViewHolder::class.java, R.layout.row_story, "ITEM_STORY")
 
     // List
-    val LIST_HORIZONTAL_IMAGES= ListItemType(HorizontalImagesViewHolder::class.java, R.layout.row_rv_images, "LIST_HORIZONTAL_IMAGES")
-    val LIST_GRID_IMAGES= ListItemType(GridImagesViewHolder::class.java, R.layout.row_rv_images, "LIST_GRID_IMAGES")
+    val LIST_IMAGES_HORIZONTAL= ListItemType(HorizontalStoriesViewHolder::class.java, R.layout.row_rv_images, "LIST_IMAGES_HORIZONTAL")
+    val LIST_IMAGES_GRID= ListItemType(GridStoriesViewHolder::class.java, R.layout.row_rv_images, "LIST_IMAGES_GRID")
 }

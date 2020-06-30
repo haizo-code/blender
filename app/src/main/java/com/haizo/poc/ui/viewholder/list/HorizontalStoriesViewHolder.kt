@@ -1,7 +1,7 @@
 package com.haizo.poc.ui.viewholder.list
 
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
@@ -9,7 +9,7 @@ import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.databinding.RowRvImagesBinding
 import com.haizo.poc.model.ImagesListModel
 
-class GridImagesViewHolder(viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
+class HorizontalStoriesViewHolder(viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
     BaseBindingViewHolder<ImagesListModel>(viewDataBinding, callback) {
 
     private val binding: RowRvImagesBinding by lazy {
@@ -31,9 +31,10 @@ class GridImagesViewHolder(viewDataBinding: ViewDataBinding, callback: ListItemC
 
     private fun setupRecyclerView() {
         binding.recyclerView.let {
-            it.layoutManager = GridLayoutManager(context,2)
+            it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             it.addItemDecoration(ItemPaddingDecoration(5))
             it.adapter = adapterBinding
         }
+        adapterBinding.setItemsToFitInScreen(context, 3.6f)
     }
 }

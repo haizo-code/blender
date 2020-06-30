@@ -7,9 +7,8 @@ import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
 import com.haizo.poc.ListItemTypes
 import com.haizo.poc.model.ImagesListModel
-import com.haizo.poc.model.ModelType1
-import com.haizo.poc.model.ModelType2
-import com.haizo.poc.util.sampleBackgrounds
+import com.haizo.poc.model.StoryModel
+import com.haizo.poc.model.UserCardModel
 
 class MainViewModel : ViewModel() {
 
@@ -25,35 +24,35 @@ class MainViewModel : ViewModel() {
         return mutableListOf(
 
             getDummyHorizontalItem(),
-            ModelType1(text = "Sample text here 1"),
+            UserCardModel.getRandomUser(),
             getDummyGridItems(),
-            ModelType1(text = "Sample text here 1"),
-            ModelType2(imageUrl = sampleBackgrounds.random()),
+            UserCardModel.getRandomUser(),
+            StoryModel.getRandomStory(),
 
             getDummyHorizontalItem(),
-            ModelType1(text = "Sample text here 2"),
+            UserCardModel.getRandomUser(),
             getDummyGridItems(),
-            ModelType1(text = "Sample text here 3"),
-            ModelType2(imageUrl = sampleBackgrounds.random()),
+            UserCardModel.getRandomUser(),
+            StoryModel.getRandomStory(),
 
             getDummyHorizontalItem(),
-            ModelType1(text = "Sample text here 5"),
+            UserCardModel.getRandomUser(),
             getDummyGridItems(),
-            ModelType1(text = "Sample text here 6"),
-            ModelType2(imageUrl = sampleBackgrounds.random())
+            UserCardModel.getRandomUser(),
+            StoryModel.getRandomStory()
         )
     }
 
     private fun getDummyHorizontalItem(): ImagesListModel {
         return ImagesListModel().apply {
-            list?.let { for (i in 1..10) it.add(ModelType2(imageUrl = sampleBackgrounds.random())) }
+            list?.let { for (i in 1..10) it.add(StoryModel.getRandomStory()) }
         }
     }
 
-    private fun getDummyGridItems(): ImagesListModel{
+    private fun getDummyGridItems(): ImagesListModel {
         return ImagesListModel().apply {
-            list?.let { for (i in 1..4) it.add(ModelType2(imageUrl = sampleBackgrounds.random())) }
-            listItemType = ListItemTypes.LIST_GRID_IMAGES
+            list?.let { for (i in 1..4) it.add(StoryModel.getRandomStory()) }
+            listItemType = ListItemTypes.LIST_IMAGES_GRID
         }
     }
 }

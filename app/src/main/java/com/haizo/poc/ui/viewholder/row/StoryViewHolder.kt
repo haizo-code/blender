@@ -4,16 +4,16 @@ import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.BR
-import com.haizo.poc.model.ModelType2
+import com.haizo.poc.model.StoryModel
 
-class Type2ViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
-    BaseBindingViewHolder<ModelType2>(viewDataBinding, callback) {
+class StoryViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
+    BaseBindingViewHolder<StoryModel>(viewDataBinding, callback) {
 
     init {
         attachClickListener(itemView)
     }
 
-    override fun draw(listItem: ModelType2) {
+    override fun draw(listItem: StoryModel) {
         super.draw(listItem)
         viewDataBinding.setVariable(BR.model, listItem)
         viewDataBinding.executePendingBindings()
