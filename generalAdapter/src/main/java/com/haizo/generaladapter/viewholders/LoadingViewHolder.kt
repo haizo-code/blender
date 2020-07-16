@@ -20,4 +20,6 @@ import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.loadmore.LoadingObj
 
 class LoadingViewHolder(binding: ViewDataBinding, callback: ListItemCallback) :
-    BaseBindingViewHolder<LoadingObj>(binding, callback)
+    BaseBindingViewHolder<LoadingObj>(binding, callback) {
+    override fun onBind(listItem: LoadingObj) {}
+}

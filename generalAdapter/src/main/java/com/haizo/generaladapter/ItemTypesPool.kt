@@ -18,7 +18,7 @@ package com.haizo.generaladapter
 import android.util.SparseArray
 import com.haizo.generaladapter.model.ListItemType
 
-object ItemTypesPool {
+internal object ItemTypesPool {
 
     private val mItemTypeMap = SparseArray<ListItemType>()
 

@@ -24,8 +24,7 @@ class HorizontalStoriesViewHolder(viewDataBinding: ViewDataBinding, callback: Li
         setupRecyclerView()
     }
 
-    override fun draw(listItem: ImagesListModel) {
-        super.draw(listItem)
+    override fun onBind(listItem: ImagesListModel) {
         adapterBinding.updateList(listItem.list)
     }
 

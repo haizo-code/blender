@@ -19,19 +19,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 
-class LoadMoreHelper(private val mAdapter: RecyclerView.Adapter<*>, val pageSize: Int = 10) {
+class LoadMoreHelper<T>(private val mAdapter: RecyclerView.Adapter<*>, val pageSize: Int = 10) {
 
-    private var mItems: MutableList<Any> = ArrayList()
+    private var mItems: MutableList<T> = ArrayList()
     private val mLoadingThreshold = 3
     private var mCurrentPage = 1
     private lateinit var mRecyclerView: RecyclerView
+    private var loadMoreListener: LoadMoreListener? = null
     var isLoadMoreEnabled = true
-    var loadMoreListener: LoadMoreListener? = null
 
-    fun setupLoadMore(recyclerView: RecyclerView, mItems: MutableList<*>, loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true) {
+    fun setupLoadMore(recyclerView: RecyclerView, mItems: MutableList<T>, loadMoreListener: LoadMoreListener?,
+        autoShowLoadingItem: Boolean = true) {
         this.mRecyclerView = recyclerView
         this.loadMoreListener = loadMoreListener
-        this.mItems = mItems as MutableList<Any>
+        this.mItems = mItems
         if (recyclerView.layoutManager is LinearLayoutManager) {
             val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -54,7 +55,8 @@ class LoadMoreHelper(private val mAdapter: RecyclerView.Adapter<*>, val pageSize
     }
 
     private fun addLoadMoreView() {
-        val loadingObj = LoadingObj()
+        @Suppress("UNCHECKED_CAST")
+        val loadingObj = LoadingObj() as T
         if (!isLoadingItemAdded) {
             mItems.add(loadingObj)
             mRecyclerView.post { mAdapter.notifyItemInserted(mItems.size - 1) }
@@ -82,7 +84,7 @@ class LoadMoreHelper(private val mAdapter: RecyclerView.Adapter<*>, val pageSize
         loadMoreListener?.onLoadMoreFinished()
     }
 
-    fun addMoreItems(collection: Collection<Any>?) {
+    fun addMoreItems(collection: Collection<T>?) {
         removeLoadMoreIfExists()
         if (collection != null) {
             val positionStart = mItems.size + 1

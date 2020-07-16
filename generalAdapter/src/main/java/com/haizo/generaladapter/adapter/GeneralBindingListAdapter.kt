@@ -23,6 +23,7 @@ import com.haizo.generaladapter.ItemTypesPool
 import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
+import com.haizo.generaladapter.viewholders.BlankViewHolder
 import kotlin.math.roundToInt
 
 @Suppress("UNCHECKED_CAST")
@@ -41,7 +42,7 @@ class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListIte
             e.printStackTrace()
         }
 
-        return BaseBindingViewHolder(binding, listItemCallback)
+        return BlankViewHolder(binding, listItemCallback)
     }
 
     override fun onBindViewHolder(bindingViewHolder: BaseBindingViewHolder<ListItem>, position: Int) {

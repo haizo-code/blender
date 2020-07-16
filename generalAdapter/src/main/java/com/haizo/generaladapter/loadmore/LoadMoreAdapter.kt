@@ -18,21 +18,41 @@ package com.haizo.generaladapter.loadmore
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Adapter<VH>() {
+/**
+ * This is a abstract class for the RecyclerView Adapter that will handle the LoadMore behavior
+ */
+abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.Adapter<VH>() {
 
-    private var mLoadMoreHelper: LoadMoreHelper? = null
-    protected abstract val items: MutableList<*>
-    private var recyclerView: RecyclerView? = null
+    private var mLoadMoreHelper: LoadMoreHelper<T>? = null
 
     /**
-     * @param recyclerView
+     *  adapter items: to be overridden and initialized in subClasses
+     */
+    protected abstract val items: MutableList<T>
+
+    /**
+     * Used recyclerview in the current adapter
+     * Value is auto @see onAttachedToRecyclerView()
+     */
+    protected var recyclerView: RecyclerView? = null
+
+    /**
+     * @return True if the loadMore is enabled for the current adapter
+     */
+    var isLoadMoreEnabled: Boolean
+        get() = mLoadMoreHelper?.isLoadMoreEnabled ?: false
+        set(isEnabled) {
+            mLoadMoreHelper?.isLoadMoreEnabled = isEnabled
+        }
+
+    /**
      * @param loadMoreListener: load more listener callbacks
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
      * @param pageSize: the page size for the list, this is used to know when to trigger the next page
      */
     fun setupLoadMore(loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10) {
         if (recyclerView == null || loadMoreListener == null) return
-        mLoadMoreHelper = LoadMoreHelper(this,pageSize)
+        mLoadMoreHelper = LoadMoreHelper(this, pageSize)
         mLoadMoreHelper?.setupLoadMore(recyclerView!!, items, loadMoreListener, autoShowLoadingItem)
     }
 
@@ -40,7 +60,7 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
      */
-    fun addMoreItems(list: Collection<Any>?) {
+    fun addMoreItems(list: Collection<T>?) {
         if (mLoadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
         mLoadMoreHelper?.addMoreItems(list)
     }
@@ -68,21 +88,13 @@ abstract class LoadMoreAdapter<VH : RecyclerView.ViewHolder?> : RecyclerView.Ada
         mLoadMoreHelper?.setCurrentPage(pageNumber)
     }
 
-    /**
-     * @return True if the loadMore is enabled for the current adapter
-     */
-    var isLoadMoreEnabled: Boolean
-        get() = mLoadMoreHelper?.isLoadMoreEnabled ?: false
-        set(isEnabled) {
-            mLoadMoreHelper?.isLoadMoreEnabled = isEnabled
-        }
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
     }
 
-    companion object{
-        private const val ERROR_NOT_INITIALIZED = "You forgot to setup the LoadMore helper, Please set it up and try again"
+    companion object {
+        private const val ERROR_NOT_INITIALIZED =
+            "You forgot to setup the LoadMore helper, Please set it up and try again"
     }
 }

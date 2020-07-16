@@ -18,20 +18,22 @@ package com.haizo.generaladapter.adapter
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.loadmore.LoadMoreAdapter
 import com.haizo.generaladapter.model.ListItem
 import java.util.ArrayList
 
 abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(context: Context?) :
-    LoadMoreAdapter<VH>() {
+    LoadMoreAdapter<M, VH>() {
 
     protected var mItems: ArrayList<M> = ArrayList()
     protected var mInflater: LayoutInflater = LayoutInflater.from(context)
     protected var mItemWidth: Float? = null
 
     /**
-     * Clear all the list
+     * Clear all the list and reset page number of the LoadMore
      */
     fun clear() {
         mItems.clear()
@@ -160,6 +162,26 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     }
 
     /**
+     * perform move item from index to index
+     * @param from
+     * @param to
+     */
+    fun moveItem(from: Int, to: Int): Boolean {
+        return try {
+            mItems.removeAt(from)
+            if (to < from) {
+                mItems.add(to, mItems[from])
+            } else {
+                mItems.add(to - 1, mItems[from])
+            }
+            notifyItemMoved(from, to)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    /**
      * return the Item at index
      * @param [index]
      */
@@ -198,7 +220,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
         return mItems[index].listItemType?.mItemViewType ?: 0
     }
 
-    override val items: MutableList<*>
+    override val items: MutableList<M>
         get() = mItems
 
     override fun getItemId(index: Int): Long {
@@ -207,5 +229,35 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
 
     override fun getItemCount(): Int {
         return mItems.size
+    }
+
+    // TODO: to be enhanced
+    private fun enableMoveItem() {
+        val itemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+                override fun onMove(recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                    val fromPos = viewHolder.adapterPosition
+                    val toPos = target.adapterPosition
+                    return moveItem(fromPos, toPos) // true if moved, false otherwise
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    // remove from adapter
+                }
+
+                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                    if (actionState == ACTION_STATE_DRAG) {
+                        viewHolder?.itemView?.alpha = 0.5f
+                    }
+                }
+
+                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                    super.clearView(recyclerView, viewHolder)
+                    viewHolder.itemView.alpha = 1.0f
+                }
+            })
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 }

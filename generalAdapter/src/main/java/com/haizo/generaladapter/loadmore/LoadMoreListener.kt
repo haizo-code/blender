@@ -17,5 +17,5 @@ package com.haizo.generaladapter.loadmore
 
 interface LoadMoreListener {
     fun onLoadMore(pageToLoad: Int)
-    fun onLoadMoreFinished(){}
+    fun onLoadMoreFinished() {}
 }

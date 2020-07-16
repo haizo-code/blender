@@ -13,8 +13,7 @@ class StoryViewHolder(private val viewDataBinding: ViewDataBinding, callback: Li
         attachClickListener(itemView)
     }
 
-    override fun draw(listItem: StoryModel) {
-        super.draw(listItem)
+    override fun onBind(listItem: StoryModel) {
         viewDataBinding.setVariable(BR.model, listItem)
         viewDataBinding.executePendingBindings()
     }

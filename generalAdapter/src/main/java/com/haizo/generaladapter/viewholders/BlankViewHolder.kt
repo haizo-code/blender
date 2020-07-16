@@ -20,4 +20,6 @@ import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.model.ListItem
 
 class BlankViewHolder(binding: ViewDataBinding, onItemClickCallback: ListItemCallback?) :
-    BaseBindingViewHolder<ListItem>(binding, onItemClickCallback)
+    BaseBindingViewHolder<ListItem>(binding, onItemClickCallback) {
+    override fun onBind(listItem: ListItem) {}
+}

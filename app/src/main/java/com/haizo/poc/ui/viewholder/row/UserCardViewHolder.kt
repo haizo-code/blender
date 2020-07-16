@@ -13,8 +13,7 @@ class UserCardViewHolder(private val viewDataBinding: ViewDataBinding, callback:
         attachClickListener(itemView)
     }
 
-    override fun draw(listItem: UserCardModel) {
-        super.draw(listItem)
+    override fun onBind(listItem: UserCardModel) {
         viewDataBinding.setVariable(BR.model, listItem)
         viewDataBinding.executePendingBindings()
     }

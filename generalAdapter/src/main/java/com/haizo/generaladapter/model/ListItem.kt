@@ -15,6 +15,6 @@
  */
 package com.haizo.generaladapter.model
 
-interface ListItem{
+interface ListItem {
     var listItemType: ListItemType?
 }
