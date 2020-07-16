@@ -1,4 +1,4 @@
-<p align="center"><img src="/device-2020-06-25-105017.png" width="250" align="right" vspace="24"></p>
+<p align="center"><img src="/sample.png" width="250" align="right" vspace="24"></p>
 
 Recyclerview General Adapter
 =================
@@ -24,7 +24,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-    implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.1.3'
+    implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.1.4'
 }
 ```
 
@@ -75,8 +75,7 @@ class StoryViewHolder(private val viewDataBinding: ViewDataBinding, callback: Li
         attachClickListener(itemView)
     }
 
-    override fun draw(listItem: StoryModel) {
-        super.draw(listItem)
+    override fun onBind(listItem: StoryModel) {
         viewDataBinding.setVariable(BR.model, listItem)
         viewDataBinding.executePendingBindings()
     }
@@ -89,8 +88,7 @@ class UserCardViewHolder(private val viewDataBinding: ViewDataBinding, callback:
         attachClickListener(itemView)
     }
 
-    override fun draw(listItem: UserCardModel) {
-        super.draw(listItem)
+    override fun onBind(listItem: UserCardModel) {
         viewDataBinding.setVariable(BR.model, listItem)
         viewDataBinding.executePendingBindings()
     }

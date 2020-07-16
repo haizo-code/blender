@@ -10,9 +10,8 @@
 
         <ProgressBar
             android:id="@+id/myProgressBar"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
-            android:layout_gravity="center"
-            android:padding="10dp"/>
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"/>
     </FrameLayout>
 </layout>
