@@ -24,7 +24,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-    implementation 'com.github.Haizo94:recyclerview-general-adapter:v1.2.0'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.2.0'
 }
 ```
 
