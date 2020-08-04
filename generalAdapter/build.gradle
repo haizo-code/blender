@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.github.haizo'
+group = 'com.github.haizo.code'
 
 android {
     compileSdkVersion 29
