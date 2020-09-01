@@ -19,22 +19,17 @@ import android.content.Context
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.ListItemCallback
+import com.haizo.generaladapter.callbacks.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 
 abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
-    private val mCallback: ListItemCallback? = null) :
+    private val actionCallback: BaseActionCallback?) :
     RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
     protected lateinit var listItem: T
 
     protected val context: Context
         get() = itemView.context
-
-    fun draw(listItem: T) {
-        this.listItem = listItem
-        onBind(listItem)
-    }
 
     protected fun attachClickListener(vararg views: View?) {
         for (view in views) {
@@ -50,7 +45,12 @@ abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
         itemView.clearAnimation()
     }
 
+    fun draw(listItem: T) {
+        this.listItem = listItem
+        onBind(listItem)
+    }
+
     override fun onClick(view: View) {
-        mCallback?.onItemClicked(view, listItem, adapterPosition)
+        actionCallback?.onItemClicked(view, listItem, adapterPosition)
     }
 }

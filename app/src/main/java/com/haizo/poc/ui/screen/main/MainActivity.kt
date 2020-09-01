@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
 import com.haizo.generaladapter.loadmore.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
@@ -18,15 +17,16 @@ import com.haizo.poc.databinding.ActivityMainBinding
 import com.haizo.poc.model.StoryModel
 import com.haizo.poc.model.UserCardModel
 import com.haizo.poc.util.showAlert
+import com.haizo.poc.util.toast
 
-class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
+class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
 
     private val adapter: GeneralBindingListAdapter by lazy {
-        GeneralBindingListAdapter(context = this, listItemCallback = this)
+        GeneralBindingListAdapter(context = this, actionCallback = this)
     }
 
     private lateinit var binding: ActivityMainBinding
@@ -44,15 +44,23 @@ class MainActivity : AppCompatActivity(), ListItemCallback, LoadMoreListener {
         })
     }
 
-    override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
+    override fun onLoadMore(pageToLoad: Int) {
+        demoLoadMore(pageToLoad)
+    }
+
+    override fun onItemClicked(view: View, listItem: ListItem, position: Int) {
         when (listItem) {
             is UserCardModel -> showAlert(message = listItem.name)
             is StoryModel -> showAlert(message = listItem.imageUrl)
         }
     }
 
-    override fun onLoadMore(pageToLoad: Int) {
-        demoLoadMore(pageToLoad)
+    override fun myAction1() {
+        toast("myAction1 callback")
+    }
+
+    override fun myAction2() {
+        toast("myAction2 callback")
     }
 
     private fun setupRecyclerView() {

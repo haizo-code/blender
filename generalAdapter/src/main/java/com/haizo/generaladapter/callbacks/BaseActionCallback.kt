@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter
+package com.haizo.generaladapter.callbacks
 
 import android.view.View
 import com.haizo.generaladapter.model.ListItem
 
-interface ListItemCallback {
-    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1, actionId: Int = 0)
+@FunctionalInterface
+interface BaseActionCallback {
+    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1) {}
 }

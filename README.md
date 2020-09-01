@@ -24,54 +24,23 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.2.0'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.3.0'
 }
 ```
 
 ## Sample code:
 
-### ListItemTypes 
-Create a object class and name it 'ListItemTypes' (Name it as you like), this class will hold the types of the *ViewHolders* that will be used in the app.
-Note that you can create many files of this
-```kotlin
-object ListItemTypes {
-    // Your types
-    val ITEM_USER_CARD = ListItemType(UserCardViewHolder::class.java, R.layout.row_user_card, "ITEM_USER_CARD")
-    val ITEM_STORY = ListItemType(StoryViewHolder::class.java, R.layout.row_story, "ITEM_STORY")
-}
-```
-
-### Models
-Let your *Model* implements *ListItem* and override the *ListItemType*
-```kotlin
-class StoryModel(
-    val id: String,
-    val imageUrl: String
-
-) : ListItem {
-    override var listItemType: ListItemType? = ListItemTypes.ITEM_STORY
-}
-
-class UserCardModel(
-    val name: String,
-    val phoneNumber: String,
-    val location: String,
-    val imageUrl: String
-
-) : ListItem {
-    override var listItemType: ListItemType? = ListItemTypes.ITEM_USER_CARD
-}
-...
-```
-**NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only without any *CRASH* :)**
-
 ### ViewHolder
-Create your *ViewHolder* and extend it with *BaseViewHolder<YourModelHere>*
+First, Create your *ViewHolder* and extend it with *BaseViewHolder<YourModelHere>* with params:
+    -> Your ViewDataBinding class
+    -> BaseActionCallback : note that you can add your custom action callback (must implements BaseActionCallback)
+    as below
 ```kotlin
-class StoryViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
-    BaseBindingViewHolder<StoryModel>(viewDataBinding, callback) {
+class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallback: BaseActionCallback?) :
+    BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) {
 
     init {
+        // Attach click listeners (vararg..) with the BaseActionCallback
         attachClickListener(itemView)
     }
 
@@ -81,11 +50,20 @@ class StoryViewHolder(private val viewDataBinding: ViewDataBinding, callback: Li
     }
 }
 
-class UserCardViewHolder(private val viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
-    BaseBindingViewHolder<UserCardModel>(viewDataBinding, callback) {
+class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, actionCallback: MyActions?) :
+    BaseBindingViewHolder<UserCardModel>(viewDataBinding, actionCallback) {
 
     init {
-        attachClickListener(itemView)
+        // You can also use this way to attach click listener or you can use custom callbacks such as MyActions
+        // attachClickListener(itemView, viewDataBinding.ivProfile, viewDataBinding.tvName)
+
+        viewDataBinding.ivProfile.setOnClickListener {
+            // Trigger callback from your custom interface
+            actionCallback?.myAction1()
+        }
+        viewDataBinding.tvName.setOnClickListener {
+            actionCallback?.myAction2()
+        }
     }
 
     override fun onBind(listItem: UserCardModel) {
@@ -93,12 +71,62 @@ class UserCardViewHolder(private val viewDataBinding: ViewDataBinding, callback:
         viewDataBinding.executePendingBindings()
     }
 }
+
+// Custom actions interface
+interface MyActions : BaseActionCallback {
+    fun myAction1()
+    fun myAction2()
+}
 ```
 
+### ListItemTypes 
+Second, Create a object class and name it 'MyListItemTypes', this class will hold the types of the *ViewHolders* that will be used in the app.
+Note that you can create many files of this
+```kotlin
+object MyListItemTypes {
+    // These variables will be associated with the listItems
+    val ITEM_USER_CARD = ListItemType(
+        viewHolderClass = UserCardViewHolder::class.java,
+        layoutResId = R.layout.row_user_card,
+        itemName = "ITEM_USER_CARD")
+
+    val ITEM_STORY = ListItemType(
+        viewHolderClass = StoryViewHolder::class.java,
+        layoutResId = R.layout.row_story,
+        itemName = "ITEM_STORY")
+}
+```
+
+### Models
+Third, let your *Model* implements *ListItem* and override the *ListItemType* variable
+```kotlin
+class StoryModel(
+    val id: String,
+    val imageUrl: String
+
+) : ListItem {
+    override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
+}
+
+class UserCardModel(
+    val name: String,
+    val phoneNumber: String,
+    val location: String,
+    val imageUrl: String
+
+) : ListItem {
+    override var listItemType: ListItemType? = MyListItemTypes.ITEM_USER_CARD
+}
+...
+```
+**NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only.. without any *CRASH* :)**
+
+
 ### Initializing the adapter
+Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
 ```kotlin
 private val adapter: GeneralBindingListAdapter by lazy {
-    GeneralBindingListAdapter(context = this, listItemCallback = this)
+    GeneralBindingListAdapter(context = this, actionCallback = this)
 }
 ```
 
@@ -110,8 +138,9 @@ recyclerview?.adapter = adapter
 
 ### Display the items
 Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
+You can mix all the types together and it will be handled automatically by the adapter
 ```kotlin
-val myList =  listOf(
+val myList = listOf(
     UserCardModel(),
     StoryViewHolder()
     ...
@@ -127,9 +156,11 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, action
         is StoryViewHolder -> toast(listItem.imageUrl)
     }
 }
+//
+// ... other custom callbacks if exists
 ```
 
-### LoadMore Callback
+### LoadMore
 ```kotlin
 // Setup the loadmore
 adapter.setupLoadMore(loadMoreListener, pageSize)
@@ -145,7 +176,7 @@ if you want to add your own behavior when loadmore triggers then you can do as b
 
 ```kotlin
 // Setup the loadmore
-adapter.setupLoadMore(loadMoreListener = this, autoShowLoadingItem = true, pageSize = 20)
+adapter.setupLoadMore(loadMoreListener = this, autoShowLoadingItem = false, pageSize = 20, loadingThreshold = 3)
 
 // Callback of the loadmore
 override fun onLoadMore(pageToLoad: Int) {

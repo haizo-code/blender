@@ -20,14 +20,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.ItemTypesPool
-import com.haizo.generaladapter.ListItemCallback
+import com.haizo.generaladapter.callbacks.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.generaladapter.viewholders.BlankViewHolder
 import kotlin.math.roundToInt
 
 @Suppress("UNCHECKED_CAST")
-class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListItemCallback? = null)
+open class GeneralBindingListAdapter(val context: Context?, var actionCallback: BaseActionCallback? = null)
     : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ListItem> {
@@ -35,14 +35,12 @@ class GeneralBindingListAdapter(context: Context?, var listItemCallback: ListIte
         val binding = DataBindingUtil.inflate<ViewDataBinding>(mInflater, listItemType.layoutResId, parent, false)
         if (mItemWidth != null) binding.root.layoutParams.width = (mItemWidth!!).roundToInt()
         try {
-            val types = arrayOf(ViewDataBinding::class.java, ListItemCallback::class.java)
-            val cons = listItemType.viewHolderClass.getConstructor(*types)
-            return cons.newInstance(binding, listItemCallback) as BaseBindingViewHolder<ListItem>
+            val mainConstructor = listItemType.viewHolderClass.constructors[0]
+            return mainConstructor.newInstance(binding, actionCallback) as BaseBindingViewHolder<ListItem>
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        return BlankViewHolder(binding, listItemCallback)
+        return BlankViewHolder(binding, actionCallback)
     }
 
     override fun onBindViewHolder(bindingViewHolder: BaseBindingViewHolder<ListItem>, position: Int) {

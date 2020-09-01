@@ -17,7 +17,13 @@ package com.haizo.generaladapter.model
 
 import com.haizo.generaladapter.ItemTypesPool
 
-class ListItemType(val viewHolderClass: Class<*>, val layoutResId: Int, val itemName: String = "") {
+/**
+ * Create by Farouq Afghani
+ * @param viewHolderClass: The class of the ViewHolder that will be used with the view [layoutResId]
+ * @param layoutResId: The layout resource for the view that will be associated with the passed ViewHolder [viewHolderClass]
+ * @param itemName: This name will be helpful in debugging phase to know which ListItemType you are using for the selected ListItem
+ */
+class ListItemType(val viewHolderClass: Class<*>, val layoutResId: Int, private val itemName: String = "") {
 
     var mItemViewType: Int = 0
 

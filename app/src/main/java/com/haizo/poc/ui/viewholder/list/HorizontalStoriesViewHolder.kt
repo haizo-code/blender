@@ -1,20 +1,16 @@
 package com.haizo.poc.ui.viewholder.list
 
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haizo.generaladapter.ListItemCallback
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
+import com.haizo.generaladapter.callbacks.BaseActionCallback
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.databinding.RowRvImagesBinding
 import com.haizo.poc.model.ImagesListModel
 
-class HorizontalStoriesViewHolder(viewDataBinding: ViewDataBinding, callback: ListItemCallback?) :
-    BaseBindingViewHolder<ImagesListModel>(viewDataBinding, callback) {
-
-    private val binding: RowRvImagesBinding by lazy {
-        viewDataBinding as RowRvImagesBinding
-    }
+class HorizontalStoriesViewHolder(private val viewDataBinding: RowRvImagesBinding,
+    actionCallback: BaseActionCallback?) :
+    BaseBindingViewHolder<ImagesListModel>(viewDataBinding, actionCallback) {
 
     private val adapterBinding: GeneralBindingListAdapter by lazy {
         GeneralBindingListAdapter(context = context)
@@ -29,7 +25,7 @@ class HorizontalStoriesViewHolder(viewDataBinding: ViewDataBinding, callback: Li
     }
 
     private fun setupRecyclerView() {
-        binding.recyclerView.let {
+        viewDataBinding.recyclerView.let {
             it.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             it.addItemDecoration(ItemPaddingDecoration(5))
             it.adapter = adapterBinding

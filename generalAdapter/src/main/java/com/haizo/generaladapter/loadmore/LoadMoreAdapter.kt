@@ -49,8 +49,10 @@ abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.
      * @param loadMoreListener: load more listener callbacks
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
      * @param pageSize: the page size for the list, this is used to know when to trigger the next page
+     * @param loadingThreshold: when to call the next page (ex. 3: when reaching the 7th item ([pageSize] - [loadingThreshold]) then call the next page)
      */
-    fun setupLoadMore(loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10, loadingThreshold: Int = 3) {
+    fun setupLoadMore(loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10,
+        loadingThreshold: Int = 3) {
         if (recyclerView == null || loadMoreListener == null) return
         mLoadMoreHelper = LoadMoreHelper(adapter = this, pageSize = pageSize, loadingThreshold = loadingThreshold)
         mLoadMoreHelper?.setupLoadMore(recyclerView!!, items, loadMoreListener, autoShowLoadingItem)
