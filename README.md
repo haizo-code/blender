@@ -2,7 +2,7 @@
 
 Recyclerview General Adapter
 =================
-[![](https://jitpack.io/v/Haizo94/recyclerview-general-adapter.svg)](https://jitpack.io/#Haizo94/recyclerview-general-adapter)
+[![](https://jitpack.io/v/haizo-code/recyclerview-general-adapter.svg)](https://jitpack.io/#haizo-code/recyclerview-general-adapter)
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
 [![API](https://img.shields.io/badge/API-19%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=19)
 ![License](http://img.shields.io/badge/license-APACHE2-blue.svg)
