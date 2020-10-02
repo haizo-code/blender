@@ -190,6 +190,14 @@ override fun onLoadMoreFinished() {
     // Your code...
 }
 ```
+    
+ProGuard
+--------
+You need to include the below line in your proguard-rules.pro
+
+```pro
+-keepclassmembers public class * extends com.haizo.generaladapter.viewholders.BaseBindingViewHolder{ public protected *; }
+```
 
 # License
 
