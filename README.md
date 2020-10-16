@@ -10,6 +10,19 @@ Recyclerview General Adapter
 ## You won't have to code any adapter again!
 Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. 
 
+:white_check_mark: --> No more adapters to create
+
+:white_check_mark: --> Works with ViewDataBinding
+
+:white_check_mark: --> Handles unlimited multiple types automatically -- just pass your model/s and thats it :)
+
+:white_check_mark: --> Handles Callbacks from (Viewholder and vice-versa)
+
+:white_check_mark: --> Handles Load more
+
+:white_check_mark: --> Handles all the common actions for the recyclerview-adapter and more..
+
+
 ## Gradle
 
 **Step 1.** Add the JitPack repository to your root build.gradle at the end of repositories:
