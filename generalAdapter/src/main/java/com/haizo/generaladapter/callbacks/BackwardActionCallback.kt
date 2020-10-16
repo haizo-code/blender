@@ -15,16 +15,10 @@
  */
 package com.haizo.generaladapter.callbacks
 
-import android.view.View
-import com.haizo.generaladapter.model.ListItem
-
 @FunctionalInterface
-interface BaseActionCallback {
+interface BackwardActionCallback {
     /**
-     * @param view
-     * @param listItem
-     * @param position (Adapter position)
-     * @param bwCallback the ViewHolder will be listening for this callback
+     * @param args
      */
-    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1, bwCallback: BackwardActionCallback) {}
+    fun onBackwardAction(vararg args: Any) {}
 }

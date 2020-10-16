@@ -19,12 +19,13 @@ import android.content.Context
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.haizo.generaladapter.callbacks.BackwardActionCallback
 import com.haizo.generaladapter.callbacks.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 
 abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
     private val actionCallback: BaseActionCallback?) :
-    RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    RecyclerView.ViewHolder(binding.root), View.OnClickListener, BackwardActionCallback {
 
     protected lateinit var listItem: T
 
@@ -51,6 +52,6 @@ abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
     }
 
     override fun onClick(view: View) {
-        actionCallback?.onItemClicked(view, listItem, adapterPosition)
+        actionCallback?.onItemClicked(view, listItem, adapterPosition, this)
     }
 }

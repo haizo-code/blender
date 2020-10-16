@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
+import com.haizo.generaladapter.callbacks.BackwardActionCallback
 import com.haizo.generaladapter.loadmore.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
@@ -48,9 +49,13 @@ class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
         demoLoadMore(pageToLoad)
     }
 
-    override fun onItemClicked(view: View, listItem: ListItem, position: Int) {
+    override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCallback: BackwardActionCallback) {
         when (listItem) {
-            is UserCardModel -> showAlert(message = listItem.name)
+            is UserCardModel -> showAlert(message = listItem.name) {
+                // Triggering a backward callback to the current ViewHolder
+                // Passing dummy values just for the POC
+                bwCallback.onBackwardAction("A", "B")
+            }
             is StoryModel -> showAlert(message = listItem.imageUrl)
         }
     }
@@ -69,6 +74,9 @@ class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
             it.adapter = adapter
             it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
             adapter.setupLoadMore(loadMoreListener = this, pageSize = 9)
+
+            // Passing RecyclerView, ViewModel and the adapter just for the POC
+            adapter.setExtraParams(it, viewModel, adapter)
         }
     }
 

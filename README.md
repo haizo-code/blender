@@ -7,7 +7,8 @@ Recyclerview General Adapter
 [![API](https://img.shields.io/badge/API-19%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=19)
 ![License](http://img.shields.io/badge/license-APACHE2-blue.svg)
 
-Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. You won't have to code any adapter again!
+## You won't have to code any adapter again!
+Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. 
 
 ## Gradle
 
@@ -24,25 +25,21 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.3.0'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.4.0'
 }
 ```
 
 ## Sample code:
 
 ### ViewHolder
-First, Create your *ViewHolder* and extend it with *BaseViewHolder<YourModelHere>* with params:
-    -> Your ViewDataBinding class
-    -> BaseActionCallback : note that you can add your custom action callback (must implements BaseActionCallback)
-    as below
+First, Create your **ViewHolder** and extend it with **BaseViewHolder<YourModelHere>** with params:
+ * **ViewDataBinding**: Your ViewDataBinding class
+ * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
+ * **ExtraParams** (Optional): You can pass extra params by **vararg** using the method **adapter.setExtraParams(..)**
+
 ```kotlin
 class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallback: BaseActionCallback?) :
     BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) {
-
-    init {
-        // Attach click listeners (vararg..) with the BaseActionCallback
-        attachClickListener(itemView)
-    }
 
     override fun onBind(listItem: StoryModel) {
         viewDataBinding.setVariable(BR.model, listItem)
@@ -50,11 +47,12 @@ class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallba
     }
 }
 
+// Notice here that we are using a custom ActionCallback
 class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, actionCallback: MyActions?) :
     BaseBindingViewHolder<UserCardModel>(viewDataBinding, actionCallback) {
 
     init {
-        // You can also use this way to attach click listener or you can use custom callbacks such as MyActions
+        // You can also use this way to attach click listener, or you can use your custom callbacks such as MyActions
         // attachClickListener(itemView, viewDataBinding.ivProfile, viewDataBinding.tvName)
 
         viewDataBinding.ivProfile.setOnClickListener {
@@ -80,8 +78,11 @@ interface MyActions : BaseActionCallback {
 ```
 
 ### ListItemTypes 
-Second, Create a object class and name it 'MyListItemTypes', this class will hold the types of the *ViewHolders* that will be used in the app.
-Note that you can create many files of this
+Second, Create a object class and name it **MyListItemTypes**, this class will hold the types of the **ViewHolders** that will be used in the app.
+Note that you can create many files like this one, and the adapter will take care of it. Just pass these params: 
+ * **ViewHolder**: Your ViewHolder class that will be associated with the ListItemType object
+ * **LayoutResId**: Your Layout-Resource-Id that will be associated with the ListItemType object
+ * **ItemName** (Optional): This name is not used anywhere but it will be helpful while debugging
 ```kotlin
 object MyListItemTypes {
     // These variables will be associated with the listItems
@@ -98,7 +99,7 @@ object MyListItemTypes {
 ```
 
 ### Models
-Third, let your *Model* implements *ListItem* and override the *ListItemType* variable
+Third, let your Model **implements ListItem** and override the **ListItemType** variable
 ```kotlin
 class StoryModel(
     val id: String,
@@ -119,7 +120,7 @@ class UserCardModel(
 }
 ...
 ```
-**NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded only.. without any *CRASH* :)**
+**NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded.. without any *CRASH* :)**
 
 
 ### Initializing the adapter
@@ -137,8 +138,8 @@ recyclerview?.adapter = adapter
 ```
 
 ### Display the items
-Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :)
-You can mix all the types together and it will be handled automatically by the adapter
+**Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :) 
+  You can mix all the types together and it will be handled automatically by the adapter**
 ```kotlin
 val myList = listOf(
     UserCardModel(),
@@ -148,9 +149,11 @@ val myList = listOf(
 adapter.addAll(myList)
 ```
 
-### Item click callback
+### Item click callback (From ViewHolder and vice-versa)
+This callback will be triggered from the ViewHolder, also you can 
+trigger backward callback to the ViewHolder using the returned **BackwardActionCallback** in the method params
 ```kotlin
-override fun onItemClicked(view: View, listItem: ListItem, position: Int, actionId: Int) {
+override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCallback: BackwardActionCallback) {
     when (listItem) {
         is UserCardModel -> toast(listItem.text)
         is StoryViewHolder -> toast(listItem.imageUrl)
@@ -158,6 +161,14 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, action
 }
 //
 // ... other custom callbacks if exists
+```
+### Handle Backward Callback
+You just need to override this method in your ViewHolder and that's it.
+```kotlin
+override fun onBackwardAction(vararg args: Any) {
+    super.onBackwardAction(*args)
+    // Your code to handle the backward action/s ...
+}
 ```
 
 ### LoadMore

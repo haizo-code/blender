@@ -1,5 +1,6 @@
 package com.haizo.poc.ui.viewholder.row
 
+import android.widget.Toast
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.BR
 import com.haizo.poc.databinding.RowUserCardBinding
@@ -18,6 +19,11 @@ class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, action
         viewDataBinding.tvName.setOnClickListener {
             actionCallback?.myAction2()
         }
+    }
+
+    override fun onBackwardAction(vararg args: Any) {
+        super.onBackwardAction(*args)
+        Toast.makeText(context, "onBackwardAction: ${args.joinToString()}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBind(listItem: UserCardModel) {
