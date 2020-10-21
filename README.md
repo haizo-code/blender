@@ -1,4 +1,4 @@
-<p align="center"><img src="/sample.png" width="250" align="right" vspace="24"></p>
+<p align="center"><img src="/sample.png" width="250" vspace="24"></p>
 
 Recyclerview General Adapter
 =================
