@@ -12,13 +12,15 @@ Android library project that intends to simplify the usage of Adapters for recyc
 
 :white_check_mark: --> No more adapters to create
 
+:white_check_mark: --> High performance
+
 :white_check_mark: --> Works with ViewDataBinding
 
 :white_check_mark: --> Handles unlimited multiple types automatically -- just pass your model/s and thats it :)
 
 :white_check_mark: --> Handles Callbacks from (Viewholder and vice-versa)
 
-:white_check_mark: --> Handles Load more
+:white_check_mark: --> Handles Load more automatically
 
 :white_check_mark: --> Handles all the common actions for the recyclerview-adapter and more..
 
