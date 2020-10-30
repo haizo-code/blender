@@ -44,10 +44,24 @@ dependencies {
 }
 ```
 
+### Initializing the adapter
+Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
+```kotlin
+private val adapter: GeneralBindingListAdapter by lazy {
+    GeneralBindingListAdapter(context = this, actionCallback = this)
+}
+```
+
+### Recyclerview
+Bind your recyclerview with the adapter
+```kotlin
+recyclerview?.adapter = adapter
+```
+
 ## Sample code:
 
 ### ViewHolder
-First, Create your **ViewHolder** and extend it with **BaseViewHolder<YourModelHere>** with params:
+First, Create your **ViewHolder** and extend it with **BaseBindingViewHolder<YourModelHere>** with params:
  * **ViewDataBinding**: Your ViewDataBinding class
  * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
  * **ExtraParams** (Optional): You can pass extra params by **vararg** using the method **adapter.setExtraParams(..)**
@@ -62,7 +76,9 @@ class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallba
     }
 }
 
-// Notice here that we are using a custom ActionCallback
+-----------
+
+// Notice here that we are using a custom ActionCallback (MyActions)
 class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, actionCallback: MyActions?) :
     BaseBindingViewHolder<UserCardModel>(viewDataBinding, actionCallback) {
 
@@ -100,6 +116,7 @@ Note that you can create many files like this one, and the adapter will take car
  * **ItemName** (Optional): This name is not used anywhere but it will be helpful while debugging
 ```kotlin
 object MyListItemTypes {
+
     // These variables will be associated with the listItems
     val ITEM_USER_CARD = ListItemType(
         viewHolderClass = UserCardViewHolder::class.java,
@@ -124,6 +141,8 @@ class StoryModel(
     override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
 }
 
+-------------------
+
 class UserCardModel(
     val name: String,
     val phoneNumber: String,
@@ -138,27 +157,13 @@ class UserCardModel(
 **NOTE: if the listItemType for a model is *NULL* then the viewHolder will not be loaded.. without any *CRASH* :)**
 
 
-### Initializing the adapter
-Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
-```kotlin
-private val adapter: GeneralBindingListAdapter by lazy {
-    GeneralBindingListAdapter(context = this, actionCallback = this)
-}
-```
-
-### Recyclerview
-Bind your recyclerview with the adapter
-```kotlin
-recyclerview?.adapter = adapter
-```
-
 ### Display the items
 **Now you just need to add any model to the adapter and it will be added to the adapter with its ViewHolder, and that's it :) 
   You can mix all the types together and it will be handled automatically by the adapter**
 ```kotlin
 val myList = listOf(
-    UserCardModel(),
-    StoryViewHolder()
+    userModel,
+    storyModel,
     ...
 )
 adapter.addAll(myList)
@@ -177,6 +182,7 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCall
 //
 // ... other custom callbacks if exists
 ```
+
 ### Handle Backward Callback
 You just need to override this method in your ViewHolder and that's it.
 ```kotlin
@@ -202,6 +208,10 @@ if you want to add your own behavior when loadmore triggers then you can do as b
 
 ```kotlin
 // Setup the loadmore
+ * **loadMoreListener**: Loadmore listener callback
+ * **autoShowLoadingItem**: Determine if you want to from the adapter to show a loading item in the list
+ * **pageSize**: Page size for the list, this will be used to determine when to call the next page depending on the loading threshold
+ * **loadingThreshold**: Depends on the pagesize in backward, ex: threshold = 3 -> triggers loadmore on item 17
 adapter.setupLoadMore(loadMoreListener = this, autoShowLoadingItem = false, pageSize = 20, loadingThreshold = 3)
 
 // Callback of the loadmore
