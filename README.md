@@ -206,12 +206,13 @@ override fun onLoadMore(pageToLoad: Int) {
 ### Custom LoadMore behavior
 if you want to add your own behavior when loadmore triggers then you can do as below
 
-```kotlin
 // Setup the loadmore
  * **loadMoreListener**: Loadmore listener callback
  * **autoShowLoadingItem**: Determine if you want to from the adapter to show a loading item in the list
  * **pageSize**: Page size for the list, this will be used to determine when to call the next page depending on the loading threshold
  * **loadingThreshold**: Depends on the pagesize in backward, ex: threshold = 3 -> triggers loadmore on item 17
+
+```kotlin
 adapter.setupLoadMore(loadMoreListener = this, autoShowLoadingItem = false, pageSize = 20, loadingThreshold = 3)
 
 // Callback of the loadmore
