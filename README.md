@@ -190,7 +190,7 @@ You can pass any extra param by **vararg** to the ViewHolder using this method:
 **adapter.setExtraParams(..)**
 
 ### Receiving the extra params in the ViewHolder
-You just need to add the extra params in the constructor of the ViewHolder
+You just need to add the extra params in the constructor of the ViewHolder (keep in mind the ordering of the params)
 ```kotlin
 class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallback: BaseActionCallback?, ...params here..) :
     BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) {
