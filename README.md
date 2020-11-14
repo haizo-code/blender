@@ -190,10 +190,15 @@ You can pass any extra param by **vararg** to the ViewHolder using this method:
 **adapter.setExtraParams(..)**
 
 ### Receiving the extra params in the ViewHolder
-You just need to add the extra params in the constructor of the ViewHolder (keep in mind the ordering of the params)
+You just need to add the extra params in the constructor of the ViewHolder (keep in mind to add the params here in the same sequence you passed it)
 ```kotlin
-class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallback: BaseActionCallback?, ...params here..) :
-    BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) {
+class StoryViewHolder(
+private val viewDataBinding: RowStoryBinding,
+private val actionCallback: BaseActionCallback?,
+.. extra params here
+..
+..
+) : BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) 
 	...
 }
 ```
@@ -201,13 +206,14 @@ class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallba
 ### Customize ViewHolder callback
 You can add your custom callbacks to the viewholder by:
 * **1. Create your interface and let it implements BaseActionCallback**
-* **2. Replace the BaseActionCallback with your own interface**
 ```kotlin
 interface MyActions : BaseActionCallback {
     fun myAction1()
     fun myAction2()
 }
-
+```
+* **2. Replace the BaseActionCallback with your own interface**
+```kotlin
 class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, actionCallback: MyActions?) :
     BaseBindingViewHolder<UserCardModel>(viewDataBinding, actionCallback) {
     ...
