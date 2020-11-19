@@ -12,16 +12,20 @@ Recyclerview General Adapter
 Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. 
 
  * **No more adapters to create**
- 
+
  * **Uses ViewDataBinding**
- 
+
  * **Handles unlimited multiple types automatically**
- 
+
  * **Handles Callbacks from Viewholder and vice-versa**
- 
+
  * **Handles Load more automatically**
- 
- * **Handles all the common actions for the recyclerview-adapter and more..**
+
+ * **Handles all the common actions for the recyclerview-adapter and more...**
+
+ * **100% kotlin ~ Compatible with Java**
+
+ * **Easy to use and implement**
 
 ## Gradle
 
@@ -158,6 +162,13 @@ override fun onLoadMore(pageToLoad: Int) {
 }
 ```
 
+#### Adding the LoadMore items
+You should use this method to add more items to the list when you are using the LoadMore
+```kotlin
+adapter.addMoreItems(list)
+```
+
+
 ### Custom LoadMore behavior
 if you want to add your own behavior when loadmore triggers then you can do as below
 
@@ -219,6 +230,37 @@ class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, action
     ...
 }
 ````
+## Adapter Methods
+
+### General methods
+| Method | Description |
+| ------ | ------ |
+| setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
+| setItemWidthPercentage | Set the item width percentage for the screen width |
+| clear() | Clear all the list and reset page number of the LoadMore |
+| add(listItem) | Add item to the adapter |
+| add(index, listItem) | Add item to the adapter in a specific index |
+| addAll(listItems) | Add list of items to the adapter |
+| addAll(index, listItems) | Add list of items to the adapter in a specific index |
+| set(index, listItem) | Update a specific index |
+| updateList(listItems) | Update the whole list with a new list |
+| remove(index) | Remove listItem at index |
+| remove(listItem) | Remove the passed listItem from the main list if exists |
+| removeAll(items) | Remove the passed listItems list from the main list |
+| indexOf(listItem) | return index of the passed item (-1 if not found) |
+| contains(listItem) | return true if the main list contains a specific listItem |
+| getItem(index) | return the Item at index |
+| moveItem(from, to) | perform move item from index to index |
+
+### Loadmore methods
+| Method | Description |
+| ------ | ------ |
+| setupLoadMore | Use this method to setup the loadmore for the current recyclerview adapter |
+| addMoreItems | Use this method when you add the new loaded items from LoadMore |
+| removeLoadMoreIfExists | Remove the loading indicator if exists and triggers the callback for [LoadMoreListener.onLoadMoreFinished] |
+| resetPageNumber | Reset the current page number to Page = 1 |
+| setCurrentPageNumber | Manual setting the value of the current page number |
+
     
 ProGuard
 --------
