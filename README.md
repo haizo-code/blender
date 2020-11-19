@@ -47,7 +47,7 @@ dependencies {
 ```
 
 ## Usage
-### Initializing the adapter
+#### Initializing the adapter
 Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
 ```kotlin
 private val adapter: GeneralBindingListAdapter by lazy {
@@ -55,12 +55,12 @@ private val adapter: GeneralBindingListAdapter by lazy {
 }
 ```
 
-### Bind the adapter to recyclerview
+#### Bind the adapter to recyclerview
 ```kotlin
 recyclerview?.adapter = adapter
 ```
 
-### Display the items
+#### Display the items
 Just need to pass your models (ListItems) to the adapter and that's it :) 
   You can mix all the types together and it will be handled automatically by the adapter
 ```kotlin
@@ -127,6 +127,8 @@ class StoryModel(
 
 And thats it :)
 
+-------------
+-------------
 
 ### Item click callback (From ViewHolder and vice-versa)
 This callback will be triggered from the ViewHolder, also you can trigger backward 
