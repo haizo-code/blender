@@ -47,7 +47,7 @@ dependencies {
 ```
 
 ## Usage
-#### Initializing the adapter
+### Initializing the adapter
 Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
 ```kotlin
 private val adapter: GeneralBindingListAdapter by lazy {
@@ -55,12 +55,12 @@ private val adapter: GeneralBindingListAdapter by lazy {
 }
 ```
 
-#### Bind the adapter to recyclerview
+### Bind the adapter to recyclerview
 ```kotlin
 recyclerview?.adapter = adapter
 ```
 
-#### Display the items
+### Display the items
 Just need to pass your models (ListItems) to the adapter and that's it :) 
   You can mix all the types together and it will be handled automatically by the adapter
 ```kotlin
@@ -71,6 +71,8 @@ val myList = listOf(
 )
 adapter.addAll(myList)
 ```
+------------
+------------
 
 ## Setup the adpater (3 steps):
 
@@ -201,7 +203,9 @@ override fun onLoadMoreFinished() {
 
 ### Sending extra params to the ViewHolder
 You can pass any extra param by **vararg** to the ViewHolder using this method:
-**adapter.setExtraParams(..)**
+```kotlin
+adapter.setExtraParams(..)
+```
 
 ### Receiving the extra params in the ViewHolder
 You just need to add the extra params in the constructor of the ViewHolder (keep in mind to add the params here in the same sequence you passed it)
