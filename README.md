@@ -46,6 +46,7 @@ dependencies {
 }
 ```
 
+## Usage
 ### Initializing the adapter
 Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
 ```kotlin
@@ -60,8 +61,8 @@ recyclerview?.adapter = adapter
 ```
 
 ### Display the items
-**Just need to pass your models (ListItems) to the adapter and that's it :) 
-  You can mix all the types together and it will be handled automatically by the adapter**
+Just need to pass your models (ListItems) to the adapter and that's it :) 
+  You can mix all the types together and it will be handled automatically by the adapter
 ```kotlin
 val myList = listOf(
     userModel,
