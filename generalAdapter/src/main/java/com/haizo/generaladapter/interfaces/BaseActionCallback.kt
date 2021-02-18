@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.callbacks
+package com.haizo.generaladapter.interfaces
+
+import android.view.View
+import com.haizo.generaladapter.model.ListItem
 
 @FunctionalInterface
-interface BackwardActionCallback {
+interface BaseActionCallback {
     /**
-     * @param args
+     * @param view
+     * @param listItem
+     * @param position (Adapter position)
+     * @param bwCallback the ViewHolder will be listening for this callback
      */
-    fun onBackwardAction(vararg args: Any) {}
+    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1, bwCallback: BackwardActionCallback) {}
 }

@@ -2,7 +2,7 @@ package com.haizo.poc.ui.viewholder.list
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
-import com.haizo.generaladapter.callbacks.BaseActionCallback
+import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.databinding.RowRvImagesBinding

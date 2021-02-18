@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
-import com.haizo.generaladapter.callbacks.BackwardActionCallback
+import com.haizo.generaladapter.interfaces.BackwardActionCallback
 import com.haizo.generaladapter.loadmore.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
@@ -75,8 +75,8 @@ class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
             it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
             adapter.setupLoadMore(loadMoreListener = this, pageSize = 9)
 
-            // Passing RecyclerView, ViewModel and the adapter just for the POC
-            adapter.setExtraParams(it, viewModel, adapter)
+            // Passing the ViewModel to the adapter so the ViewHolder can use it
+            adapter.setExtraParams(viewModel)
         }
     }
 

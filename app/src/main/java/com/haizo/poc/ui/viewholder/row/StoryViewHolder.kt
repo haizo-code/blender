@@ -1,6 +1,6 @@
 package com.haizo.poc.ui.viewholder.row
 
-import com.haizo.generaladapter.callbacks.BaseActionCallback
+import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.poc.BR
 import com.haizo.poc.databinding.RowStoryBinding

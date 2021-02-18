@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.ItemTypesPool
-import com.haizo.generaladapter.callbacks.BaseActionCallback
+import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
@@ -33,10 +33,11 @@ open class GeneralBindingListAdapter constructor(
     var actionCallback: BaseActionCallback? = null
 ) : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
 
-    private var extraParams: Array<out Any?>? = null
+    private var extraParams = ArrayList<Any?>()
 
     fun setExtraParams(vararg extraParams: Any) {
-        this.extraParams = extraParams
+        this.extraParams.clear()
+        this.extraParams.addAll(extraParams)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ListItem> {
@@ -45,12 +46,12 @@ open class GeneralBindingListAdapter constructor(
         setupViewWidth(binding)
         try {
             val mainConstructor = listItemType.viewHolderClass.constructors[0]
-            if (mainConstructor.parameterTypes.size == 3) {
-                return mainConstructor.newInstance(binding, actionCallback,
-                    extraParams ?: emptyArray<Any>()) as BaseBindingViewHolder<ListItem>
+            return when (mainConstructor.parameterTypes.size) {
+                1 -> mainConstructor.newInstance(binding) as BaseBindingViewHolder<ListItem>
+                2 -> mainConstructor.newInstance(binding, actionCallback) as BaseBindingViewHolder<ListItem>
+                else -> mainConstructor.newInstance(binding, actionCallback,
+                    *extraParams.toTypedArray()) as BaseBindingViewHolder<ListItem>
             }
-            return mainConstructor.newInstance(binding, actionCallback) as BaseBindingViewHolder<ListItem>
-
         } catch (e: Exception) {
             e.printStackTrace()
         }

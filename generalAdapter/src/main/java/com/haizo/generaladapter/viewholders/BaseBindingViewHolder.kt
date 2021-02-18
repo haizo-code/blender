@@ -19,8 +19,8 @@ import android.content.Context
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.callbacks.BackwardActionCallback
-import com.haizo.generaladapter.callbacks.BaseActionCallback
+import com.haizo.generaladapter.interfaces.BackwardActionCallback
+import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 
 abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
