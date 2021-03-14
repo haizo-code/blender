@@ -21,11 +21,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.BackwardActionCallback
 import com.haizo.generaladapter.interfaces.BaseActionCallback
+import com.haizo.generaladapter.interfaces.RecyclerViewAdapterCallback
 import com.haizo.generaladapter.model.ListItem
 
 abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
     private val actionCallback: BaseActionCallback?) :
-    RecyclerView.ViewHolder(binding.root), View.OnClickListener, BackwardActionCallback {
+    RecyclerView.ViewHolder(binding.root), View.OnClickListener, BackwardActionCallback, RecyclerViewAdapterCallback {
 
     protected lateinit var listItem: T
 
@@ -40,9 +41,7 @@ abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
 
     abstract fun onBind(listItem: T)
 
-    open fun onViewAttachedToWindow() {}
-
-    open fun onViewDetachedFromWindow() {
+    override fun onViewDetachedFromWindow() {
         itemView.clearAnimation()
     }
 

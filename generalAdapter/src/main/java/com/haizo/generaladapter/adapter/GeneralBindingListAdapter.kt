@@ -76,7 +76,12 @@ open class GeneralBindingListAdapter constructor(
     }
 
     override fun onViewDetachedFromWindow(holderBinding: BaseBindingViewHolder<ListItem>) {
-        super.onViewDetachedFromWindow(holderBinding)
         holderBinding.onViewDetachedFromWindow()
+        super.onViewDetachedFromWindow(holderBinding)
+    }
+
+    override fun onViewRecycled(holder: BaseBindingViewHolder<ListItem>) {
+        holder.onViewRecycled()
+        super.onViewRecycled(holder)
     }
 }
