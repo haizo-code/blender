@@ -13,6 +13,8 @@ Android library project that intends to simplify the usage of Adapters for recyc
 
  * **No more adapters to create**
 
+ * **Supports all SDK 16+**
+
  * **Uses ViewDataBinding**
 
  * **Handles unlimited multiple types automatically**
