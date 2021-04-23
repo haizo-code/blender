@@ -51,6 +51,6 @@ abstract class BaseBindingViewHolder<T : ListItem>(binding: ViewDataBinding,
     }
 
     override fun onClick(view: View) {
-        actionCallback?.onItemClicked(view, listItem, adapterPosition, this)
+        actionCallback?.onItemClicked(view, listItem, bindingAdapterPosition, this)
     }
 }

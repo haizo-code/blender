@@ -132,15 +132,9 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     /**
      * Remove the passed listItems list from the main list
      * @param [items]: ListItems
-     * TODO: Enhance: in case the list spreads in the main list (not ordered)
      */
     override fun removeAll(items: List<M>) {
         if (items.isNotEmpty()) {
-//            val startIndex = mItems.indexOf(items[0])
-//            if (startIndex != -1){
-//                mItems.removeAll(items)
-//                notifyItemRangeRemoved(startIndex, items.count())
-//            }
             mItems.removeAll(items)
             notifyDataSetChanged()
         }
