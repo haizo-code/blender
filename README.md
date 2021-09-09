@@ -4,8 +4,11 @@
 Recyclerview General Adapter
 =================
 [![](https://jitpack.io/v/haizo-code/recyclerview-general-adapter.svg)](https://jitpack.io/#haizo-code/recyclerview-general-adapter)
+
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-[![API](https://img.shields.io/badge/API-19%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=19)
+
+[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
+
 ![License](http://img.shields.io/badge/license-APACHE2-blue.svg)
 
 ## You won't have to code any adapter again!
@@ -13,7 +16,7 @@ Android library project that intends to simplify the usage of Adapters for recyc
 
  * **No more adapters to create**
 
- * **Supports all SDK 16+**
+ * **Supports API levels 16+**
 
  * **Uses ViewDataBinding**
 
