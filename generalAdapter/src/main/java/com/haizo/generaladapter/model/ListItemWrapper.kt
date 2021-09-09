@@ -1,5 +1,7 @@
 package com.haizo.generaladapter.model
 
+import java.util.ArrayList
+
 /**
  * This could be used as a wrapper class for the model that will be used inside the ViewHolder
  * This may need this when you do not want to let your model implements the ListItem,

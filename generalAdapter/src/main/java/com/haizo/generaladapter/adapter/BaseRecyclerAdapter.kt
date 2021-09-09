@@ -15,7 +15,6 @@
  */
 package com.haizo.generaladapter.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,7 +36,6 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     /**
      * Clear all the list and reset page number of the LoadMore
      */
-    @SuppressLint("NotifyDataSetChanged")
     override fun clear() {
         mItems.clear()
         notifyDataSetChanged()
@@ -102,7 +100,6 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
      * Update the whole list with a new list
      * @param listItems
      */
-    @SuppressLint("NotifyDataSetChanged")
     override fun updateList(listItems: List<M>?) {
         clear()
         mItems.addAll(listItems ?: ArrayList())
@@ -136,7 +133,6 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
      * Remove the passed listItems list from the main list
      * @param [items]: ListItems
      */
-    @SuppressLint("NotifyDataSetChanged")
     override fun removeAll(items: List<M>) {
         if (items.isNotEmpty()) {
             mItems.removeAll(items)
@@ -236,8 +232,8 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
                 override fun onMove(recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                    val fromPos = viewHolder.bindingAdapterPosition
-                    val toPos = target.bindingAdapterPosition
+                    val fromPos = viewHolder.adapterPosition
+                    val toPos = target.adapterPosition
                     return moveItem(fromPos, toPos) // true if moved, false otherwise
                 }
 
