@@ -15,7 +15,6 @@
  */
 package com.haizo.generaladapter.interfaces
 
-@FunctionalInterface
 interface BackwardActionCallback {
     /**
      * @param args
