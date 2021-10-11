@@ -212,6 +212,8 @@ You can pass any extra param by **vararg** to the ViewHolder using this method:
 adapter.setExtraParams(..)
 ```
 
+------
+
 ### Receiving the extra params in the ViewHolder
 You just need to add the extra params in the constructor of the ViewHolder (keep in mind to add the params here in the same sequence you passed it)
 ```kotlin
@@ -242,6 +244,27 @@ class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, action
     ...
 }
 ````
+
+### ListItem Wrapper
+for example, if you are using clean architecture and you dont wan't to let your model in the Domain-Module implements the ListItem directly,
+then you can use the **ListItemWrapper** to solve it, just create a new class that implements this wrapper and add your model in it:
+example:
+
+```kotlin
+class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper() {
+     override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
+}
+```
+and update the viewholder to use the wrapper instead of the direct model as:
+```kotlin
+BaseBindingViewHolder<StoryListItemWrapper>(viewDataBinding, actionCallback)
+```
+finally, update the adapter with the list of wrappers, you can use the below helper method inside ListItemWrapper.kt:
+```kotlin
+val list : list<StoryModel> = ...
+adapter.updateList(list.getListItemWrapper<StoryListItemWrapper>())
+```
+
 ## Adapter Methods
 
 ### General methods
