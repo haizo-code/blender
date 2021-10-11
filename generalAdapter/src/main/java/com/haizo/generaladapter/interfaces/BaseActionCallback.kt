@@ -18,7 +18,6 @@ package com.haizo.generaladapter.interfaces
 import android.view.View
 import com.haizo.generaladapter.model.ListItem
 
-@FunctionalInterface
 interface BaseActionCallback {
     /**
      * @param view
