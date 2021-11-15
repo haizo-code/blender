@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.viewholders
+package com.haizo.generaladapter.interfaces
 
-import androidx.databinding.ViewDataBinding
-import com.haizo.generaladapter.interfaces.BaseActionCallback
-import com.haizo.generaladapter.loadmore.LoadingObj
-
-class LoadingViewHolder(
-    binding: ViewDataBinding, actionCallback: BaseActionCallback?
-) : BaseBindingViewHolder<LoadingObj>(binding, actionCallback) {
-    override fun onBind(listItem: LoadingObj) {}
-}
+interface ViewHolderExtras

@@ -128,7 +128,7 @@ class StoryModel(
     val imageUrl: String
 ) : ListItem {
     // This model will be presenting the ITEM_STORY
-    override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
+    override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
 
@@ -252,7 +252,7 @@ example:
 
 ```kotlin
 class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper() {
-     override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
+     override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
 and update the viewholder to use the wrapper instead of the direct model as:

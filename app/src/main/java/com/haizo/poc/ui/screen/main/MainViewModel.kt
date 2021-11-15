@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.poc.ListItemTypes
-import com.haizo.poc.model.ImagesListModel
-import com.haizo.poc.model.StoryModel
-import com.haizo.poc.model.UserCardModel
+import com.haizo.poc.model.StoriesListItem
+import com.haizo.poc.model.Story
+import com.haizo.poc.model.User
+import com.haizo.poc.util.ListItemTypes
+import com.haizo.poc.util.sampleBackgrounds
+import java.util.UUID
 
 class MainViewModel : ViewModel() {
 
@@ -20,44 +21,52 @@ class MainViewModel : ViewModel() {
         _items.value = getDummyItems()
     }
 
-    private fun getDummyItems(): MutableList<ListItem>? {
+    private fun getDummyItems(): MutableList<ListItem> {
         return mutableListOf(
-
             getDummyHorizontalItem(),
-            UserCardModel.getRandomUser(),
-            getDummyGridItems(),
-            UserCardModel.getRandomUser(),
-            StoryModel.getRandomStory(),
-
-            getDummyHorizontalItem(),
-            UserCardModel.getRandomUser(),
-            getDummyGridItems(),
-            UserCardModel.getRandomUser(),
-            StoryModel.getRandomStory(),
-
-            getDummyHorizontalItem(),
-            UserCardModel.getRandomUser(),
-            getDummyGridItems(),
-            UserCardModel.getRandomUser(),
-            StoryModel.getRandomStory()
+            getRandomUser(),
+            getRandomUser(),
+            getDummyGridItem(),
+            getRandomUser(),
+            getRandomStory(),
+            getRandomUser(),
+            getRandomUser(),
+            getRandomUser(),
+            getRandomUser(),
         )
     }
 
-    private fun getDummyHorizontalItem(): ImagesListModel {
-        return ImagesListModel().apply {
-            list?.let { for (i in 1..10) it.add(StoryModel.getRandomStory()) }
+    private fun getDummyHorizontalItem(): StoriesListItem {
+        return StoriesListItem(ListItemTypes.LIST_STORIES_HORIZONTAL).apply {
+            list.let { for (i in 1..10) it.add(getRandomStory()) }
         }
     }
 
-    private fun getDummyGridItems(): ImagesListModel {
-        return ImagesListModel().apply {
-            list?.let { for (i in 1..4) it.add(StoryModel.getRandomStory()) }
-            listItemType = ListItemTypes.LIST_IMAGES_GRID
+    private fun getDummyGridItem(): StoriesListItem {
+        return StoriesListItem(ListItemTypes.LIST_STORIES_GRID).apply {
+            list.let { for (i in 1..4) it.add(getRandomStory()) }
+        }
+    }
+
+    companion object {
+        /*For testing only*/
+        var dummyUserNumber = 0
+        fun getRandomUser(): User {
+            return User(
+                id = UUID.randomUUID().toString(),
+                name = "First Last $dummyUserNumber",
+                phoneNumber = "00000000${dummyUserNumber++}",
+                location = "Amman - Jordan",
+                imageUrl = sampleBackgrounds.random()
+            )
+        }
+
+        /*For testing only*/
+        fun getRandomStory(): Story {
+            return Story(
+                id = UUID.randomUUID().toString(),
+                imageUrl = sampleBackgrounds.random()
+            )
         }
     }
 }
-
-fun ArrayList<ListItem>.setType(listItemType: ListItemType) {
-    forEach { it.listItemType = listItemType }
-}
-

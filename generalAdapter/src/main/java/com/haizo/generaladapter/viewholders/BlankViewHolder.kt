@@ -19,7 +19,8 @@ import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.model.ListItem
 
-class BlankViewHolder(binding: ViewDataBinding, actionCallback: BaseActionCallback?) :
-    BaseBindingViewHolder<ListItem>(binding, actionCallback) {
+class BlankViewHolder(
+    binding: ViewDataBinding, actionCallback: BaseActionCallback?
+) : BaseBindingViewHolder<ListItem>(binding, actionCallback) {
     override fun onBind(listItem: ListItem) {}
 }

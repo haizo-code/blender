@@ -20,5 +20,5 @@ import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
 
 class LoadingObj : ListItem {
-    override var listItemType: ListItemType? = MainListItemTypes.LOADING
+    override val listItemType: ListItemType = MainListItemTypes.LOADING
 }

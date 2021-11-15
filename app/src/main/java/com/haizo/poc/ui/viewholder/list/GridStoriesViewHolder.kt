@@ -1,26 +1,26 @@
 package com.haizo.poc.ui.viewholder.list
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
-import com.haizo.generaladapter.interfaces.BaseActionCallback
+import com.haizo.generaladapter.listadapter.BlenderListAdapter
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
-import com.haizo.poc.databinding.RowRvImagesBinding
-import com.haizo.poc.model.ImagesListModel
+import com.haizo.poc.callbacks.StoryActionCallback
+import com.haizo.poc.databinding.RowStoriesRvBinding
+import com.haizo.poc.model.StoriesListItem
 
-class GridStoriesViewHolder(private val viewDataBinding: RowRvImagesBinding, actionCallback: BaseActionCallback?) :
-    BaseBindingViewHolder<ImagesListModel>(viewDataBinding, actionCallback) {
+class GridStoriesViewHolder(private val viewDataBinding: RowStoriesRvBinding, actionCallback: StoryActionCallback) :
+    BaseBindingViewHolder<StoriesListItem>(viewDataBinding, actionCallback) {
 
-    private val adapterBinding: GeneralBindingListAdapter by lazy {
-        GeneralBindingListAdapter(context = context)
+    private val adapterBinding: BlenderListAdapter by lazy {
+        BlenderListAdapter(context = context, actionCallback)
     }
 
     init {
         setupRecyclerView()
     }
 
-    override fun onBind(listItem: ImagesListModel) {
-        adapterBinding.updateList(listItem.list)
+    override fun onBind(listItem: StoriesListItem) {
+        adapterBinding.submitList(listItem.list.toList())
     }
 
     private fun setupRecyclerView() {

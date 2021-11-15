@@ -7,13 +7,19 @@ import java.util.ArrayList
  * This may need this when you do not want to let your model implements the ListItem,
  * such as in Clean-Architecture when the model is separated in a differance package as in Domain-Package
  */
-abstract class ListItemWrapper : ListItem
+abstract class ListItemWrapper : ListItem {
 
-inline fun <reified T : ListItemWrapper> List<*>.getListItemWrapper(): List<T> {
-    return ArrayList<T>().also { list ->
-        forEach { item ->
-            val listItemInstance = T::class.java.constructors.first().newInstance(item) as T
-            list.add(listItemInstance)
+    companion object {
+        /**
+         * Helper method to wrap any items with a listItemWrapper
+         */
+        inline fun <reified T : ListItemWrapper> wrap(items: List<*>?): List<T> {
+            return ArrayList<T>().also { list ->
+                items?.forEach { item ->
+                    val listItemInstance = T::class.java.constructors.first().newInstance(item) as T
+                    list.add(listItemInstance)
+                }
+            }
         }
     }
 }

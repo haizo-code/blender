@@ -94,14 +94,13 @@ interface AdapterActions<M> {
     /**
      * Set the number of the items that will fit in the screen (Horizontally), so for ex, 1.5 will show 1 and (half item/quarter of 2 items).
      * Note: Any added margin to the view will not be counted in the formula
-     * @param context
      * @param itemsToFit
      */
-    fun setItemsToFitInScreen(context: Context, itemsToFit: Float)
+    fun setItemsToFitInScreen(itemsToFit: Float)
 
     /**
      * Set the item width percentage for the screen width
      */
-    fun setItemWidthPercentage(context: Context, percentage: Float)
+    fun setItemWidthPercentage(percentage: Float)
 
 }
