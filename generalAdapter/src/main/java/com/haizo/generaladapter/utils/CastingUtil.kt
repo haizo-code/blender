@@ -3,7 +3,12 @@ package com.haizo.generaladapter.utils
 object CastingUtil {
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> genericCastOrNull(anything: Any?, clazz: Class<T>?): T? {
-        return if (clazz?.isInstance(anything) == true) anything as T else null
+    fun <T> castOrNull(instance: Any?, toClass: Class<T>?): T? {
+        return if (toClass?.isInstance(instance) == true) instance as T else null
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    inline fun <reified T> castOrNull(instance: Any?): T? {
+        return instance as? T
     }
 }

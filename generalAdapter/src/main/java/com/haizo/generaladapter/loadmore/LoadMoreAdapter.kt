@@ -17,6 +17,7 @@ package com.haizo.generaladapter.loadmore
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
+import com.haizo.generaladapter.interfaces.LoadMoreListener
 
 /**
  * This is a abstract class for the RecyclerView Adapter that will handle the LoadMore behavior

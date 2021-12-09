@@ -1,7 +1,5 @@
 package com.haizo.generaladapter.interfaces
 
-import android.content.Context
-
 interface AdapterActions<M> {
 
     /**

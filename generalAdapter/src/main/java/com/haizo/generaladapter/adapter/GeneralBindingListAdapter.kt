@@ -19,5 +19,5 @@ import android.content.Context
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 
 @Deprecated("Use the BlenderAdapter or BlenderListAdapter instead")
-open class GeneralBindingListAdapter(context: Context, vararg actionCallback: BaseActionCallback) :
-    BlenderAdapter(context, *actionCallback)
+open class GeneralBindingListAdapter(context: Context, vararg actionCallbacks: BaseActionCallback) :
+    BlenderAdapter(context, *actionCallbacks)

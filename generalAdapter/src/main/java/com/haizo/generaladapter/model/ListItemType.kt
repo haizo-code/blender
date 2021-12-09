@@ -27,7 +27,7 @@ import com.haizo.generaladapter.interfaces.ViewHolderExtras
  * @param callbackClass: The class of the BaseActionCallback that will be used in the [viewHolderClass]
  * @param extrasClass: The class of the ViewHolderExtras that will be used in the view [viewHolderClass]
  */
-class ListItemType constructor(
+class ListItemType @JvmOverloads constructor(
     val viewHolderClass: Class<*>,
     val layoutResId: Int,
     val itemName: String = viewHolderClass.simpleName,
@@ -54,3 +54,9 @@ class ListItemType constructor(
         var type: Int = 1
     }
 }
+
+/*
+
+
+
+ */

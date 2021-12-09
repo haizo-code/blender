@@ -33,7 +33,7 @@ import com.haizo.generaladapter.viewholders.BlankViewHolder
 import kotlin.math.roundToInt
 
 open class BlenderAdapter constructor(
-    val context: Context,
+    context: Context,
     vararg actionCallbacks: BaseActionCallback
 ) : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
 
@@ -62,11 +62,11 @@ open class BlenderAdapter constructor(
         setupViewWidth(binding)
 
         val callback: BaseActionCallback? = actionCallbacks.find {
-            CastingUtil.genericCastOrNull(it, listItemType.callbackClass) != null
+            CastingUtil.castOrNull(it, listItemType.callbackClass) != null
         } ?: actionCallbacks.firstOrNull()
 
         val viewHolderExtras: ViewHolderExtras? = viewHolderExtrasList.find {
-            CastingUtil.genericCastOrNull(it, listItemType.extrasClass) != null
+            CastingUtil.castOrNull(it, listItemType.extrasClass) != null
         } ?: viewHolderExtrasList.firstOrNull()
 
         val mainConstructor = listItemType.viewHolderClass.constructors[0]

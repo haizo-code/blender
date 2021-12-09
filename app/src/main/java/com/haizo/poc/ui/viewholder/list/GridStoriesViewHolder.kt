@@ -8,8 +8,10 @@ import com.haizo.poc.callbacks.StoryActionCallback
 import com.haizo.poc.databinding.RowStoriesRvBinding
 import com.haizo.poc.model.StoriesListItem
 
-class GridStoriesViewHolder(private val viewDataBinding: RowStoriesRvBinding, actionCallback: StoryActionCallback) :
-    BaseBindingViewHolder<StoriesListItem>(viewDataBinding, actionCallback) {
+class GridStoriesViewHolder constructor(
+    private val viewDataBinding: RowStoriesRvBinding,
+    actionCallback: StoryActionCallback
+) : BaseBindingViewHolder<StoriesListItem>(viewDataBinding, actionCallback) {
 
     private val adapterBinding: BlenderListAdapter by lazy {
         BlenderListAdapter(context = context, actionCallback)

@@ -37,13 +37,13 @@ class MainViewModel : ViewModel() {
     }
 
     private fun getDummyHorizontalItem(): StoriesListItem {
-        return StoriesListItem(ListItemTypes.LIST_STORIES_HORIZONTAL).apply {
+        return StoriesListItem(listItemType = ListItemTypes.LIST_STORIES_HORIZONTAL).apply {
             list.let { for (i in 1..10) it.add(getRandomStory()) }
         }
     }
 
     private fun getDummyGridItem(): StoriesListItem {
-        return StoriesListItem(ListItemTypes.LIST_STORIES_GRID).apply {
+        return StoriesListItem(listItemType = ListItemTypes.LIST_STORIES_GRID).apply {
             list.let { for (i in 1..4) it.add(getRandomStory()) }
         }
     }

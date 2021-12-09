@@ -3,8 +3,7 @@ package com.haizo.poc.model
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
 
-class StoriesListItem constructor(
+data class StoriesListItem constructor(
+    var list: MutableList<Story> = ArrayList(),
     override val listItemType: ListItemType
-) : ListItem {
-    var list: MutableList<Story> = ArrayList()
-}
+) : ListItem

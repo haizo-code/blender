@@ -15,12 +15,9 @@
  */
 package com.haizo.generaladapter.listadapter
 
-import androidx.recyclerview.widget.ListAdapter
-import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
+import com.haizo.generaladapter.loadmore.LoadMoreListAdapter
 
-abstract class BaseRecyclerListAdapter :
-    ListAdapter<ListItem, BaseBindingViewHolder<ListItem>>(DiffCallbacks.LIST_ITEM_COMPARATOR) {
+abstract class BaseRecyclerListAdapter : LoadMoreListAdapter() {
 
     override fun getItemCount(): Int {
         return currentList.size

@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haizo.generaladapter.adapter.BlenderAdapter
-import com.haizo.generaladapter.loadmore.LoadMoreListener
+import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.listadapter.BlenderListAdapter
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.poc.R
@@ -21,28 +21,19 @@ import com.haizo.poc.model.User
 
 class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallback {
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    }
-
-    private val adapter: BlenderAdapter by lazy {
-        BlenderAdapter(context = this, this)
-    }
-
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by viewModels()
+
+    private val adapter: BlenderListAdapter by lazy {
+        BlenderListAdapter(context = this, this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupRecyclerView()
         setupLoadMore()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.items.observe(this, {
-            adapter.updateList(it)
-        })
     }
 
     private fun setupRecyclerView() {
@@ -63,7 +54,7 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
 
     private fun demoLoadMore(pageToLoad: Int) {
         Handler(Looper.getMainLooper()).postDelayed({
-            // lets say the last page is 3 and the next page returned null list
+            // assuming last page is 3 and the next page returned null list
             val list: List<ListItem> =
                 if (pageToLoad <= 3) {
                     ArrayList<ListItem>().also {
@@ -73,8 +64,15 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                         it.add(MainViewModel.getRandomStory())
                     }
                 } else emptyList()
-            adapter.addMoreItems(list)
-        }, 500)
+            adapter.submitMoreList(pageToLoad, list)
+        }, 1000)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.items.observe(this, {
+            adapter.submitMoreList(page = 1, list = it)
+        })
     }
 
     override fun onStoryClicked(story: Story) {
