@@ -1,7 +1,7 @@
 
-<p align="center"><img src="/sample.png" width="250" vspace="24"></p>
+<img width="800" alt="blender_adapter" src="https://user-images.githubusercontent.com/17477070/145425168-f01c4af1-b0c4-4de5-b72c-ca6067bd7431.png">
 
-Recyclerview General Adapter
+Recyclerview Smart Adapter
 =================
 [![](https://jitpack.io/v/haizo-code/recyclerview-general-adapter.svg)](https://jitpack.io/#haizo-code/recyclerview-general-adapter)
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
@@ -43,7 +43,7 @@ dependencies {
 
 ## Usage
 ### Initializing the adapter
-Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
+Create an instance from BlenderListAdapter and bind it to your recyclerview
 ```kotlin
 private val adapter: BlenderListAdapter by lazy {
     BlenderListAdapter(context = this, actionCallbacks = this)
