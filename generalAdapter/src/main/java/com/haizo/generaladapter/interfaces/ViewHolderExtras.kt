@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.viewholders
+package com.haizo.generaladapter.interfaces
 
-import androidx.databinding.ViewDataBinding
-import com.haizo.generaladapter.interfaces.BaseActionCallback
-import com.haizo.generaladapter.model.ListItem
-
-class BlankViewHolder constructor(
-    binding: ViewDataBinding, actionCallback: BaseActionCallback?
-) : BaseBindingViewHolder<ListItem>(binding, actionCallback) {
-    override fun onBind(listItem: ListItem) {}
-}
+interface ViewHolderExtras

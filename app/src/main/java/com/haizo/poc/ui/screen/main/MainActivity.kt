@@ -2,70 +2,38 @@ package com.haizo.poc.ui.screen.main
 
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
+import android.os.Looper
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haizo.generaladapter.adapter.GeneralBindingListAdapter
-import com.haizo.generaladapter.interfaces.BackwardActionCallback
-import com.haizo.generaladapter.loadmore.LoadMoreListener
+import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.listadapter.BlenderListAdapter
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.poc.R
+import com.haizo.poc.callbacks.StoryActionCallback
+import com.haizo.poc.callbacks.UserActionCallback
 import com.haizo.poc.databinding.ActivityMainBinding
-import com.haizo.poc.model.StoryModel
-import com.haizo.poc.model.UserCardModel
-import com.haizo.poc.util.showAlert
-import com.haizo.poc.util.toast
+import com.haizo.poc.model.Story
+import com.haizo.poc.model.User
 
-class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
-
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
-    }
-
-    private val adapter: GeneralBindingListAdapter by lazy {
-        GeneralBindingListAdapter(context = this, actionCallback = this)
-    }
+class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallback {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by viewModels()
+
+    private val adapter: BlenderListAdapter by lazy {
+        BlenderListAdapter(context = this, this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupRecyclerView()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.items.observe(this, Observer {
-            adapter.updateList(it)
-        })
-    }
-
-    override fun onLoadMore(pageToLoad: Int) {
-        demoLoadMore(pageToLoad)
-    }
-
-    override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCallback: BackwardActionCallback) {
-        when (listItem) {
-            is UserCardModel -> showAlert(message = listItem.name) {
-                // Triggering a backward callback to the current ViewHolder
-                // Passing dummy values just for the POC
-                bwCallback.onBackwardAction("A", "B")
-            }
-            is StoryModel -> showAlert(message = listItem.imageUrl)
-        }
-    }
-
-    override fun myAction1() {
-        toast("myAction1 callback")
-    }
-
-    override fun myAction2() {
-        toast("myAction2 callback")
+        setupLoadMore()
     }
 
     private fun setupRecyclerView() {
@@ -73,25 +41,49 @@ class MainActivity : AppCompatActivity(), LoadMoreListener, MyActions {
             it.layoutManager = LinearLayoutManager(this)
             it.adapter = adapter
             it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
-            adapter.setupLoadMore(loadMoreListener = this, pageSize = 9)
-
-            // Passing the ViewModel to the adapter so the ViewHolder can use it
-            adapter.setExtraParams(viewModel)
         }
     }
 
+    private fun setupLoadMore() {
+        adapter.setupLoadMore(pageSize = 10, loadMoreListener = object : LoadMoreListener {
+            override fun onLoadMore(pageToLoad: Int) {
+                demoLoadMore(pageToLoad)
+            }
+        })
+    }
+
     private fun demoLoadMore(pageToLoad: Int) {
-        Handler().postDelayed({
-            // lets say the last page is 3 and the next page returned null list
-            val list: List<UserCardModel>? =
+        Handler(Looper.getMainLooper()).postDelayed({
+            // assuming last page is 3 and the next page returned null list
+            val list: List<ListItem> =
                 if (pageToLoad <= 3) {
-                    ArrayList<UserCardModel>().also {
+                    ArrayList<ListItem>().also {
                         for (i in 1..10) {
-                            it.add(UserCardModel.getRandomUser())
+                            it.add(MainViewModel.getRandomUser())
                         }
+                        it.add(MainViewModel.getRandomStory())
                     }
-                } else null
-            adapter.addMoreItems(list)
-        }, 500)
+                } else emptyList()
+            adapter.submitMoreList(pageToLoad, list)
+        }, 1000)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.items.observe(this, {
+            adapter.submitMoreList(page = 1, list = it)
+        })
+    }
+
+    override fun onStoryClicked(story: Story) {
+        Toast.makeText(this@MainActivity, "Story clicked id: ${story.id}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onAvatarClicked(user: User) {
+        Toast.makeText(this@MainActivity, "User Avatar clicked: ${user.name}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCallClicked(user: User) {
+        Toast.makeText(this@MainActivity, "User Call clicked: ${user.name}", Toast.LENGTH_SHORT).show()
     }
 }

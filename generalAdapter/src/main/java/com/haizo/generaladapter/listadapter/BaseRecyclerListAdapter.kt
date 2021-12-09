@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.viewholders
+package com.haizo.generaladapter.listadapter
 
-import androidx.databinding.ViewDataBinding
-import com.haizo.generaladapter.interfaces.BaseActionCallback
-import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.loadmore.LoadMoreListAdapter
 
-class BlankViewHolder constructor(
-    binding: ViewDataBinding, actionCallback: BaseActionCallback?
-) : BaseBindingViewHolder<ListItem>(binding, actionCallback) {
-    override fun onBind(listItem: ListItem) {}
+abstract class BaseRecyclerListAdapter : LoadMoreListAdapter() {
+
+    override fun getItemCount(): Int {
+        return currentList.size
+    }
+
+    override fun getItemViewType(index: Int): Int {
+        val item = currentList[index]
+        return item.listItemType.mItemViewType
+    }
 }

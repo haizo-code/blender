@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.viewholders
+package com.haizo.generaladapter.listadapter
 
-import androidx.databinding.ViewDataBinding
-import com.haizo.generaladapter.interfaces.BaseActionCallback
+import androidx.recyclerview.widget.DiffUtil
 import com.haizo.generaladapter.model.ListItem
 
-class BlankViewHolder constructor(
-    binding: ViewDataBinding, actionCallback: BaseActionCallback?
-) : BaseBindingViewHolder<ListItem>(binding, actionCallback) {
-    override fun onBind(listItem: ListItem) {}
+object DiffCallbacks {
+
+    val LIST_ITEM_COMPARATOR = object : DiffUtil.ItemCallback<ListItem>() {
+        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
+            oldItem.itemUniqueIdentifier() == newItem.itemUniqueIdentifier()
+
+        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
+            oldItem.areContentsTheSame(newItem)
+    }
 }

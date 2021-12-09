@@ -16,21 +16,16 @@
 package com.haizo.generaladapter.adapter
 
 import android.content.Context
-import android.util.Log
-import android.view.LayoutInflater
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.AdapterActions
 import com.haizo.generaladapter.loadmore.LoadMoreAdapter
 import com.haizo.generaladapter.model.ListItem
 import java.util.ArrayList
 
-abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(context: Context?) :
+abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(private val context: Context) :
     AdapterActions<M>, LoadMoreAdapter<M, VH>() {
 
     protected var mItems: ArrayList<M> = ArrayList()
-    protected var mInflater: LayoutInflater = LayoutInflater.from(context)
     protected var mItemWidth: Float? = null
 
     /**
@@ -187,10 +182,9 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     /**
      * Set the number of the items that will fit in the screen (Horizontally), so for ex, 1.5 will show 1 and (half item/quarter of 2 items).
      * Note: Any added margin to the view will not be counted in the formula
-     * @param context
      * @param itemsToFit
      */
-    override fun setItemsToFitInScreen(context: Context, itemsToFit: Float) {
+    override fun setItemsToFitInScreen(itemsToFit: Float) {
         try {
             val dm = context.resources.displayMetrics
             mItemWidth = dm.widthPixels / itemsToFit
@@ -202,17 +196,13 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
     /**
      * Set the item width percentage for the screen width
      */
-    override fun setItemWidthPercentage(context: Context, percentage: Float) {
+    override fun setItemWidthPercentage(percentage: Float) {
         val dm = context.resources.displayMetrics
         mItemWidth = dm.widthPixels * percentage
     }
 
     override fun getItemViewType(index: Int): Int {
-        if (mItems[index].listItemType == null) {
-            val message = "The listItemType in (${mItems[index].javaClass}) is NULL. Item index $index"
-            Log.e(this.javaClass.name, "======== $message ======== ")
-        }
-        return mItems[index].listItemType?.mItemViewType ?: 0
+        return mItems[index].listItemType.mItemViewType
     }
 
     override val items: MutableList<M>
@@ -224,35 +214,5 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(c
 
     override fun getItemCount(): Int {
         return mItems.size
-    }
-
-    // TODO: to be enhanced
-    private fun enableMoveItem() {
-        val itemTouchHelper =
-            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
-                override fun onMove(recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                    val fromPos = viewHolder.adapterPosition
-                    val toPos = target.adapterPosition
-                    return moveItem(fromPos, toPos) // true if moved, false otherwise
-                }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    // remove from adapter
-                }
-
-                override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-                    super.onSelectedChanged(viewHolder, actionState)
-                    if (actionState == ACTION_STATE_DRAG) {
-                        viewHolder?.itemView?.alpha = 0.5f
-                    }
-                }
-
-                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-                    super.clearView(recyclerView, viewHolder)
-                    viewHolder.itemView.alpha = 1.0f
-                }
-            })
-        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 }

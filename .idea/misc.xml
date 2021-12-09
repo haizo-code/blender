@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../POC/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3802083333333333" />
+        <entry key="../POC/app/src/main/res/drawable/ic_baseline_error_outline_24.xml" value="0.3802083333333333" />
+        <entry key="../POC/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3802083333333333" />
+        <entry key="../POC/app/src/main/res/layout/activity_main.xml" value="0.3072916666666667" />
+        <entry key="../POC/app/src/main/res/layout/blank_fragment.xml" value="0.17916666666666667" />
+        <entry key="../POC/app/src/main/res/layout/row_rv_images.xml" value="0.3072916666666667" />
+        <entry key="../POC/app/src/main/res/layout/row_stories_rv.xml" value="0.3640625" />
+        <entry key="../POC/app/src/main/res/layout/row_story.xml" value="0.3072916666666667" />
+        <entry key="../POC/app/src/main/res/layout/row_user_card.xml" value="0.3072916666666667" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

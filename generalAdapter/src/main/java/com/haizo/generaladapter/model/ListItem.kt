@@ -16,5 +16,10 @@
 package com.haizo.generaladapter.model
 
 interface ListItem {
-    var listItemType: ListItemType?
+    val listItemType: ListItemType
+
+    // Override if you are using BlenderListAdapter
+    // Used in the DiffUtil
+    fun itemUniqueIdentifier(): String = ""
+    fun areContentsTheSame(newItem: ListItem): Boolean = false
 }

@@ -1,36 +1,26 @@
 
-<p align="center"><img src="/sample.png" width="250" vspace="24"></p>
+<img width="800" alt="blender_adapter" src="https://user-images.githubusercontent.com/17477070/145425168-f01c4af1-b0c4-4de5-b72c-ca6067bd7431.png">
 
-Recyclerview General Adapter
+Recyclerview Smart Adapter
 =================
 [![](https://jitpack.io/v/haizo-code/recyclerview-general-adapter.svg)](https://jitpack.io/#haizo-code/recyclerview-general-adapter)
-
 [![Platform](https://img.shields.io/badge/platform-android-green.svg)](http://developer.android.com/index.html)
-
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
-
 ![License](http://img.shields.io/badge/license-APACHE2-blue.svg)
 
 ## You won't have to code any adapter again!
-Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**. 
+Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**.
 
- * **No more adapters to create**
-
- * **Supports API levels 16+**
-
- * **Uses ViewDataBinding**
-
- * **Handles unlimited multiple types automatically**
-
- * **Handles Callbacks from Viewholder and vice-versa**
-
- * **Handles Load more automatically**
-
- * **Handles all the common actions for the recyclerview-adapter and more...**
-
- * **100% kotlin ~ Compatible with Java**
-
- * **Easy to use and implement**
+ * No more adapters to create
+ * Supports (RecyclerView adapter) and (RecyclerView ListAdapter + DiffUill)
+ * Supports API levels 16+
+ * Uses ViewDataBinding
+ * Handles unlimited multiple types automatically
+ * Handles Callbacks from ViewHolder and vice-versa
+ * Handles Load more automatically
+ * Handles all the common actions for the recyclerview-adapter and more...
+ * 100% kotlin ~ Compatible with Java
+ * Easy to use and implement
 
 ## Gradle
 
@@ -47,34 +37,34 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v1.5.25'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.0.0'
 }
 ```
 
 ## Usage
 ### Initializing the adapter
-Create an instance from GeneralBindingListAdapter and bind it to your recyclerview
+Create an instance from BlenderListAdapter and bind it to your recyclerview
 ```kotlin
-private val adapter: GeneralBindingListAdapter by lazy {
-    GeneralBindingListAdapter(context = this, actionCallback = this)
+private val adapter: BlenderListAdapter by lazy {
+    BlenderListAdapter(context = this, actionCallbacks = this)
 }
 ```
 
-### Bind the adapter to recyclerview
 ```kotlin
-recyclerview?.adapter = adapter
+recyclerview.adapter = adapter
+```
+### Display the items
+Just need to pass your models (ListItems) to the adapter and that's it :)
+  You can mix all the types together and it will be handled automatically by the adapter
+
+* for **BlenderListAdapter** (RecyclerView ListAdapter - diffUtil) use:
+```kotlin
+adapter.submitList(list)
 ```
 
-### Display the items
-Just need to pass your models (ListItems) to the adapter and that's it :) 
-  You can mix all the types together and it will be handled automatically by the adapter
+* for **BlenderAdapter** (Legacy recyclerView adapter) use:
 ```kotlin
-val myList = listOf(
-    userModel,
-    storyModel,
-    ...
-)
-adapter.addAll(myList)
+adapter.updateList(list)
 ```
 ------------
 ------------
@@ -87,8 +77,8 @@ Create your **ViewHolder** and extend it with **BaseBindingViewHolder<YourModelH
  * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
 
 ```kotlin
-class StoryViewHolder(private val viewDataBinding: RowStoryBinding, actionCallback: BaseActionCallback?) :
-    BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) {
+class StoryViewHolder(private val binding: RowStoryBinding, actionCallback: BaseActionCallback?) :
+    BaseBindingViewHolder<StoryModel>(binding, actionCallback) {
 
     override fun onBind(listItem: StoryModel) {
     	// use the listItem here..
@@ -128,17 +118,159 @@ class StoryModel(
     val imageUrl: String
 ) : ListItem {
     // This model will be presenting the ITEM_STORY
-    override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
+    override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
 
 And thats it :)
 
 -------------
--------------
+
+### List Adapter DiffUtil
+* if you are using the **BlenderListAdapter**, then you need to override these methods in your ListItem class to be used in the DiffUtil:
+```kotlin
+data class Story(val id: String) : ListItem {
+    ...
+
+    override fun itemUniqueIdentifier(): String {
+        return id
+    }
+    override fun areContentsTheSame(newItem: ListItem): Boolean {
+        return if (newItem is Story) {
+            this == newItem
+        } else false
+    }
+}
+```
+* if you are using the **BlenderAdapter** then no need to override the above methods
+-------
+
+### LoadMore
+* for default usage, you can use this method as:
+```kotlin
+adapter.setupLoadMore(object : LoadMoreListener {
+    override fun onLoadMore(pageToLoad: Int) {
+        // request load next page
+    }
+})
+```
+* for custom loadmore, you can use this method as:
+```kotlin
+adapter.setupLoadMore(
+    pageSize = 10,
+    loadingThreshold = 3,
+    autoShowLoadingItem = false,
+    loadMoreListener = object : LoadMoreListener {
+        override fun onLoadMore(pageToLoad: Int) {
+            // show your loading
+            // request load next page
+        }
+
+        override fun onLoadMoreFinished() {
+            super.onLoadMoreFinished()
+            // hide your loading
+        }
+    })
+```
+
+### Submit Items with LoadMore
+you must use this method for submitting the list when using the loadMore
+```kotlin
+adapter.submitMoreList(page = 1, list = it)
+// If you used this method "adapter.submitList()" instead of "adapter.submitMoreList()" then the loadmore will not work
+
+// if you are using the BlenderAdapter (legacy adapter), then you should used this method
+// adapter.addMoreItems(list)
+```
+------
+
+### Sending extra params to the ViewHolder
+
+**Step 1.** create a class and let it implements the ViewHolderExtras:
+```kotlin
+class MySampleExtras : ViewHolderExtras {..}
+```
+
+**Step 2.** send this extra to the adapter using this method:
+```kotlin
+adapter.setExtraParams(mySampleExtras)
+```
+
+**Step 3.** define this extra class in the ListItemType initialization:
+```kotlin
+val ITEM_STORY = ListItemType(
+    viewHolderClass = StoryViewHolder::class.java,
+    layoutResId = R.layout.row_story,
+    itemName = "ITEM_STORY",
+    callbackClass = null,
+    extrasClass = MySampleExtras::class.java
+)
+```
+**Step 4.** Add the extra param in the constructor of the viewholder **as the third param**:
+```kotlin
+class StoryViewHolder(
+private val viewDataBinding: RowStoryBinding,
+private val actionCallback: BaseActionCallback?,
+private val mySampleExtras: MySampleExtras
+) : BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback)
+	...
+}
+```
+------
+
+### Custom callback
+You can add your custom callbacks to the ViewHolder by:
+
+**Step 1.** Create your interface and let it implements BaseActionCallback**
+```kotlin
+interface UserActionCallback : BaseActionCallback {
+    fun onAvatarClicked(user: User)
+    fun onCallClicked(user: User)
+}
+```
+**Step 2.** Replace the BaseActionCallback with your own interface**
+```kotlin
+class UserViewHolder constructor(
+    private val binding: RowUserCardBinding,
+    actionCallback: UserActionCallback?
+) : BaseBindingViewHolder<User>(binding, actionCallback) {
+    ...
+}
+````
+**Step 3.** define this extra class in the ListItemType initialization:
+```kotlin
+   val ITEM_USER_CARD = ListItemType(
+        viewHolderClass = UserViewHolder::class.java,
+        layoutResId = R.layout.row_user_card,
+        itemName = "ITEM_USER_CARD",
+        UserActionCallback::class.java)
+````
+
+------
+
+### ListItem Wrapper
+for example, if you are using clean architecture and you dont wan't to let your model in the Domain-Module implements the ListItem directly,
+then you can use the **ListItemWrapper** to solve it, just create a new class that implements this wrapper and add your model in it:
+example:
+
+```kotlin
+class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper() {
+     override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
+}
+```
+and update the viewholder to use the wrapper instead of the direct model as:
+```kotlin
+BaseBindingViewHolder<StoryListItemWrapper>(viewDataBinding, actionCallback)
+```
+finally, update the adapter with the list of wrappers, you can use the below helper method inside ListItemWrapper.kt:
+```kotlin
+val list : list<StoryModel> = ...
+adapter.submitList(ListItemWrapper.wrap<StoryListItemWrapper>(list))
+```
+------
 
 ### Item click callback (From ViewHolder and vice-versa)
-This callback will be triggered from the ViewHolder, also you can trigger backward 
+This callback will be triggered from the ViewHolder, also you can trigger backward
 callback to the ViewHolder using the **BackwardActionCallback** interface
 ```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCallback: BackwardActionCallback) {
@@ -160,141 +292,14 @@ override fun onBackwardAction(vararg args: Any) {
     // Your code to handle the backward action/s ...
 }
 ```
-
-### LoadMore
-```kotlin
-// Setup the loadmore
-adapter.setupLoadMore(loadMoreListener)
-
-// Callback of the loadmore
-override fun onLoadMore(pageToLoad: Int) {
-    // Your code...
-}
-```
-
-#### Adding the LoadMore items
-You should use this method to add more items to the list when you are using the LoadMore
-```kotlin
-adapter.addMoreItems(list)
-```
-
-
-### Custom LoadMore behavior
-if you want to add your own behavior when loadmore triggers then you can do as below
-
-// Setup the loadmore
- * **loadMoreListener**: Loadmore listener callback
- * **autoShowLoadingItem**: Determine if you want to from the adapter to show a loading item in the list
- * **pageSize**: Page size for the list, this will be used to determine when to call the next page depending on the loading threshold
- * **loadingThreshold**: Depends on the pagesize in backward, ex: threshold = 3 -> triggers loadmore on item 17
-
-```kotlin
-adapter.setupLoadMore(loadMoreListener = this, autoShowLoadingItem = false, pageSize = 20, loadingThreshold = 3)
-
-// Callback of the loadmore
-override fun onLoadMore(pageToLoad: Int) {
-    // Show your own loading (in case autoShowLoadingItem is false)
-    // Your code...
-}
-
-override fun onLoadMoreFinished() {
-    super.onLoadMoreFinished()
-    // Hide loading
-    // Your code...
-}
-```
-
-## Advanced
-
-### Sending extra params to the ViewHolder
-You can pass any extra param by **vararg** to the ViewHolder using this method:
-```kotlin
-adapter.setExtraParams(..)
-```
-
 ------
 
-### Receiving the extra params in the ViewHolder
-You just need to add the extra params in the constructor of the ViewHolder (keep in mind to add the params here in the same sequence you passed it)
-```kotlin
-class StoryViewHolder(
-private val viewDataBinding: RowStoryBinding,
-private val actionCallback: BaseActionCallback?,
-.. extra params here
-..
-..
-) : BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback) 
-	...
-}
-```
+### Adapter extra methods
 
-### Customize ViewHolder callback
-You can add your custom callbacks to the viewholder by:
-* **1. Create your interface and let it implements BaseActionCallback**
-```kotlin
-interface MyActions : BaseActionCallback {
-    fun myAction1()
-    fun myAction2()
-}
-```
-* **2. Replace the BaseActionCallback with your own interface**
-```kotlin
-class UserCardViewHolder(private val viewDataBinding: RowUserCardBinding, actionCallback: MyActions?) :
-    BaseBindingViewHolder<UserCardModel>(viewDataBinding, actionCallback) {
-    ...
-}
-````
-
-### ListItem Wrapper
-for example, if you are using clean architecture and you dont wan't to let your model in the Domain-Module implements the ListItem directly,
-then you can use the **ListItemWrapper** to solve it, just create a new class that implements this wrapper and add your model in it:
-example:
-
-```kotlin
-class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper() {
-     override var listItemType: ListItemType? = MyListItemTypes.ITEM_STORY
-}
-```
-and update the viewholder to use the wrapper instead of the direct model as:
-```kotlin
-BaseBindingViewHolder<StoryListItemWrapper>(viewDataBinding, actionCallback)
-```
-finally, update the adapter with the list of wrappers, you can use the below helper method inside ListItemWrapper.kt:
-```kotlin
-val list : list<StoryModel> = ...
-adapter.updateList(list.getListItemWrapper<StoryListItemWrapper>())
-```
-
-## Adapter Methods
-
-### General methods
 | Method | Description |
 | ------ | ------ |
 | setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
 | setItemWidthPercentage | Set the item width percentage for the screen width |
-| clear() | Clear all the list and reset page number of the LoadMore |
-| add(listItem) | Add item to the adapter |
-| add(index, listItem) | Add item to the adapter in a specific index |
-| addAll(listItems) | Add list of items to the adapter |
-| addAll(index, listItems) | Add list of items to the adapter in a specific index |
-| set(index, listItem) | Update a specific index |
-| updateList(listItems) | Update the whole list with a new list |
-| remove(index) | Remove listItem at index |
-| remove(listItem) | Remove the passed listItem from the main list if exists |
-| removeAll(items) | Remove the passed listItems list from the main list |
-| indexOf(listItem) | return index of the passed item (-1 if not found) |
-| contains(listItem) | return true if the main list contains a specific listItem |
-| getItem(index) | return the Item at index |
-| moveItem(from, to) | perform move item from index to index |
-
-### Loadmore methods
-| Method | Description |
-| ------ | ------ |
-| setupLoadMore | Use this method to setup the loadmore for the current recyclerview adapter |
-| addMoreItems | Use this method when you add the new loaded items from LoadMore |
-| removeLoadMoreIfExists | Remove the loading indicator if exists and triggers the callback for [LoadMoreListener.onLoadMoreFinished] |
-| resetPageNumber | Reset the current page number to Page = 1 |
-| setCurrentPageNumber | Manual setting the value of the current page number |
 
     
 ProGuard

@@ -16,14 +16,24 @@
 package com.haizo.generaladapter.model
 
 import com.haizo.generaladapter.ItemTypesPool
+import com.haizo.generaladapter.interfaces.BaseActionCallback
+import com.haizo.generaladapter.interfaces.ViewHolderExtras
 
 /**
  * Create by Farouq Afghani
  * @param viewHolderClass: The class of the ViewHolder that will be used with the view [layoutResId]
  * @param layoutResId: The layout resource for the view that will be associated with the passed ViewHolder [viewHolderClass]
  * @param itemName: This name will be helpful in debugging phase to know which ListItemType you are using for the selected ListItem
+ * @param callbackClass: The class of the BaseActionCallback that will be used in the [viewHolderClass]
+ * @param extrasClass: The class of the ViewHolderExtras that will be used in the view [viewHolderClass]
  */
-class ListItemType(val viewHolderClass: Class<*>, val layoutResId: Int, private val itemName: String = "") {
+class ListItemType @JvmOverloads constructor(
+    val viewHolderClass: Class<*>,
+    val layoutResId: Int,
+    val itemName: String = viewHolderClass.simpleName,
+    var callbackClass: Class<out BaseActionCallback>? = null,
+    var extrasClass: Class<out ViewHolderExtras>? = null
+) {
 
     var mItemViewType: Int = 0
 
@@ -44,3 +54,9 @@ class ListItemType(val viewHolderClass: Class<*>, val layoutResId: Int, private 
         var type: Int = 1
     }
 }
+
+/*
+
+
+
+ */

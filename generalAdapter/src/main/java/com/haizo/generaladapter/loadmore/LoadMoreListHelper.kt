@@ -16,8 +16,11 @@
 package com.haizo.generaladapter.loadmore
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import java.util.ArrayList
 
 /**
@@ -26,10 +29,12 @@ import java.util.ArrayList
  * @param [pageSize]: page size
  * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
  */
-class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSize: Int = 10,
-    val loadingThreshold: Int = 3) {
-
-    private var mItems: MutableList<T> = ArrayList()
+class LoadMoreListHelper constructor(
+    val adapter: ListAdapter<ListItem, BaseBindingViewHolder<ListItem>>,
+    val pageSize: Int = 10,
+    val loadingThreshold: Int = 3
+) {
+    private var mItems: MutableList<ListItem> = ArrayList()
     private var mCurrentPage = 1
     private lateinit var mRecyclerView: RecyclerView
     private var loadMoreListener: LoadMoreListener? = null
@@ -41,7 +46,7 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
      * @param [items]
      * @param [loadMoreListener]
      */
-    fun setupLoadMore(recyclerView: RecyclerView, items: MutableList<T>, loadMoreListener: LoadMoreListener?,
+    fun setupLoadMore(recyclerView: RecyclerView, items: MutableList<ListItem>, loadMoreListener: LoadMoreListener,
         autoShowLoadingItem: Boolean = true) {
         this.mRecyclerView = recyclerView
         this.loadMoreListener = loadMoreListener
@@ -54,7 +59,7 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
                     // To check if at the bottom of recycler view
                     if (items.size < pageSize) return
                     if (linearLayoutManager!!.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
-                        if (isLoadMoreEnabled && loadMoreListener != null && !isLoadingItemAdded) {
+                        if (isLoadMoreEnabled && !isLoadingItemAdded) {
                             if (isSpammingCalls) return
                             if (items.size >= mCurrentPage * pageSize) {
                                 if (autoShowLoadingItem) addLoadMoreView()
@@ -72,10 +77,10 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
      */
     private fun addLoadMoreView() {
         @Suppress("UNCHECKED_CAST")
-        val loadingObj = LoadingObj() as T
+        val loadingObj = LoadingObj()
         if (!isLoadingItemAdded) {
             mItems.add(loadingObj)
-            adapter.notifyItemInserted(mItems.size - 1)
+            adapter.submitList(mItems.toList())
         }
     }
 
@@ -84,12 +89,10 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
      */
     private val isLoadingItemAdded: Boolean
         get() {
-            if (mItems.isNotEmpty()) {
+            return if (mItems.isNotEmpty()) {
                 val lastIndex = mItems.size - 1
-                val `object` = mItems[lastIndex]
-                return `object` is LoadingObj
-            }
-            return false
+                return mItems[lastIndex] is LoadingObj
+            } else false
         }
 
     /**
@@ -100,7 +103,7 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
             val lastIndex = mItems.size - 1
             if (mItems[lastIndex] is LoadingObj) {
                 mItems.removeAt(lastIndex)
-                adapter.notifyItemRemoved(lastIndex)
+                adapter.submitList(mItems.toList())
             }
         }
         loadMoreListener?.onLoadMoreFinished()
@@ -109,12 +112,11 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
     /**
      * Add more items to the main listItem for the adapter
      */
-    fun addMoreItems(collection: Collection<T>?) {
+    fun addMoreItems(collection: Collection<ListItem>?) {
         removeLoadMoreIfExists()
         if (collection != null) {
-            val positionStart = mItems.size + 1
             mItems.addAll(collection)
-            adapter.notifyItemRangeInserted(positionStart, mItems.size)
+            adapter.submitList(mItems.toList())
         }
     }
 
@@ -131,6 +133,10 @@ class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSi
      */
     fun setCurrentPage(currentPage: Int) {
         this.mCurrentPage = currentPage
+    }
+
+    fun getCurrentPage(): Int {
+        return mCurrentPage
     }
 
     /**
