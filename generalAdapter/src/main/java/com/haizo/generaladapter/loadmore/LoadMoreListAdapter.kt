@@ -83,7 +83,7 @@ abstract class LoadMoreListAdapter :
             mLoadMoreListHelper!!.resetPage()
             loadMoreList.clear()
             loadMoreList.addAll(list)
-            submitList(loadMoreList, commitCallback)
+            submitList(loadMoreList.toList(), commitCallback)
         } else {
             mLoadMoreListHelper!!.addMoreItems(list)
         }
