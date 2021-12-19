@@ -64,14 +64,14 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                         it.add(MainViewModel.getRandomStory())
                     }
                 } else emptyList()
-            adapter.submitMoreList(pageToLoad, list)
+            adapter.submitMoreListItems(list)
         }, 1000)
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.items.observe(this, {
-            adapter.submitMoreList(page = 1, list = it)
+            adapter.submitListItems(it)
         })
     }
 
