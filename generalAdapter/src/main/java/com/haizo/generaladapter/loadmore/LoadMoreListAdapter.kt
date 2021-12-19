@@ -75,16 +75,20 @@ abstract class LoadMoreListAdapter :
     }
 
     /**
+     * This method will reset the page number and update the current list with the new list
+     * Use this method to submit the first page
+     */
+    fun submitListItems(list: List<ListItem>?, commitCallback: Runnable? = null) {
+        mLoadMoreListHelper?.updateListItems(list)
+        super.submitList(list, commitCallback)
+    }
+
+    /**
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
      */
     fun submitMoreListItems(list: List<ListItem>, commitCallback: Runnable? = null) {
         mLoadMoreListHelper?.addMoreItems(list, commitCallback) ?: kotlin.run { throw LoadMoreNotInitialized() }
-    }
-
-    fun submitListItems(list: List<ListItem>?, commitCallback: Runnable? = null) {
-        mLoadMoreListHelper?.updateListItems(list)
-        super.submitList(list, commitCallback)
     }
 
     /**

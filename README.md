@@ -12,7 +12,7 @@ Recyclerview Smart Adapter
 Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**.
 
  * No more adapters to create
- * Supports (RecyclerView adapter) and (RecyclerView ListAdapter + DiffUill)
+ * Supports (RecyclerView adapter) and (RecyclerView ListAdapter + DiffUtil)
  * Supports API levels 16+
  * Uses ViewDataBinding
  * Handles unlimited multiple types automatically
@@ -37,7 +37,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.0.1'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.1.0'
 }
 ```
 
@@ -69,7 +69,7 @@ adapter.updateList(list)
 ------------
 ------------
 
-## Setup the adpater (3 steps):
+## Setup the adapter (3 steps):
 
 ### 1. Setup the ViewHolder
 Create your **ViewHolder** and extend it with **BaseBindingViewHolder<YourModelHere>** with params:
@@ -111,7 +111,7 @@ object MyListItemTypes {
 ```
 
 ### 3. Setup your Models
-let your Model **implements ListItem** and override the **ListItemType** variable
+**Option 1.** let your Model **implements ListItem** and override the **ListItemType** variable
 ```kotlin
 class StoryModel(
     val id: String,
@@ -122,7 +122,11 @@ class StoryModel(
 }
 ```
 
-And thats it :)
+**Option 2.** if you do not want to let your model implements the **ListItem** directly, then you can use the **ListItemWrapper**
+Check the **ListItem Wrapper** section below: [Here](#listitem-wrapper)
+
+
+And that's it :)
 
 -------------
 
@@ -154,7 +158,7 @@ adapter.setupLoadMore(object : LoadMoreListener {
     }
 })
 ```
-* for custom loadmore, you can use this method as:
+* for custom load-more, you can use this method as:
 ```kotlin
 adapter.setupLoadMore(
     pageSize = 10,
@@ -174,10 +178,17 @@ adapter.setupLoadMore(
 ```
 
 ### Submit Items with LoadMore
-you must use this method for submitting the list when using the loadMore
+#### * Submit Items
+Use this method to submit your first page or to update the list with the new items:
 ```kotlin
-adapter.submitMoreList(page = 1, list = it)
-// If you used this method "adapter.submitList()" instead of "adapter.submitMoreList()" then the loadmore will not work
+// this method will reset the page number and will update the current list with the new list
+adapter.submitListItems(list)
+```
+
+#### * Submit More Items
+Use this method to submit more items to the current list
+```kotlin
+adapter.submitMoreListItems(list)
 
 // if you are using the BlenderAdapter (legacy adapter), then you should used this method
 // adapter.addMoreItems(list)
@@ -206,7 +217,7 @@ val ITEM_STORY = ListItemType(
     extrasClass = MySampleExtras::class.java
 )
 ```
-**Step 4.** Add the extra param in the constructor of the viewholder **as the third param**:
+**Step 4.** Add the extra param in the constructor of the ViewHolder **as the third param**:
 ```kotlin
 class StoryViewHolder(
 private val viewDataBinding: RowStoryBinding,
@@ -249,7 +260,7 @@ class UserViewHolder constructor(
 ------
 
 ### ListItem Wrapper
-for example, if you are using clean architecture and you dont wan't to let your model in the Domain-Module implements the ListItem directly,
+for example, if you are using clean architecture and you don't want to let your model in the Domain-Module implements the ListItem directly,
 then you can use the **ListItemWrapper** to solve it, just create a new class that implements this wrapper and add your model in it:
 example:
 
@@ -258,7 +269,7 @@ class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper(
      override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
-and update the viewholder to use the wrapper instead of the direct model as:
+and update the ViewHolder to use the wrapper instead of the direct model as:
 ```kotlin
 BaseBindingViewHolder<StoryListItemWrapper>(viewDataBinding, actionCallback)
 ```
