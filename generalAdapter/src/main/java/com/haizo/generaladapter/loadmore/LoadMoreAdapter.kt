@@ -15,8 +15,8 @@
  */
 package com.haizo.generaladapter.loadmore
 
-import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
+import com.haizo.generaladapter.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 
 /**
@@ -64,8 +64,7 @@ abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.
      * @param [list]: new items to add on the main list
      */
     fun addMoreItems(list: Collection<T>?) {
-        if (mLoadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
-        mLoadMoreHelper?.addMoreItems(list)
+        mLoadMoreHelper?.addMoreItems(list) ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -87,17 +86,11 @@ abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.
      * @param pageNumber
      */
     fun setCurrentPageNumber(pageNumber: Int) {
-        if (mLoadMoreHelper == null) Log.d("LoadMoreHelper", ERROR_NOT_INITIALIZED)
-        mLoadMoreHelper?.setCurrentPage(pageNumber)
+        mLoadMoreHelper?.setCurrentPage(pageNumber) ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
-    }
-
-    companion object {
-        private const val ERROR_NOT_INITIALIZED =
-            "You forgot to setup the LoadMore helper, Please set it up and try again"
     }
 }

@@ -17,6 +17,7 @@ package com.haizo.generaladapter.loadmore
 
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.haizo.generaladapter.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.listadapter.DiffCallbacks
 import com.haizo.generaladapter.model.ListItem
@@ -36,6 +37,8 @@ abstract class LoadMoreListAdapter :
      */
     protected lateinit var recyclerView: RecyclerView
 
+    private val loadMoreList: MutableList<ListItem> = ArrayList()
+
     /**
      * @return True if the loadMore is enabled for the current adapter
      */
@@ -44,8 +47,6 @@ abstract class LoadMoreListAdapter :
         set(isEnabled) {
             mLoadMoreListHelper?.isLoadMoreEnabled = isEnabled
         }
-
-    val loadMoreList: MutableList<ListItem> = ArrayList()
 
     /**
      * @param loadMoreListener: load more listener callbacks
@@ -74,19 +75,20 @@ abstract class LoadMoreListAdapter :
     }
 
     /**
+     * This method will reset the page number and update the current list with the new list
+     * Use this method to submit the first page
+     */
+    fun submitListItems(list: List<ListItem>?, commitCallback: Runnable? = null) {
+        mLoadMoreListHelper?.updateListItems(list)
+        super.submitList(list, commitCallback)
+    }
+
+    /**
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
      */
-    fun submitMoreList(page: Int, list: Collection<ListItem>, commitCallback: Runnable? = null) {
-        if (mLoadMoreListHelper == null) throw NullPointerException(ERROR_NOT_INITIALIZED)
-        if (page == 1) {
-            mLoadMoreListHelper!!.resetPage()
-            loadMoreList.clear()
-            loadMoreList.addAll(list)
-            submitList(loadMoreList.toList(), commitCallback)
-        } else {
-            mLoadMoreListHelper!!.addMoreItems(list)
-        }
+    fun submitMoreListItems(list: List<ListItem>, commitCallback: Runnable? = null) {
+        mLoadMoreListHelper?.addMoreItems(list, commitCallback) ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -94,22 +96,15 @@ abstract class LoadMoreListAdapter :
      * @param pageNumber
      */
     fun setCurrentPageNumber(pageNumber: Int) {
-        if (mLoadMoreListHelper == null) throw NullPointerException(ERROR_NOT_INITIALIZED)
-        mLoadMoreListHelper!!.setCurrentPage(pageNumber)
+        mLoadMoreListHelper?.setCurrentPage(pageNumber) ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     fun getCurrentPageNumber(): Int {
-        if (mLoadMoreListHelper == null) throw NullPointerException(ERROR_NOT_INITIALIZED)
-        return mLoadMoreListHelper!!.getCurrentPage()
+        return mLoadMoreListHelper?.getCurrentPage() ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
-    }
-
-    companion object {
-        private const val ERROR_NOT_INITIALIZED =
-            "You forgot to setup the LoadMore helper, Please set it up and try again"
     }
 }

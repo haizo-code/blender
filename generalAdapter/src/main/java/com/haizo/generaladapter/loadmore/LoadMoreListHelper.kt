@@ -98,7 +98,7 @@ class LoadMoreListHelper constructor(
     /**
      * Remove the loadMore view if exists / Trigger onLoadMoreFinished()
      */
-    fun removeLoadMoreIfExists() {
+    private fun removeLoadMoreIfExists() {
         if (mItems.isNotEmpty()) {
             val lastIndex = mItems.size - 1
             if (mItems[lastIndex] is LoadingObj) {
@@ -110,20 +110,28 @@ class LoadMoreListHelper constructor(
     }
 
     /**
+     * Clear and reset the page number, then update the list with the new list
+     */
+    fun updateListItems(collection: Collection<ListItem>?) {
+        removeLoadMoreIfExists()
+        resetPage()
+        mItems.clear()
+        collection?.let { mItems.addAll(it) }
+    }
+
+    /**
      * Add more items to the main listItem for the adapter
      */
-    fun addMoreItems(collection: Collection<ListItem>?) {
+    fun addMoreItems(collection: Collection<ListItem>, commitCallback: Runnable?) {
         removeLoadMoreIfExists()
-        if (collection != null) {
-            mItems.addAll(collection)
-            adapter.submitList(mItems.toList())
-        }
+        mItems.addAll(collection)
+        adapter.submitList(mItems.toList(), commitCallback)
     }
 
     /**
      * Reset the current page number to 1
      */
-    fun resetPage() {
+    private fun resetPage() {
         mCurrentPage = 1
     }
 

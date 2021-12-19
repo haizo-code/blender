@@ -15,17 +15,6 @@ data class Story(
     }
 
     override fun areContentsTheSame(newItem: ListItem): Boolean {
-        return if (newItem is Story) {
-            this == newItem
-        } else false
+        return this == (newItem as? Story)
     }
 }
-
-/*
-- First impression: Feel Strange the UI not that friendly
-- Founded arabic influencers and arabic content as expected
-- Expected to find content once opened the app
-- the icon of the explore is not indicating for discover people, its indicates for search
-- not interested to click on hashtags even if it has a high number
-- in add post, i think we should add the word 'also' to 'Share it to my story'
- */
