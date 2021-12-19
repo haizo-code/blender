@@ -74,6 +74,16 @@ abstract class LoadMoreListAdapter :
         mLoadMoreListHelper = null
     }
 
+    @Deprecated("Use the new methods for better experience",
+        ReplaceWith("SubmitListItems() and submitMoreListItems() "))
+    fun submitMoreList(page: Int, list: Collection<ListItem>, commitCallback: Runnable? = null) {
+        if (page == 1) {
+            submitListItems(list.toList(), commitCallback)
+        } else {
+            submitMoreListItems(list.toList(), commitCallback)
+        }
+    }
+
     /**
      * This method will reset the page number and update the current list with the new list
      * Use this method to submit the first page
