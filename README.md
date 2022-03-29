@@ -319,6 +319,7 @@ You need to include the below line in your proguard-rules.pro
 
 ```pro
 -keepclassmembers public class * extends com.haizo.generaladapter.viewholders.BaseBindingViewHolder{ public protected *; }
+-keepclassmembers public class * extends com.haizo.generaladapter.model.**{ public protected *; }
 ```
 
 # License
