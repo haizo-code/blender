@@ -48,7 +48,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.github.haizo-code'
                 artifactId = 'recyclerview-general-adapter'
-                version = '2.1.2'
+                version = 'master-SNAPSHOT'
             }
         }
     }
