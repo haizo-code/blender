@@ -1,9 +1,9 @@
-package com.haizo.poc.util
+package com.haizo.sample.util
 
 import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.haizo.poc.R
+import com.haizo.sample.R
 
 class Utils {
 

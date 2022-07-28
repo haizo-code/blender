@@ -117,4 +117,8 @@ abstract class LoadMoreListAdapter :
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
     }
+
+    override fun getCurrentList(): MutableList<ListItem> {
+        return super.getCurrentList()
+    }
 }

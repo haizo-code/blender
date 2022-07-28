@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.haizo.poc.model.User"/>
+            type="com.haizo.sample.model.User"/>
     </data>
 
     <androidx.cardview.widget.CardView

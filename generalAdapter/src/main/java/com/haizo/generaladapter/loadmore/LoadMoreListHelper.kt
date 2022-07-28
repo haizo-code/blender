@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
-import java.util.ArrayList
 
 /**
  * This class will handle the loadMore process
@@ -38,7 +37,7 @@ class LoadMoreListHelper constructor(
     private var mCurrentPage = 1
     private lateinit var mRecyclerView: RecyclerView
     private var loadMoreListener: LoadMoreListener? = null
-    var isLoadMoreEnabled = true
+    var isLoadMoreEnabled: Boolean = true
 
     /**
      * Setup the loadMore behavior
@@ -61,7 +60,7 @@ class LoadMoreListHelper constructor(
                     if (linearLayoutManager!!.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
                         if (isLoadMoreEnabled && !isLoadingItemAdded) {
                             if (isSpammingCalls) return
-                            if (items.size >= mCurrentPage * pageSize) {
+                            if (isHasNextPage()) {
                                 if (autoShowLoadingItem) addLoadMoreView()
                                 loadMoreListener.onLoadMore(++mCurrentPage)
                             }
@@ -70,6 +69,10 @@ class LoadMoreListHelper constructor(
                 }
             })
         }
+    }
+
+    private fun isHasNextPage(): Boolean {
+        return mItems.size >= mCurrentPage * pageSize
     }
 
     /**

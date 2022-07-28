@@ -20,19 +20,16 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Locale
 
 /**
  * Create by Farouq Afghani at 12-2-2019
+ * This is a helper class to add padding for the edges ONLY, which means the padding will be added
+ * for the (first|last) items only
  */
-class EdgeItemPaddingDecoration(
+class EdgeVerticalItemPaddingDecoration constructor(
     private var paddingTop: Int = 0,
     private var paddingBottom: Int = 0,
-    private var paddingStart: Int = 0,
-    private var paddingEnd: Int = 0
 ) : RecyclerView.ItemDecoration() {
-
-    private val isAppEnglish: Boolean = Locale.getDefault().language == "en"
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -44,19 +41,9 @@ class EdgeItemPaddingDecoration(
 
         // Apply offset only to first item
         if (recyclerView.getChildAdapterPosition(view) == 0) {
-            if (isAppEnglish) {
-                outRect.left += dpToPx(paddingStart)
-            } else {
-                outRect.right += dpToPx(paddingStart)
-            }
             outRect.top += dpToPx(paddingTop)
         } else if (recyclerView.getChildAdapterPosition(
                 view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
-            if (isAppEnglish) {
-                outRect.right += dpToPx(paddingEnd)
-            } else {
-                outRect.left += dpToPx(paddingEnd)
-            }
             outRect.bottom += dpToPx(paddingBottom)
         }
     }

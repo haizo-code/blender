@@ -18,7 +18,6 @@ package com.haizo.generaladapter.loadmore
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
-import java.util.ArrayList
 
 /**
  * This class will handle the loadMore process
@@ -26,8 +25,11 @@ import java.util.ArrayList
  * @param [pageSize]: page size
  * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
  */
-class LoadMoreHelper<T>(private val adapter: RecyclerView.Adapter<*>, val pageSize: Int = 10,
-    val loadingThreshold: Int = 3) {
+class LoadMoreHelper<T> constructor(
+    private val adapter: RecyclerView.Adapter<*>,
+    val pageSize: Int = 10,
+    val loadingThreshold: Int = 3
+) {
 
     private var mItems: MutableList<T> = ArrayList()
     private var mCurrentPage = 1

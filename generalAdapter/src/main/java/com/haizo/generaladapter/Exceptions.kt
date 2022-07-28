@@ -23,7 +23,7 @@ private const val MESSAGE_WRONG_2_ARGUMENTS =
         Issue in ViewHolder: ---> %s <----
         --------------------
         -> Make sure to specify the callback in the listItemType's (%s) constructor under param: 'callbackClass'
-        -> Also make sure that you are passing the callback instance to the adapter.
+        -> Make sure that you are passing the callback instance to the adapter.
         -> Make sure the you are using the right type as defined in the ViewHolder/ListItemType constructor
         ========================================================================
         """
