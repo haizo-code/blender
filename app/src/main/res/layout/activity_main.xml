@@ -6,13 +6,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.screen.main.MainActivity">
+        tools:context="com.haizo.sample.ui.screen.main.MainActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingTop="20dp"/>
+            android:clipToPadding="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

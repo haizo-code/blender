@@ -1,4 +1,4 @@
-package com.haizo.poc.ui.screen.main
+package com.haizo.sample.ui.screen.main
 
 import android.os.Bundle
 import android.os.Handler
@@ -11,13 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.listadapter.BlenderListAdapter
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.utils.EdgeVerticalItemPaddingDecoration
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
-import com.haizo.poc.R
-import com.haizo.poc.callbacks.StoryActionCallback
-import com.haizo.poc.callbacks.UserActionCallback
-import com.haizo.poc.databinding.ActivityMainBinding
-import com.haizo.poc.model.Story
-import com.haizo.poc.model.User
+import com.haizo.sample.R
+import com.haizo.sample.callbacks.StoryActionCallback
+import com.haizo.sample.callbacks.UserActionCallback
+import com.haizo.sample.databinding.ActivityMainBinding
+import com.haizo.sample.model.Story
+import com.haizo.sample.model.User
+import java.util.Collections.emptyList
 
 class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallback {
 
@@ -33,18 +35,17 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupRecyclerView()
-        setupLoadMore()
+        adapter.submitListItems(viewModel.getDummyItems())
     }
 
     private fun setupRecyclerView() {
         binding.recyclerView.let {
             it.layoutManager = LinearLayoutManager(this)
             it.adapter = adapter
-            it.addItemDecoration(ItemPaddingDecoration(startEndOffset = 5, topBottomOffset = 10, startingIndex = 1))
+            it.addItemDecoration(ItemPaddingDecoration(bottom = 10))
+            it.addItemDecoration(EdgeVerticalItemPaddingDecoration(paddingTop = 10))
         }
-    }
 
-    private fun setupLoadMore() {
         adapter.setupLoadMore(pageSize = 10, loadMoreListener = object : LoadMoreListener {
             override fun onLoadMore(pageToLoad: Int) {
                 demoLoadMore(pageToLoad)
@@ -59,20 +60,13 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                 if (pageToLoad <= 3) {
                     ArrayList<ListItem>().also {
                         for (i in 1..10) {
-                            it.add(MainViewModel.getRandomUser())
+                            it.add(MainViewModel.getMockUser())
                         }
-                        it.add(MainViewModel.getRandomStory())
+                        it.add(MainViewModel.getMockStory())
                     }
                 } else emptyList()
             adapter.submitMoreListItems(list)
         }, 1000)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.items.observe(this, {
-            adapter.submitListItems(it)
-        })
     }
 
     override fun onStoryClicked(story: Story) {

@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.AdapterActions
 import com.haizo.generaladapter.loadmore.LoadMoreAdapter
 import com.haizo.generaladapter.model.ListItem
-import java.util.ArrayList
 
 abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(private val context: Context) :
     AdapterActions<M>, LoadMoreAdapter<M, VH>() {

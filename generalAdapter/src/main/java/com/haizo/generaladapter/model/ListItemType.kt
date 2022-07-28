@@ -15,6 +15,8 @@
  */
 package com.haizo.generaladapter.model
 
+import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.ItemTypesPool
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.interfaces.ViewHolderExtras
@@ -28,8 +30,8 @@ import com.haizo.generaladapter.interfaces.ViewHolderExtras
  * @param extrasClass: The class of the ViewHolderExtras that will be used in the view [viewHolderClass]
  */
 class ListItemType @JvmOverloads constructor(
-    val viewHolderClass: Class<*>,
-    val layoutResId: Int,
+    val viewHolderClass: Class<out RecyclerView.ViewHolder>,
+    @LayoutRes val layoutResId: Int,
     val itemName: String = viewHolderClass.simpleName,
     var callbackClass: Class<out BaseActionCallback>? = null,
     var extrasClass: Class<out ViewHolderExtras>? = null

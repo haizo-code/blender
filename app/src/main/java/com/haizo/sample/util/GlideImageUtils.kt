@@ -1,10 +1,10 @@
-package com.haizo.poc.util
+package com.haizo.sample.util
 
 import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.haizo.poc.R
+import com.haizo.sample.R
 
 /**
  * Created by Farouq Afghani on 2019-03-19.

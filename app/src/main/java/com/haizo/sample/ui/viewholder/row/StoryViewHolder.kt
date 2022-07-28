@@ -1,10 +1,10 @@
-package com.haizo.poc.ui.viewholder.row
+package com.haizo.sample.ui.viewholder.row
 
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
-import com.haizo.poc.BR
-import com.haizo.poc.callbacks.StoryActionCallback
-import com.haizo.poc.databinding.RowStoryBinding
-import com.haizo.poc.model.Story
+import com.haizo.sample.BR
+import com.haizo.sample.callbacks.StoryActionCallback
+import com.haizo.sample.databinding.RowStoryBinding
+import com.haizo.sample.model.Story
 
 class StoryViewHolder constructor(
     private val binding: RowStoryBinding,
@@ -12,9 +12,7 @@ class StoryViewHolder constructor(
 ) : BaseBindingViewHolder<Story>(binding, actionCallback) {
 
     init {
-        binding.imageView.setOnClickListener {
-            actionCallback?.onStoryClicked(listItem)
-        }
+        binding.imageView.setOnClickListener { actionCallback?.onStoryClicked(listItem) }
     }
 
     override fun onBind(listItem: Story) {

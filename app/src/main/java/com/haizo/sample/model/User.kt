@@ -1,10 +1,10 @@
-package com.haizo.poc.model
+package com.haizo.sample.model
 
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
-import com.haizo.poc.util.ListItemTypes
+import com.haizo.sample.util.ListItemTypes
 
-data class User(
+data class User constructor(
     val id: String,
     val name: String,
     val phoneNumber: String,
@@ -18,8 +18,6 @@ data class User(
     }
 
     override fun areContentsTheSame(newItem: ListItem): Boolean {
-        return if (newItem is User) {
-            this == newItem
-        } else false
+        return this == newItem
     }
 }
