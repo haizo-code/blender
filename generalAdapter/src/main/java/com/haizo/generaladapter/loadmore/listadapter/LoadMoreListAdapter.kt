@@ -103,6 +103,10 @@ abstract class LoadMoreListAdapter :
         super.submitList(list, commitCallback)
     }
 
+    fun submitListItems(list: List<ListItem>?, commitCallback: Runnable? = null) {
+        submitListItems(list, null, commitCallback)
+    }
+
     /**
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
@@ -113,6 +117,10 @@ abstract class LoadMoreListAdapter :
             it.nextPageUrl = nextPageUrl
             it.addMoreItems(list, commitCallback)
         } ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    fun submitMoreListItems(list: List<ListItem>, commitCallback: Runnable? = null) {
+        submitMoreListItems(list, null, commitCallback)
     }
 
     /**
