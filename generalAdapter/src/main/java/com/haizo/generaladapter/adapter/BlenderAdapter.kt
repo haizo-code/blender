@@ -35,7 +35,7 @@ import kotlin.math.roundToInt
 open class BlenderAdapter constructor(
     context: Context,
     vararg actionCallbacks: BaseActionCallback
-) : BaseRecyclerAdapter<ListItem, BaseBindingViewHolder<ListItem>>(context) {
+) : BaseRecyclerAdapter(context) {
 
     private var viewHolderExtrasList: List<ViewHolderExtras> = ArrayList()
     private var actionCallbacks: MutableList<BaseActionCallback> = actionCallbacks.toMutableList()

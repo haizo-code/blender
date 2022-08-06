@@ -56,9 +56,3 @@ class ListItemType @JvmOverloads constructor(
         var type: Int = 1
     }
 }
-
-/*
-
-
-
- */

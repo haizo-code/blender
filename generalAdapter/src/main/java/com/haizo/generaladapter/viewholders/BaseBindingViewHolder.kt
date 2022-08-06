@@ -25,7 +25,7 @@ import com.haizo.generaladapter.interfaces.RecyclerViewAdapterCallback
 import com.haizo.generaladapter.model.ListItem
 
 abstract class BaseBindingViewHolder<T : ListItem> constructor(
-    binding: ViewDataBinding,
+    private val binding: ViewDataBinding,
     private val actionCallback: BaseActionCallback? = null
 ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, BackwardActionCallback, RecyclerViewAdapterCallback {
 
@@ -49,6 +49,7 @@ abstract class BaseBindingViewHolder<T : ListItem> constructor(
     fun draw(listItem: T) {
         this.listItem = listItem
         onBind(listItem)
+        binding.executePendingBindings()
     }
 
     override fun onClick(view: View) {

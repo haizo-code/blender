@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.adapter
+package com.haizo.generaladapter.model
 
-import android.content.Context
-import com.haizo.generaladapter.interfaces.BaseActionCallback
-
-@Deprecated("Use the BlenderAdapter or BlenderListAdapter instead")
-open class GeneralBindingListAdapter(context: Context, vararg actionCallbacks: BaseActionCallback) :
-    BlenderAdapter(context, *actionCallbacks)
+interface LoadingListItem : ListItem

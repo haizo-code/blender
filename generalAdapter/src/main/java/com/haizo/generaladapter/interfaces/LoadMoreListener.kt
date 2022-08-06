@@ -19,7 +19,7 @@ interface LoadMoreListener {
     /**
      * Triggered when the next page is required (reaching the end of the list based on the threshold)
      */
-    fun onLoadMore(pageToLoad: Int)
+    fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?)
 
     /**
      * Triggered when loading finished (when removing the load-more item from the list)

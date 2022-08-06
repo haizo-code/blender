@@ -18,9 +18,12 @@ package com.haizo.generaladapter.utils
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
+import android.util.LayoutDirection
 import android.view.View
 import androidx.annotation.DimenRes
+import androidx.core.text.layoutDirection
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Locale
 
 /**
  * Create by Farouq Afghani at 12-2-2019
@@ -33,6 +36,7 @@ class ItemPaddingDecoration : RecyclerView.ItemDecoration {
     private var mStartOffset: Int = 0
     private var mEndOffset: Int = 0
     private var mStartingIndex: Int = 0
+    private val isLTR: Boolean = Locale.getDefault().layoutDirection == LayoutDirection.LTR
 
     /**
      * This Method adds margin for each item in the list
@@ -88,7 +92,11 @@ class ItemPaddingDecoration : RecyclerView.ItemDecoration {
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         super.getItemOffsets(outRect, view, parent, state)
         if (parent.getChildAdapterPosition(view) >= mStartingIndex) {
-            outRect.set(mStartOffset, mTopOffset, mEndOffset, mBottomOffset)
+            if (isLTR) {
+                outRect.set(mStartOffset, mTopOffset, mEndOffset, mBottomOffset)
+            } else {
+                outRect.set(mEndOffset, mTopOffset, mStartOffset, mBottomOffset)
+            }
         }
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.loadmore
+package com.haizo.generaladapter.loadmore.listadapter
 
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +21,7 @@ import com.haizo.generaladapter.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.listadapter.DiffCallbacks
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.model.LoadingListItem
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
@@ -40,56 +41,65 @@ abstract class LoadMoreListAdapter :
     private val loadMoreList: MutableList<ListItem> = ArrayList()
 
     /**
-     * @return True if the loadMore is enabled for the current adapter
-     */
-    var isLoadMoreEnabled: Boolean
-        get() = mLoadMoreListHelper?.isLoadMoreEnabled ?: false
-        set(isEnabled) {
-            mLoadMoreListHelper?.isLoadMoreEnabled = isEnabled
-        }
-
-    /**
      * @param loadMoreListener: load more listener callbacks
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
      * @param pageSize: the page size for the list, this is used to know when to trigger the next page
      * @param loadingThreshold: when to call the next page (ex. 3: when reaching the 7th item ([pageSize] - [loadingThreshold]) then call the next page)
      */
+    @JvmOverloads
     fun setupLoadMore(
-        loadMoreListener: LoadMoreListener,
         autoShowLoadingItem: Boolean = true,
         pageSize: Int = 10,
-        loadingThreshold: Int = 3
+        loadingThreshold: Int = 3,
+        loadMoreListener: LoadMoreListener,
     ) {
         if (mLoadMoreListHelper == null) {
             // prevent the reInitialization of the helper to avoid losing the current page number
-            mLoadMoreListHelper = LoadMoreListHelper(this, pageSize, loadingThreshold)
+            mLoadMoreListHelper = LoadMoreListHelper(this)
         }
-        mLoadMoreListHelper?.setupLoadMore(recyclerView, loadMoreList, loadMoreListener, autoShowLoadingItem)
+        mLoadMoreListHelper?.setupLoadMore(
+            recyclerView = recyclerView,
+            items = loadMoreList,
+            loadMoreListener = loadMoreListener,
+            autoShowLoadingItem = autoShowLoadingItem,
+            loadingThreshold = loadingThreshold,
+            pageSize = pageSize
+        )
     }
 
     /**
-     * If you need to reinitialize the loadMoreHelper instance, then use this method
+     * Use this method to control enabling/disabling the load-more
      */
-    fun clearLoadMoreInstance() {
-        mLoadMoreListHelper = null
+    fun setLoadMoreEnabled(isEnabled: Boolean) {
+        mLoadMoreListHelper?.let { it.isLoadMoreEnabled = isEnabled } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
-    @Deprecated("Use the new methods for better experience",
-        ReplaceWith("SubmitListItems() and submitMoreListItems() "))
-    fun submitMoreList(page: Int, list: Collection<ListItem>, commitCallback: Runnable? = null) {
-        if (page == 1) {
-            submitListItems(list.toList(), commitCallback)
-        } else {
-            submitMoreListItems(list.toList(), commitCallback)
-        }
+    /**
+     * Use this method to set your custom Loading indicator listItem
+     * hint: it will be added at the end of the current list once the load-more logic started
+     *       and will be removed once the loading is finished
+     */
+    fun setLoadingListItem(loadingListItem: LoadingListItem?) {
+        mLoadMoreListHelper?.setLoadingListItem(loadingListItem)
+    }
+
+    /**
+     * The added param here will be passed to the LoadMore callback when the onLoadMore method is triggered
+     */
+    fun setNextPageUrl(nextPageUrl: String?) {
+        mLoadMoreListHelper?.nextPageUrl = nextPageUrl
     }
 
     /**
      * This method will reset the page number and update the current list with the new list
      * Use this method to submit the first page
      */
-    fun submitListItems(list: List<ListItem>?, commitCallback: Runnable? = null) {
-        mLoadMoreListHelper?.updateListItems(list)
+    @JvmOverloads
+    fun submitListItems(list: List<ListItem>?, nextPageUrl: String? = null, commitCallback: Runnable? = null) {
+        mLoadMoreListHelper?.let {
+            it.nextPageUrl = nextPageUrl
+            it.updateListItems(list)
+        }
         super.submitList(list, commitCallback)
     }
 
@@ -97,8 +107,12 @@ abstract class LoadMoreListAdapter :
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
      */
-    fun submitMoreListItems(list: List<ListItem>, commitCallback: Runnable? = null) {
-        mLoadMoreListHelper?.addMoreItems(list, commitCallback) ?: kotlin.run { throw LoadMoreNotInitialized() }
+    @JvmOverloads
+    fun submitMoreListItems(list: List<ListItem>, nextPageUrl: String? = null, commitCallback: Runnable? = null) {
+        mLoadMoreListHelper?.let {
+            it.nextPageUrl = nextPageUrl
+            it.addMoreItems(list, commitCallback)
+        } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -106,11 +120,21 @@ abstract class LoadMoreListAdapter :
      * @param pageNumber
      */
     fun setCurrentPageNumber(pageNumber: Int) {
-        mLoadMoreListHelper?.setCurrentPage(pageNumber) ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreListHelper?.let { it.currentPage = pageNumber } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
+    /**
+     * @return current loading page
+     */
     fun getCurrentPageNumber(): Int {
-        return mLoadMoreListHelper?.getCurrentPage() ?: kotlin.run { throw LoadMoreNotInitialized() }
+        return mLoadMoreListHelper?.currentPage ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
+     * Use this method to clear the current 'loadMoreHelper' instance
+     */
+    fun clearLoadMoreInstance() {
+        mLoadMoreListHelper = null
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -118,6 +142,7 @@ abstract class LoadMoreListAdapter :
         this.recyclerView = recyclerView
     }
 
+    @Suppress("RedundantOverride")
     override fun getCurrentList(): MutableList<ListItem> {
         return super.getCurrentList()
     }

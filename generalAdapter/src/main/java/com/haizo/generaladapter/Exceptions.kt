@@ -42,13 +42,13 @@ private const val MESSAGE_WRONG_3_ARGUMENTS =
 private const val LOAD_MORE_NOT_INITIALIZED =
     "You are trying to use the LoadMore's methods while the LoadMore is not initialized, call setupLoadMore() first before using the methods"
 
-class Wrong2ArgumentsParamException(
+internal class Wrong2ArgumentsParamException(
     e: Exception,
     listItemType: ListItemType
 ) : IllegalArgumentException(
     String.format(MESSAGE_WRONG_2_ARGUMENTS, listItemType.viewHolderClass, listItemType.itemName), e)
 
-class Wrong3ArgumentsParamException(
+internal class Wrong3ArgumentsParamException(
     e: Exception,
     listItemType: ListItemType
 ) : IllegalArgumentException(

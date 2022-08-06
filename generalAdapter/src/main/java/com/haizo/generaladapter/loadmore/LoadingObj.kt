@@ -16,9 +16,9 @@
 package com.haizo.generaladapter.loadmore
 
 import com.haizo.generaladapter.MainListItemTypes
-import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ListItemType
+import com.haizo.generaladapter.model.LoadingListItem
 
-class LoadingObj : ListItem {
+internal class LoadingObj : LoadingListItem {
     override val listItemType: ListItemType = MainListItemTypes.LOADING
 }
