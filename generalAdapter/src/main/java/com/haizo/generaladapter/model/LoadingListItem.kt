@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.loadmore
+package com.haizo.generaladapter.model
 
-import com.haizo.generaladapter.MainListItemTypes
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.generaladapter.model.LoadingListItem
-
-internal class LoadingObj : LoadingListItem {
-    override val listItemType: ListItemType = MainListItemTypes.LOADING
-}
+interface LoadingListItem : ListItem

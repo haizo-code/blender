@@ -11,16 +11,16 @@ Recyclerview Smart Adapter
 ## You won't have to code any adapter again!
 Android library project that intends to simplify the usage of Adapters for recyclerView using **Data Binding**.
 
- * No more adapters to create
- * Supports (RecyclerView adapter) and (RecyclerView ListAdapter + DiffUtil)
- * Supports API levels 16+
- * Uses ViewDataBinding
- * Handles unlimited multiple types automatically
- * Handles Callbacks from ViewHolder and vice-versa
- * Handles Load more automatically
- * Handles all the common actions for the recyclerview-adapter and more...
- * 100% kotlin ~ Compatible with Java
- * Easy to use and implement
+* No more adapters to create
+* Supports (RecyclerView adapter) and (RecyclerView ListAdapter + DiffUtil)
+* Supports API levels 19+
+* Uses ViewDataBinding
+* Handles unlimited multiple types automatically
+* Handles Callbacks from ViewHolder and vice-versa
+* Handles Load more automatically
+* Handles all the common actions for the recyclerview-adapter and more...
+* 100% kotlin ~ Compatible with Java
+* Easy to use and implement
 
 ## Gradle
 
@@ -37,7 +37,7 @@ allprojects {
 **Step 2.** Add the library dependency to your project build.gradle:
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.1.3'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.2.0'
 }
 ```
 
@@ -46,7 +46,7 @@ dependencies {
 Create an instance from BlenderListAdapter and bind it to your recyclerview
 ```kotlin
 private val adapter: BlenderListAdapter by lazy {
-    BlenderListAdapter(context = this, actionCallbacks = this)
+  BlenderListAdapter(context = this, actionCallbacks = this)
 }
 ```
 
@@ -55,7 +55,7 @@ recyclerview.adapter = adapter
 ```
 ### Display the items
 Just need to pass your models (ListItems) to the adapter and that's it :)
-  You can mix all the types together and it will be handled automatically by the adapter
+You can mix all the types together and it will be handled automatically by the adapter
 
 * for **BlenderListAdapter** (RecyclerView ListAdapter - diffUtil) use:
 ```kotlin
@@ -73,40 +73,40 @@ adapter.updateList(list)
 
 ### 1. Setup the ViewHolder
 Create your **ViewHolder** and extend it with **BaseBindingViewHolder<YourModelHere>** with params:
- * **ViewDataBinding**: Your ViewDataBinding class
- * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
+* **ViewDataBinding**: Your ViewDataBinding class
+* **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
 
 ```kotlin
 class StoryViewHolder(private val binding: RowStoryBinding, actionCallback: BaseActionCallback?) :
-    BaseBindingViewHolder<StoryModel>(binding, actionCallback) {
+  BaseBindingViewHolder<StoryModel>(binding, actionCallback) {
 
-    override fun onBind(listItem: StoryModel) {
-    	// use the listItem here..
-    }
+  override fun onBind(listItem: StoryModel) {
+    // use the listItem here..
+  }
 }
 ```
 
 ### 2. Add the types for the items
 Create a object class **MyListItemTypes** that will be holding the types of the **ViewHolders** that will be used in the Model.
 Note that you can create many files like this one, just create instances from ListItemType and pass these params:
- * **ViewHolder**: Your ViewHolder class that will be associated with the ListItemType object
- * **LayoutResId**: Your Layout-Resource-Id that will be associated with the ListItemType object
- * **ItemName** (Optional): This name is not used anywhere but it will be helpful while debugging
+* **ViewHolder**: Your ViewHolder class that will be associated with the ListItemType object
+* **LayoutResId**: Your Layout-Resource-Id that will be associated with the ListItemType object
+* **ItemName** (Optional): This name is not used anywhere but it will be helpful while debugging
  ```kotlin
 object MyListItemTypes {
 
-    // These variables will be associated with the listItems
-    val ITEM_USER_CARD = ListItemType(
-        viewHolderClass = UserCardViewHolder::class.java,
-        layoutResId = R.layout.row_user_card,
-        itemName = "ITEM_USER_CARD")
+  // These variables will be associated with the listItems
+  val ITEM_USER_CARD = ListItemType(
+          viewHolderClass = UserCardViewHolder::class.java,
+          layoutResId = R.layout.row_user_card,
+          itemName = "ITEM_USER_CARD")
 
-    val ITEM_STORY = ListItemType(
-        viewHolderClass = StoryViewHolder::class.java,
-        layoutResId = R.layout.row_story,
-        itemName = "ITEM_STORY")
+  val ITEM_STORY = ListItemType(
+          viewHolderClass = StoryViewHolder::class.java,
+          layoutResId = R.layout.row_story,
+          itemName = "ITEM_STORY")
 
-	...
+  ...
 }
 ```
 
@@ -114,11 +114,11 @@ object MyListItemTypes {
 **Option 1.** let your Model **implements ListItem** and override the **ListItemType** variable
 ```kotlin
 class StoryModel(
-    val id: String,
-    val imageUrl: String
+        val id: String,
+        val imageUrl: String
 ) : ListItem {
-    // This model will be presenting the ITEM_STORY
-    override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
+  // This model will be presenting the ITEM_STORY
+  override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
 
@@ -134,16 +134,16 @@ And that's it :)
 * if you are using the **BlenderListAdapter**, then you need to override these methods in your ListItem class to be used in the DiffUtil:
 ```kotlin
 data class Story(val id: String) : ListItem {
-    ...
+  ...
 
-    override fun itemUniqueIdentifier(): String {
-        return id
-    }
-    override fun areContentsTheSame(newItem: ListItem): Boolean {
-        return if (newItem is Story) {
-            this == newItem
-        } else false
-    }
+  override fun itemUniqueIdentifier(): String {
+    return id
+  }
+  override fun areContentsTheSame(newItem: ListItem): Boolean {
+    return if (newItem is Story) {
+      this == newItem
+    } else false
+  }
 }
 ```
 * if you are using the **BlenderAdapter** then no need to override the above methods
@@ -153,28 +153,28 @@ data class Story(val id: String) : ListItem {
 * for default usage, you can use this method as:
 ```kotlin
 adapter.setupLoadMore(object : LoadMoreListener {
-    override fun onLoadMore(pageToLoad: Int) {
-        // request load next page
-    }
+  override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+    // request load next page
+  }
 })
 ```
 * for custom load-more, you can use this method as:
 ```kotlin
 adapter.setupLoadMore(
-    pageSize = 10,
-    loadingThreshold = 3,
-    autoShowLoadingItem = false,
-    loadMoreListener = object : LoadMoreListener {
-        override fun onLoadMore(pageToLoad: Int) {
+        pageSize = 10,
+        loadingThreshold = 3,
+        autoShowLoadingItem = false,
+        loadMoreListener = object : LoadMoreListener {
+          override fun onLoadMore(pageToLoad: Int) {
             // show your loading
             // request load next page
-        }
+          }
 
-        override fun onLoadMoreFinished() {
+          override fun onLoadMoreFinished() {
             super.onLoadMoreFinished()
             // hide your loading
-        }
-    })
+          }
+        })
 ```
 
 ### Submit Items with LoadMore
@@ -189,9 +189,41 @@ adapter.submitListItems(list)
 Use this method to submit more items to the current list
 ```kotlin
 adapter.submitMoreListItems(list)
+// or
+adapter.submitMoreListItems(list = list, nextPageUrl = "your-next-page-url-here")
 
 // if you are using the BlenderAdapter (legacy adapter), then you should used this method
 // adapter.addMoreItems(list)
+```
+
+### * Custom Loading Item
+You can use your own loading-item to be shown when loadmore triggered
+
+**Step 1.** create your Loading-model (the same as you create a normal ListItem) but let it implements "LoadingListItem" instead of "ListItem"
+```kotlin
+
+// Item
+class MyCustomLoadListItem : LoadingListItem {
+    override var listItemType: ListItemType = ..
+    override fun areContentsTheSame(newItem: ListItem): Boolean = true
+}
+	
+// ViewHolder
+class MyLoadingViewHolder constructor(
+    binding: RowMyLoadingBinding, actionCallback: UserActionCallback?
+) : BaseBindingViewHolder<MyLoadListItem>(binding, actionCallback) {
+	..
+}
+
+// Item Type
+val ITEM_CUSTOM_LOADING = ListItemType(
+    viewHolderClass = MyLoadingViewHolder::class.java,
+    layoutResId = R.layout.row_my_loading)
+```
+
+**Step 2.** pass your created Loading-model to the adapter
+```kotlin
+adapter.setLoadingListItem(MyCustomLoadListItem())
 ```
 ------
 
@@ -210,21 +242,21 @@ adapter.setExtraParams(mySampleExtras)
 **Step 3.** define this extra class in the ListItemType initialization:
 ```kotlin
 val ITEM_STORY = ListItemType(
-    viewHolderClass = StoryViewHolder::class.java,
-    layoutResId = R.layout.row_story,
-    itemName = "ITEM_STORY",
-    callbackClass = null,
-    extrasClass = MySampleExtras::class.java
+        viewHolderClass = StoryViewHolder::class.java,
+        layoutResId = R.layout.row_story,
+        itemName = "ITEM_STORY",
+        callbackClass = null,
+        extrasClass = MySampleExtras::class.java
 )
 ```
 **Step 4.** Add the extra param in the constructor of the ViewHolder **as the third param**:
 ```kotlin
 class StoryViewHolder(
-private val viewDataBinding: RowStoryBinding,
-private val actionCallback: BaseActionCallback?,
-private val mySampleExtras: MySampleExtras
+        private val viewDataBinding: RowStoryBinding,
+        private val actionCallback: BaseActionCallback?,
+        private val mySampleExtras: MySampleExtras
 ) : BaseBindingViewHolder<StoryModel>(viewDataBinding, actionCallback)
-	...
+...
 }
 ```
 ------
@@ -235,17 +267,17 @@ You can add your custom callbacks to the ViewHolder by:
 **Step 1.** Create your interface and let it implements BaseActionCallback**
 ```kotlin
 interface UserActionCallback : BaseActionCallback {
-    fun onAvatarClicked(user: User)
-    fun onCallClicked(user: User)
+  fun onAvatarClicked(user: User)
+  fun onCallClicked(user: User)
 }
 ```
 **Step 2.** Replace the BaseActionCallback with your own interface**
 ```kotlin
 class UserViewHolder constructor(
-    private val binding: RowUserCardBinding,
-    actionCallback: UserActionCallback?
+        private val binding: RowUserCardBinding,
+        actionCallback: UserActionCallback?
 ) : BaseBindingViewHolder<User>(binding, actionCallback) {
-    ...
+  ...
 }
 ````
 **Step 3.** define this extra class in the ListItemType initialization:
@@ -265,8 +297,8 @@ then you can use the **ListItemWrapper** to solve it, just create a new class th
 example:
 
 ```kotlin
-class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper() {
-     override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
+class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper {
+  override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
 }
 ```
 and update the ViewHolder to use the wrapper instead of the direct model as:
@@ -285,13 +317,13 @@ This callback will be triggered from the ViewHolder, also you can trigger backwa
 callback to the ViewHolder using the **BackwardActionCallback** interface
 ```kotlin
 override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCallback: BackwardActionCallback) {
-    when (listItem) {
-        is UserCardModel -> toast(listItem.text)
-        is StoryViewHolder -> toast(listItem.imageUrl)
-	...
-	// You can use the Backward-Action here as:
-	// bwCallback.onBackwardAction(Args if exists)
-    }
+  when (listItem) {
+    is UserCardModel -> toast(listItem.text)
+    is StoryViewHolder -> toast(listItem.imageUrl)
+      ...
+    // You can use the Backward-Action here as:
+    // bwCallback.onBackwardAction(Args if exists)
+  }
 }
 ```
 
@@ -299,8 +331,8 @@ override fun onItemClicked(view: View, listItem: ListItem, position: Int, bwCall
 You just need to override this method in your ViewHolder and you will be receiving the callbacks here.
 ```kotlin
 override fun onBackwardAction(vararg args: Any) {
-    super.onBackwardAction(*args)
-    // Your code to handle the backward action/s ...
+  super.onBackwardAction(*args)
+  // Your code to handle the backward action/s ...
 }
 ```
 ------
@@ -312,7 +344,7 @@ override fun onBackwardAction(vararg args: Any) {
 | setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
 | setItemWidthPercentage | Set the item width percentage for the screen width |
 
-    
+
 ProGuard
 --------
 You need to include the below line in your proguard-rules.pro

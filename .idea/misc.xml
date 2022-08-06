@@ -8,10 +8,12 @@
         <entry key="../POC/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3802083333333333" />
         <entry key="../POC/app/src/main/res/layout/activity_main.xml" value="0.3072916666666667" />
         <entry key="../POC/app/src/main/res/layout/blank_fragment.xml" value="0.17916666666666667" />
+        <entry key="../POC/app/src/main/res/layout/row_my_loading.xml" value="0.3098958333333333" />
         <entry key="../POC/app/src/main/res/layout/row_rv_images.xml" value="0.3072916666666667" />
         <entry key="../POC/app/src/main/res/layout/row_stories_rv.xml" value="0.3640625" />
         <entry key="../POC/app/src/main/res/layout/row_story.xml" value="0.3072916666666667" />
         <entry key="../POC/app/src/main/res/layout/row_user_card.xml" value="0.3072916666666667" />
+        <entry key="../POC/generalAdapter/src/main/res/layout/row_loading.xml" value="0.1203125" />
       </map>
     </option>
   </component>

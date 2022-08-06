@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupRecyclerView()
-        adapter.submitListItems(viewModel.getDummyItems())
+        adapter.submitListItems(viewModel.getDummyItems(), "Next Page 1")
     }
 
     private fun setupRecyclerView() {
@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
             it.addItemDecoration(EdgeVerticalItemPaddingDecoration(paddingTop = 10))
         }
 
-        adapter.setupLoadMore(pageSize = 10, loadMoreListener = object : LoadMoreListener {
-            override fun onLoadMore(pageToLoad: Int) {
-                demoLoadMore(pageToLoad)
+        adapter.setupLoadMore(loadMoreListener = object : LoadMoreListener {
+            override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+                Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
+                demoLoadMore(nextPageNumber)
             }
         })
     }
@@ -60,10 +61,13 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                 if (pageToLoad <= 3) {
                     ArrayList<ListItem>().also {
                         for (i in 1..10) {
-                            it.add(MainViewModel.getMockUser())
+                            val userWrapper = MainViewModel.getMockUser()
+                            it.add(userWrapper)
                         }
                         it.add(MainViewModel.getMockStory())
                     }
+                } else if (pageToLoad == 4) {
+                    listOf(MainViewModel.getMockUser(), MainViewModel.getMockUser(), MainViewModel.getMockUser())
                 } else emptyList()
             adapter.submitMoreListItems(list)
         }, 1000)

@@ -3,13 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
+var libVersion = "2.2.0"
+
 android {
     compileSdkVersion 32
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 32
-
+        versionCode 3
+        versionName libVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -48,9 +51,8 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.github.haizo-code'
                 artifactId = 'recyclerview-general-adapter'
-                version = 'master-SNAPSHOT'
+                version = libVersion
             }
         }
     }
 }
-// ./gradlew publishReleasePublicationToMavenLocal

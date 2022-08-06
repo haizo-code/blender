@@ -13,58 +13,77 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.loadmore
+package com.haizo.generaladapter.loadmore.legacyadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
  * This is a abstract class for the RecyclerView Adapter that will handle the LoadMore behavior
  */
-abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.Adapter<VH>() {
+abstract class LoadMoreAdapter : RecyclerView.Adapter<BaseBindingViewHolder<ListItem>>() {
 
-    private var mLoadMoreHelper: LoadMoreHelper<T>? = null
+    private var mLoadMoreHelper: LoadMoreHelper? = null
 
     /**
      *  adapter items: to be overridden and initialized in subClasses
      */
-    protected abstract val items: MutableList<T>
+    protected abstract val items: MutableList<ListItem>
 
     /**
      * Used recyclerview in the current adapter
      * Value is auto @see onAttachedToRecyclerView()
      */
-    protected var recyclerView: RecyclerView? = null
+    protected lateinit var recyclerView: RecyclerView
 
     /**
-     * @return True if the loadMore is enabled for the current adapter
-     */
-    var isLoadMoreEnabled: Boolean
-        get() = mLoadMoreHelper?.isLoadMoreEnabled ?: false
-        set(isEnabled) {
-            mLoadMoreHelper?.isLoadMoreEnabled = isEnabled
-        }
-
-    /**
-     * @param loadMoreListener: load more listener callbacks
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
      * @param pageSize: the page size for the list, this is used to know when to trigger the next page
      * @param loadingThreshold: when to call the next page (ex. 3: when reaching the 7th item ([pageSize] - [loadingThreshold]) then call the next page)
+     * @param loadMoreListener: load more listener callbacks
      */
-    fun setupLoadMore(loadMoreListener: LoadMoreListener?, autoShowLoadingItem: Boolean = true, pageSize: Int = 10,
-        loadingThreshold: Int = 3) {
-        if (recyclerView == null || loadMoreListener == null) return
-        mLoadMoreHelper = LoadMoreHelper(adapter = this, pageSize = pageSize, loadingThreshold = loadingThreshold)
-        mLoadMoreHelper?.setupLoadMore(recyclerView!!, items, loadMoreListener, autoShowLoadingItem)
+    @JvmOverloads
+    fun setupLoadMore(
+        autoShowLoadingItem: Boolean = true,
+        pageSize: Int = 0,
+        loadingThreshold: Int = 3,
+        loadMoreListener: LoadMoreListener,
+    ) {
+        if (mLoadMoreHelper == null) {
+            // prevent the reInitialization of the helper to avoid losing the current page number
+            mLoadMoreHelper = LoadMoreHelper(this)
+        }
+        mLoadMoreHelper?.setupLoadMore(
+            recyclerView = recyclerView,
+            items = items,
+            loadMoreListener = loadMoreListener,
+            autoShowLoadingItem = autoShowLoadingItem,
+            loadingThreshold = loadingThreshold,
+            pageSize = pageSize
+        )
     }
 
     /**
      * Use this method when you add the new loaded items from LoadMore
      * @param [list]: new items to add on the main list
      */
-    fun addMoreItems(list: Collection<T>?) {
-        mLoadMoreHelper?.addMoreItems(list) ?: kotlin.run { throw LoadMoreNotInitialized() }
+    @JvmOverloads
+    fun addMoreItems(list: Collection<ListItem>, nextPageUrl: String? = null) {
+        mLoadMoreHelper?.addMoreItems(list, nextPageUrl) ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    fun setNextPageUrl(nextPageUrl: String?) {
+        mLoadMoreHelper?.nextPageUrl = nextPageUrl
+    }
+
+    /**
+     * Use this method to control enabling/disabling the load-more
+     */
+    fun setLoadMoreEnabled(isEnabled: Boolean) {
+        mLoadMoreHelper?.let { it.isLoadMoreEnabled = isEnabled } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -86,7 +105,7 @@ abstract class LoadMoreAdapter<T, VH : RecyclerView.ViewHolder?> : RecyclerView.
      * @param pageNumber
      */
     fun setCurrentPageNumber(pageNumber: Int) {
-        mLoadMoreHelper?.setCurrentPage(pageNumber) ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreHelper?.let { it.currentPage = pageNumber } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

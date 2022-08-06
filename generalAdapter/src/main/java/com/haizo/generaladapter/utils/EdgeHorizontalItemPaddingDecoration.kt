@@ -17,7 +17,9 @@ package com.haizo.generaladapter.utils
 
 import android.content.res.Resources
 import android.graphics.Rect
+import android.util.LayoutDirection
 import android.view.View
+import androidx.core.text.layoutDirection
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
@@ -32,7 +34,7 @@ class EdgeHorizontalItemPaddingDecoration constructor(
     private var paddingEnd: Int = 0
 ) : RecyclerView.ItemDecoration() {
 
-    private val isAppEnglish: Boolean = Locale.getDefault().language == "en"
+    private val isLTR: Boolean = Locale.getDefault().layoutDirection == LayoutDirection.LTR
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -44,14 +46,14 @@ class EdgeHorizontalItemPaddingDecoration constructor(
 
         // Apply offset only to first item
         if (recyclerView.getChildAdapterPosition(view) == 0) {
-            if (isAppEnglish) {
+            if (isLTR) {
                 outRect.left += dpToPx(paddingStart)
             } else {
                 outRect.right += dpToPx(paddingStart)
             }
         } else if (recyclerView.getChildAdapterPosition(
                 view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
-            if (isAppEnglish) {
+            if (isLTR) {
                 outRect.right += dpToPx(paddingEnd)
             } else {
                 outRect.left += dpToPx(paddingEnd)

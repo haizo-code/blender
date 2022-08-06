@@ -15,7 +15,7 @@
  */
 package com.haizo.generaladapter.listadapter
 
-import com.haizo.generaladapter.loadmore.LoadMoreListAdapter
+import com.haizo.generaladapter.loadmore.listadapter.LoadMoreListAdapter
 
 abstract class BaseRecyclerListAdapter : LoadMoreListAdapter() {
 

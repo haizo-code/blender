@@ -17,6 +17,5 @@ class StoryViewHolder constructor(
 
     override fun onBind(listItem: Story) {
         binding.setVariable(BR.model, listItem)
-        binding.executePendingBindings()
     }
 }

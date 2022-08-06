@@ -21,10 +21,12 @@ import com.haizo.generaladapter.model.ListItem
 object DiffCallbacks {
 
     val LIST_ITEM_COMPARATOR = object : DiffUtil.ItemCallback<ListItem>() {
-        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
-            oldItem.itemUniqueIdentifier() == newItem.itemUniqueIdentifier()
+        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
+            return oldItem.itemUniqueIdentifier() == newItem.itemUniqueIdentifier()
+        }
 
-        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
-            oldItem.areContentsTheSame(newItem)
+        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
+            return oldItem.areContentsTheSame(newItem)
+        }
     }
 }

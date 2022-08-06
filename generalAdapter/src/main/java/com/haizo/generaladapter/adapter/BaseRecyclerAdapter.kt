@@ -15,16 +15,18 @@
  */
 package com.haizo.generaladapter.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
-import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.AdapterActions
-import com.haizo.generaladapter.loadmore.LoadMoreAdapter
+import com.haizo.generaladapter.loadmore.legacyadapter.LoadMoreAdapter
 import com.haizo.generaladapter.model.ListItem
 
-abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(private val context: Context) :
-    AdapterActions<M>, LoadMoreAdapter<M, VH>() {
+@SuppressLint("NotifyDataSetChanged")
+abstract class BaseRecyclerAdapter(
+    private val context: Context
+) : AdapterActions, LoadMoreAdapter() {
 
-    protected var mItems: ArrayList<M> = ArrayList()
+    protected var mItems: MutableList<ListItem> = ArrayList()
     protected var mItemWidth: Float? = null
 
     /**
@@ -40,7 +42,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * Add item to the adapter
      * @param listItem
      */
-    override fun add(listItem: M) {
+    override fun add(listItem: ListItem) {
         mItems.add(listItem)
         notifyItemInserted(mItems.size - 1)
     }
@@ -50,7 +52,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * @param index
      * @param listItem
      */
-    override fun add(index: Int, listItem: M) {
+    override fun add(index: Int, listItem: ListItem) {
         if (index in 0 until mItems.size) {
             mItems.add(index, listItem)
             notifyItemInserted(index)
@@ -61,7 +63,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * Add list of items to the adapter
      * @param listItems
      */
-    override fun addAll(listItems: List<M>) {
+    override fun addAll(listItems: List<ListItem>) {
         mItems.addAll(listItems)
         notifyItemRangeInserted(mItems.size, mItems.size)
     }
@@ -71,7 +73,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * @param index
      * @param listItems
      */
-    override fun addAll(index: Int, listItems: List<M>) {
+    override fun addAll(index: Int, listItems: List<ListItem>) {
         if (index in 0 until mItems.size) {
             mItems.addAll(index, listItems)
             notifyItemRangeInserted(index, listItems.size)
@@ -83,7 +85,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * @param index
      * @param listItem
      */
-    override operator fun set(index: Int, listItem: M) {
+    override operator fun set(index: Int, listItem: ListItem) {
         if (index in 0 until mItems.size) {
             mItems[index] = listItem
             notifyItemChanged(index)
@@ -94,7 +96,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * Update the whole list with a new list
      * @param listItems
      */
-    override fun updateList(listItems: List<M>?) {
+    override fun updateList(listItems: List<ListItem>?) {
         clear()
         mItems.addAll(listItems ?: ArrayList())
         notifyDataSetChanged()
@@ -115,7 +117,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * Remove the passed listItem from the main list
      * @param [listItem]
      */
-    override fun remove(listItem: M) {
+    override fun remove(listItem: ListItem) {
         val indexOfItem = indexOf(listItem)
         if (indexOfItem != -1) {
             mItems.remove(listItem)
@@ -127,9 +129,9 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * Remove the passed listItems list from the main list
      * @param [items]: ListItems
      */
-    override fun removeAll(items: List<M>) {
+    override fun removeAll(items: List<ListItem>) {
         if (items.isNotEmpty()) {
-            mItems.removeAll(items)
+            mItems.removeAll(items.toSet())
             notifyDataSetChanged()
         }
     }
@@ -138,7 +140,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * @return index of the passed item (-1 if not found)
      * @param [listItem]
      */
-    override fun indexOf(listItem: M): Int {
+    override fun indexOf(listItem: ListItem): Int {
         return mItems.indexOf(listItem)
     }
 
@@ -146,7 +148,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * @return true if the main list contains a specific listItem
      * @param [listItem]
      */
-    override fun contains(listItem: M): Boolean {
+    override fun contains(listItem: ListItem): Boolean {
         return mItems.contains(listItem)
     }
 
@@ -174,7 +176,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
      * return the Item at index
      * @param [index]
      */
-    override fun getItem(index: Int): M? {
+    override fun getItem(index: Int): ListItem? {
         return mItems[index]
     }
 
@@ -204,7 +206,7 @@ abstract class BaseRecyclerAdapter<M : ListItem, VH : RecyclerView.ViewHolder>(p
         return mItems[index].listItemType.mItemViewType
     }
 
-    override val items: MutableList<M>
+    override val items: MutableList<ListItem>
         get() = mItems
 
     override fun getItemId(index: Int): Long {

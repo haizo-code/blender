@@ -18,6 +18,5 @@ class UserViewHolder constructor(
 
     override fun onBind(listItem: User) {
         binding.setVariable(BR.model, listItem)
-        binding.executePendingBindings()
     }
 }
