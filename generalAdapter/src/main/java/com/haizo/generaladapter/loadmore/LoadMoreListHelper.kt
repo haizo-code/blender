@@ -28,7 +28,7 @@ import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
  * @param [pageSize]: page size
  * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
  */
-class LoadMoreListHelper constructor(
+internal class LoadMoreListHelper constructor(
     val adapter: ListAdapter<ListItem, BaseBindingViewHolder<ListItem>>,
     val pageSize: Int = 10,
     val loadingThreshold: Int = 3
@@ -45,8 +45,12 @@ class LoadMoreListHelper constructor(
      * @param [items]
      * @param [loadMoreListener]
      */
-    fun setupLoadMore(recyclerView: RecyclerView, items: MutableList<ListItem>, loadMoreListener: LoadMoreListener,
-        autoShowLoadingItem: Boolean = true) {
+    fun setupLoadMore(
+        recyclerView: RecyclerView,
+        items: MutableList<ListItem>,
+        loadMoreListener: LoadMoreListener,
+        autoShowLoadingItem: Boolean = true
+    ) {
         this.mRecyclerView = recyclerView
         this.loadMoreListener = loadMoreListener
         this.mItems = items
@@ -79,7 +83,6 @@ class LoadMoreListHelper constructor(
      * Add loadMore view to the recyclerView
      */
     private fun addLoadMoreView() {
-        @Suppress("UNCHECKED_CAST")
         val loadingObj = LoadingObj()
         if (!isLoadingItemAdded) {
             mItems.add(loadingObj)

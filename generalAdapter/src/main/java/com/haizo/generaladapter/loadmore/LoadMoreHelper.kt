@@ -25,7 +25,7 @@ import com.haizo.generaladapter.interfaces.LoadMoreListener
  * @param [pageSize]: page size
  * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
  */
-class LoadMoreHelper<T> constructor(
+internal class LoadMoreHelper<T> constructor(
     private val adapter: RecyclerView.Adapter<*>,
     val pageSize: Int = 10,
     val loadingThreshold: Int = 3
