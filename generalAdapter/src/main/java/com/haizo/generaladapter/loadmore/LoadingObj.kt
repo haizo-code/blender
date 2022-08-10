@@ -15,10 +15,10 @@
  */
 package com.haizo.generaladapter.loadmore
 
-import com.haizo.generaladapter.MainListItemTypes
-import com.haizo.generaladapter.model.ListItemType
+import com.haizo.generaladapter.MainViewHolderContracts
 import com.haizo.generaladapter.model.LoadingListItem
+import com.haizo.generaladapter.model.ViewHolderContract
 
 class LoadingObj : LoadingListItem {
-    override val listItemType: ListItemType = MainListItemTypes.LOADING
+    override val viewHolderContract: ViewHolderContract = MainViewHolderContracts.LOADING
 }

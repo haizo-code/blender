@@ -17,7 +17,7 @@ package com.haizo.generaladapter.loadmore.listadapter
 
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.LoadMoreNotInitialized
+import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.listadapter.DiffCallbacks
 import com.haizo.generaladapter.model.ListItem
@@ -27,7 +27,7 @@ import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 /**
  * This is a abstract class for the RecyclerView Adapter that will handle the LoadMore behavior
  */
-abstract class LoadMoreListAdapter :
+abstract class LoadMoreListAdapter internal constructor() :
     ListAdapter<ListItem, BaseBindingViewHolder<ListItem>>(DiffCallbacks.LIST_ITEM_COMPARATOR) {
 
     private var mLoadMoreListHelper: LoadMoreListHelper? = null

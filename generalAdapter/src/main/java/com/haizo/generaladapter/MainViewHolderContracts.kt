@@ -15,18 +15,11 @@
  */
 package com.haizo.generaladapter
 
-import android.util.SparseArray
-import com.haizo.generaladapter.model.ListItemType
+import com.haizo.generaladapter.model.ViewHolderContract
+import com.haizo.generaladapter.viewholders.BlankViewHolder
+import com.haizo.generaladapter.viewholders.LoadingViewHolder
 
-internal object ItemTypesPool {
-
-    private val mItemTypeMap = SparseArray<ListItemType>()
-
-    fun getItemType(type: Int): ListItemType {
-        return mItemTypeMap.get(type) ?: MainListItemTypes.NONE
-    }
-
-    fun put(itemViewType: Int, listItemType: ListItemType) {
-        mItemTypeMap.put(itemViewType, listItemType)
-    }
+object MainViewHolderContracts {
+    var NONE = ViewHolderContract(BlankViewHolder::class.java, R.layout.row_blank)
+    var LOADING = ViewHolderContract(LoadingViewHolder::class.java, R.layout.row_loading)
 }

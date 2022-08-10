@@ -22,7 +22,7 @@ import com.haizo.generaladapter.loadmore.legacyadapter.LoadMoreAdapter
 import com.haizo.generaladapter.model.ListItem
 
 @SuppressLint("NotifyDataSetChanged")
-abstract class BaseRecyclerAdapter(
+abstract class BaseRecyclerAdapter internal constructor(
     private val context: Context
 ) : AdapterActions, LoadMoreAdapter() {
 
@@ -203,7 +203,7 @@ abstract class BaseRecyclerAdapter(
     }
 
     override fun getItemViewType(index: Int): Int {
-        return mItems[index].listItemType.mItemViewType
+        return mItems[index].viewHolderContract.mItemViewType
     }
 
     override val items: MutableList<ListItem>

@@ -18,6 +18,9 @@ package com.haizo.generaladapter.interfaces
 interface LoadMoreListener {
     /**
      * Triggered when the next page is required (reaching the end of the list based on the threshold)
+     * @param nextPageNumber: The next page to load
+     * @param nextPageUrl: The next page url, you need to pass it when you submit the listItems in
+     * these methods: submitListItems(..) | submitMoreListItems(..)
      */
     fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?)
 

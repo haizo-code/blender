@@ -16,7 +16,7 @@
 package com.haizo.generaladapter.model
 
 interface ListItem {
-    val listItemType: ListItemType
+    val viewHolderContract: ViewHolderContract
 
     // Override if you are using BlenderListAdapter
     // Used in the DiffUtil

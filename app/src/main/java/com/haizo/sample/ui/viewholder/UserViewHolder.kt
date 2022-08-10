@@ -1,10 +1,27 @@
-package com.haizo.sample.ui.viewholder.row
+package com.haizo.sample.ui.viewholder
 
+import com.haizo.generaladapter.model.ViewHolderContract
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.sample.BR
+import com.haizo.sample.R
 import com.haizo.sample.callbacks.UserActionCallback
 import com.haizo.sample.databinding.RowUserCardBinding
 import com.haizo.sample.model.User
+
+//####################################################//
+//#################### Contract ######################//
+//####################################################//
+
+val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
+    viewHolderClass = UserViewHolder::class.java,
+    layoutResId = R.layout.row_user_card,
+    itemName = "ITEM_USER_CARD",
+    UserActionCallback::class.java
+)
+
+//####################################################//
+//################## ViewHolder ######################//
+//####################################################//
 
 class UserViewHolder constructor(
     private val binding: RowUserCardBinding,

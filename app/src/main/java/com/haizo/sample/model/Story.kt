@@ -1,14 +1,13 @@
 package com.haizo.sample.model
 
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.sample.util.ListItemTypes
+import com.haizo.sample.ui.viewholder.STORY_VIEW_HOLDER_CONTRACT
 
 data class Story constructor(
     val id: String,
     val imageUrl: String
 ) : ListItem {
-    override var listItemType: ListItemType = ListItemTypes.ITEM_STORY
+    override var viewHolderContract = STORY_VIEW_HOLDER_CONTRACT
 
     override fun itemUniqueIdentifier(): String {
         return id

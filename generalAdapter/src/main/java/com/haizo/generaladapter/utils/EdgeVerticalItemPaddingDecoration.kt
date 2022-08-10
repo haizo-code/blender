@@ -27,8 +27,9 @@ import androidx.recyclerview.widget.RecyclerView
  * for the (first|last) items only
  */
 class EdgeVerticalItemPaddingDecoration constructor(
-    private var paddingTop: Int = 0,
-    private var paddingBottom: Int = 0,
+    private val paddingTop: Int = 0,
+    private val paddingBottom: Int = 0,
+    private val convertDpToPx: Boolean = true
 ) : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(
@@ -41,10 +42,9 @@ class EdgeVerticalItemPaddingDecoration constructor(
 
         // Apply offset only to first item
         if (recyclerView.getChildAdapterPosition(view) == 0) {
-            outRect.top += dpToPx(paddingTop)
-        } else if (recyclerView.getChildAdapterPosition(
-                view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
-            outRect.bottom += dpToPx(paddingBottom)
+            outRect.top += paddingTop.let { if (convertDpToPx) dpToPx(it) else it }
+        } else if (recyclerView.getChildAdapterPosition(view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
+            outRect.bottom += paddingBottom.let { if (convertDpToPx) dpToPx(it) else it }
         }
     }
 

@@ -1,12 +1,11 @@
 package com.haizo.sample.model
 
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.sample.util.ListItemTypes
+import com.haizo.sample.ui.viewholder.HORIZONTAL_STORIES_VIEW_HOLDER_CONTRACT
 
 data class StoriesList constructor(
     var list: MutableList<Story> = ArrayList()
 ) : ListItem {
-    override val listItemType: ListItemType = ListItemTypes.LIST_STORIES_HORIZONTAL
+    override val viewHolderContract = HORIZONTAL_STORIES_VIEW_HOLDER_CONTRACT
     override fun areContentsTheSame(newItem: ListItem) = true
 }

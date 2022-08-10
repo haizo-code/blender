@@ -31,10 +31,11 @@ import java.util.Locale
  */
 class EdgeHorizontalItemPaddingDecoration constructor(
     private var paddingStart: Int = 0,
-    private var paddingEnd: Int = 0
+    private var paddingEnd: Int = 0,
+    private val convertDpToPx: Boolean = true
 ) : RecyclerView.ItemDecoration() {
 
-    private val isLTR: Boolean = Locale.getDefault().layoutDirection == LayoutDirection.LTR
+    private val isLTR: Boolean get() = Locale.getDefault().layoutDirection == LayoutDirection.LTR
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -46,17 +47,14 @@ class EdgeHorizontalItemPaddingDecoration constructor(
 
         // Apply offset only to first item
         if (recyclerView.getChildAdapterPosition(view) == 0) {
-            if (isLTR) {
-                outRect.left += dpToPx(paddingStart)
-            } else {
-                outRect.right += dpToPx(paddingStart)
+            paddingStart.let {
+                val value = if (convertDpToPx) dpToPx(it) else it
+                if (isLTR) outRect.left += value else outRect.right += value
             }
-        } else if (recyclerView.getChildAdapterPosition(
-                view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
-            if (isLTR) {
-                outRect.right += dpToPx(paddingEnd)
-            } else {
-                outRect.left += dpToPx(paddingEnd)
+        } else if (recyclerView.getChildAdapterPosition(view) == (recyclerView.layoutManager as LinearLayoutManager).itemCount - 1) {
+            paddingEnd.let {
+                val value = if (convertDpToPx) dpToPx(it) else it
+                if (isLTR) outRect.right += value else outRect.left += value
             }
         }
     }

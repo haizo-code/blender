@@ -77,31 +77,33 @@ Create your **ViewHolder** and extend it with **BaseBindingViewHolder<YourModelH
 * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
 
 ```kotlin
-class StoryViewHolder(private val binding: RowStoryBinding, actionCallback: BaseActionCallback?) :
-  BaseBindingViewHolder<StoryModel>(binding, actionCallback) {
+@file:Suppress("CanBeParameter")
 
-  override fun onBind(listItem: StoryModel) {
-    // use the listItem here..
-  }
+class StoryViewHolder(private val binding: RowStoryBinding, actionCallback: BaseActionCallback?) :
+    BaseBindingViewHolder<StoryModel>(binding, actionCallback) {
+
+    override fun onBind(listItem: StoryModel) {
+        // use the listItem here..
+    }
 }
 ```
 
 ### 2. Add the types for the items
 Create a object class **MyListItemTypes** that will be holding the types of the **ViewHolders** that will be used in the Model.
-Note that you can create many files like this one, just create instances from ListItemType and pass these params:
-* **ViewHolder**: Your ViewHolder class that will be associated with the ListItemType object
-* **LayoutResId**: Your Layout-Resource-Id that will be associated with the ListItemType object
+Note that you can create many files like this one, just create instances from ViewHolderContract and pass these params:
+* **ViewHolder**: Your ViewHolder class that will be associated with the ViewHolderContract object
+* **LayoutResId**: Your Layout-Resource-Id that will be associated with the ViewHolderContract object
 * **ItemName** (Optional): This name is not used anywhere but it will be helpful while debugging
  ```kotlin
 object MyListItemTypes {
 
   // These variables will be associated with the listItems
-  val ITEM_USER_CARD = ListItemType(
+  val ITEM_USER_CARD = ViewHolderContract(
           viewHolderClass = UserCardViewHolder::class.java,
           layoutResId = R.layout.row_user_card,
           itemName = "ITEM_USER_CARD")
 
-  val ITEM_STORY = ListItemType(
+  val ITEM_STORY = ViewHolderContract(
           viewHolderClass = StoryViewHolder::class.java,
           layoutResId = R.layout.row_story,
           itemName = "ITEM_STORY")
@@ -111,14 +113,14 @@ object MyListItemTypes {
 ```
 
 ### 3. Setup your Models
-**Option 1.** let your Model **implements ListItem** and override the **ListItemType** variable
+**Option 1.** let your Model **implements ListItem** and override the **ViewHolderContract** variable
 ```kotlin
 class StoryModel(
         val id: String,
         val imageUrl: String
 ) : ListItem {
   // This model will be presenting the ITEM_STORY
-  override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
+  override var viewHolderContract: ViewHolderContract = MyListItemTypes.ITEM_STORY
 }
 ```
 
@@ -204,7 +206,7 @@ You can use your own loading-item to be shown when loadmore triggered
 
 // Item
 class MyCustomLoadListItem : LoadingListItem {
-    override var listItemType: ListItemType = ..
+    override var viewHolderContract: ViewHolderContract = ..
     override fun areContentsTheSame(newItem: ListItem): Boolean = true
 }
 	
@@ -216,7 +218,7 @@ class MyLoadingViewHolder constructor(
 }
 
 // Item Type
-val ITEM_CUSTOM_LOADING = ListItemType(
+val ITEM_CUSTOM_LOADING = ViewHolderContract(
     viewHolderClass = MyLoadingViewHolder::class.java,
     layoutResId = R.layout.row_my_loading)
 ```
@@ -239,9 +241,9 @@ class MySampleExtras : ViewHolderExtras {..}
 adapter.setExtraParams(mySampleExtras)
 ```
 
-**Step 3.** define this extra class in the ListItemType initialization:
+**Step 3.** define this extra class in the ViewHolderContract initialization:
 ```kotlin
-val ITEM_STORY = ListItemType(
+val ITEM_STORY = ViewHolderContract(
         viewHolderClass = StoryViewHolder::class.java,
         layoutResId = R.layout.row_story,
         itemName = "ITEM_STORY",
@@ -280,9 +282,9 @@ class UserViewHolder constructor(
   ...
 }
 ````
-**Step 3.** define this extra class in the ListItemType initialization:
+**Step 3.** define this extra class in the ViewHolderContract initialization:
 ```kotlin
-   val ITEM_USER_CARD = ListItemType(
+   val ITEM_USER_CARD = ViewHolderContract(
         viewHolderClass = UserViewHolder::class.java,
         layoutResId = R.layout.row_user_card,
         itemName = "ITEM_USER_CARD",
@@ -298,7 +300,7 @@ example:
 
 ```kotlin
 class StoryListItemWrapper constructor(val story: StoryModel) : ListItemWrapper {
-  override var listItemType: ListItemType = MyListItemTypes.ITEM_STORY
+  override var viewHolderContract: ViewHolderContract = MyListItemTypes.ITEM_STORY
 }
 ```
 and update the ViewHolder to use the wrapper instead of the direct model as:

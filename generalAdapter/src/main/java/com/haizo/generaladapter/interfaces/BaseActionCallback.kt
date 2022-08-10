@@ -23,7 +23,6 @@ interface BaseActionCallback {
      * @param view
      * @param listItem
      * @param position (Adapter position)
-     * @param bwCallback the ViewHolder will be listening for this callback
      */
-    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1, bwCallback: BackwardActionCallback) {}
+    fun onItemClicked(view: View, listItem: ListItem, position: Int = -1) {}
 }
