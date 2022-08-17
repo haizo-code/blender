@@ -17,7 +17,7 @@ package com.haizo.generaladapter.listadapter
 
 import com.haizo.generaladapter.loadmore.listadapter.LoadMoreListAdapter
 
-abstract class BaseRecyclerListAdapter : LoadMoreListAdapter() {
+abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdapter() {
 
     override fun getItemCount(): Int {
         return currentList.size
@@ -25,6 +25,6 @@ abstract class BaseRecyclerListAdapter : LoadMoreListAdapter() {
 
     override fun getItemViewType(index: Int): Int {
         val item = currentList[index]
-        return item.listItemType.mItemViewType
+        return item.viewHolderContract.mItemViewType
     }
 }

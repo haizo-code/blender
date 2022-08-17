@@ -32,10 +32,8 @@ internal class LoadMoreHelper constructor(
      * Add loadMore view to the recyclerView
      */
     override fun addLoadMoreView() {
-        if (!isLoadingItemAdded()) {
-            mItems.add(loadingListItem)
-            adapter.notifyItemInserted(mItems.size - 1)
-        }
+        mItems.add(loadingListItem)
+        adapter.notifyItemInserted(mItems.size - 1)
     }
 
     /**
@@ -49,6 +47,7 @@ internal class LoadMoreHelper constructor(
                 adapter.notifyItemRemoved(lastIndex)
             }
         }
+        isLoadingInProgress = false
         loadMoreListener?.onLoadMoreFinished()
     }
 

@@ -1,4 +1,4 @@
-package com.haizo.sample.ui.screen.main
+package com.haizo.sample.ui.screen
 
 import android.os.Bundle
 import android.os.Handler
@@ -17,6 +17,7 @@ import com.haizo.sample.R
 import com.haizo.sample.callbacks.StoryActionCallback
 import com.haizo.sample.callbacks.UserActionCallback
 import com.haizo.sample.databinding.ActivityMainBinding
+import com.haizo.sample.model.LoadingItem
 import com.haizo.sample.model.Story
 import com.haizo.sample.model.User
 import java.util.Collections.emptyList
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupRecyclerView()
-        adapter.submitListItems(viewModel.getDummyItems(), "Next Page 1")
+        adapter.submitListItems(viewModel.getDummyItems(), "Next Page URL 1")
     }
 
     private fun setupRecyclerView() {
@@ -46,12 +47,21 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
             it.addItemDecoration(EdgeVerticalItemPaddingDecoration(paddingTop = 10))
         }
 
-        adapter.setupLoadMore(loadMoreListener = object : LoadMoreListener {
-            override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
-                Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
-                demoLoadMore(nextPageNumber)
-            }
-        })
+        adapter.setupLoadMore(
+            autoShowLoadingItem = true,
+            pageSize = 10,
+            loadingThreshold = 3,
+            loadMoreListener = object : LoadMoreListener {
+                override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+                    Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
+                    demoLoadMore(nextPageNumber)
+                }
+
+                override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPageUrl: String?): Boolean {
+                    return nextPageNumber <= 4
+                }
+            })
+        adapter.setLoadingListItem(LoadingItem())
     }
 
     private fun demoLoadMore(pageToLoad: Int) {
@@ -69,7 +79,7 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                 } else if (pageToLoad == 4) {
                     listOf(MainViewModel.getMockUser(), MainViewModel.getMockUser(), MainViewModel.getMockUser())
                 } else emptyList()
-            adapter.submitMoreListItems(list)
+            adapter.submitMoreListItems(list, "Next Page URL $pageToLoad")
         }, 1000)
     }
 

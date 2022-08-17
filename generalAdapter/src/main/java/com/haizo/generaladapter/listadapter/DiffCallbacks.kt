@@ -18,7 +18,7 @@ package com.haizo.generaladapter.listadapter
 import androidx.recyclerview.widget.DiffUtil
 import com.haizo.generaladapter.model.ListItem
 
-object DiffCallbacks {
+internal object DiffCallbacks {
 
     val LIST_ITEM_COMPARATOR = object : DiffUtil.ItemCallback<ListItem>() {
         override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {

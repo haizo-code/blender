@@ -45,10 +45,8 @@ internal class LoadMoreListHelper constructor(
     }
 
     override fun addLoadMoreView() {
-        if (!isLoadingItemAdded()) {
-            mItems.add(loadingListItem)
-            adapter.submitList(mItems.toList())
-        }
+        mItems.add(loadingListItem)
+        adapter.submitList(mItems.toList())
     }
 
     override fun removeLoadMoreIfExists() {
@@ -58,6 +56,7 @@ internal class LoadMoreListHelper constructor(
                 adapter.submitList(mItems.toList())
             }
         }
+        isLoadingInProgress = false
         loadMoreListener?.onLoadMoreFinished()
     }
 }
