@@ -20,14 +20,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.haizo.generaladapter.ItemTypesPool
-import com.haizo.generaladapter.Wrong2ArgumentsParamException
-import com.haizo.generaladapter.Wrong3ArgumentsParamException
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.interfaces.ViewHolderExtras
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.model.ListItemType
+import com.haizo.generaladapter.model.ViewHolderContract
 import com.haizo.generaladapter.utils.CastingUtil
+import com.haizo.generaladapter.utils.ContractsPool
+import com.haizo.generaladapter.utils.Wrong2ArgumentsParamException
+import com.haizo.generaladapter.utils.Wrong3ArgumentsParamException
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.generaladapter.viewholders.BlankViewHolder
 import kotlin.math.roundToInt
@@ -57,19 +57,19 @@ open class BlenderAdapter constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ListItem> {
-        val listItemType = ItemTypesPool.getItemType(viewType)
-        val binding = getViewDataBinding(listItemType, parent)
+        val viewHolderContract = ContractsPool.getViewHolderContract(viewType)
+        val binding = getViewDataBinding(viewHolderContract, parent)
         setupViewWidth(binding)
 
         val callback: BaseActionCallback? = actionCallbacks.find {
-            CastingUtil.castOrNull(it, listItemType.callbackClass) != null
+            CastingUtil.castOrNull(it, viewHolderContract.callbackClass) != null
         } ?: actionCallbacks.firstOrNull()
 
         val viewHolderExtras: ViewHolderExtras? = viewHolderExtrasList.find {
-            CastingUtil.castOrNull(it, listItemType.extrasClass) != null
+            CastingUtil.castOrNull(it, viewHolderContract.extrasClass) != null
         } ?: viewHolderExtrasList.firstOrNull()
 
-        val mainConstructor = listItemType.viewHolderClass.constructors[0]
+        val mainConstructor = viewHolderContract.viewHolderClass.constructors[0]
         val constructorSize = mainConstructor.parameterTypes.size
         try {
             return when (constructorSize) {
@@ -80,8 +80,8 @@ open class BlenderAdapter constructor(
             }
         } catch (e: IllegalArgumentException) {
             when (constructorSize) {
-                2 -> throw (Wrong2ArgumentsParamException(e, listItemType))
-                3 -> throw (Wrong3ArgumentsParamException(e, listItemType))
+                2 -> throw (Wrong2ArgumentsParamException(e, viewHolderContract))
+                3 -> throw (Wrong3ArgumentsParamException(e, viewHolderContract))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -93,8 +93,8 @@ open class BlenderAdapter constructor(
         if (mItemWidth != null) binding.root.layoutParams.width = (mItemWidth!!).roundToInt()
     }
 
-    private fun getViewDataBinding(listItemType: ListItemType, parent: ViewGroup): ViewDataBinding {
-        return DataBindingUtil.inflate(mInflater, listItemType.layoutResId, parent, false)
+    private fun getViewDataBinding(viewHolderContract: ViewHolderContract, parent: ViewGroup): ViewDataBinding {
+        return DataBindingUtil.inflate(mInflater, viewHolderContract.layoutResId, parent, false)
     }
 
     override fun onBindViewHolder(bindingViewHolder: BaseBindingViewHolder<ListItem>, position: Int) {

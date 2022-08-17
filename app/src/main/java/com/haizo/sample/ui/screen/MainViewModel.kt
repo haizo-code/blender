@@ -1,4 +1,4 @@
-package com.haizo.sample.ui.screen.main
+package com.haizo.sample.ui.screen
 
 import androidx.lifecycle.ViewModel
 import com.haizo.generaladapter.model.ListItem
@@ -36,7 +36,7 @@ class MainViewModel : ViewModel() {
 
     companion object {
         /*For testing only*/
-        var dummyUserNumber = 0
+        private var dummyUserNumber = 0
         fun getMockUser(): User {
             return User(
                 id = UUID.randomUUID().toString(),

@@ -16,15 +16,15 @@
 package com.haizo.generaladapter.loadmore.legacyadapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
  * This is a abstract class for the RecyclerView Adapter that will handle the LoadMore behavior
  */
-abstract class LoadMoreAdapter : RecyclerView.Adapter<BaseBindingViewHolder<ListItem>>() {
+abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<BaseBindingViewHolder<ListItem>>() {
 
     private var mLoadMoreHelper: LoadMoreHelper? = null
 
@@ -48,7 +48,7 @@ abstract class LoadMoreAdapter : RecyclerView.Adapter<BaseBindingViewHolder<List
     @JvmOverloads
     fun setupLoadMore(
         autoShowLoadingItem: Boolean = true,
-        pageSize: Int = 0,
+        pageSize: Int? = null,
         loadingThreshold: Int = 3,
         loadMoreListener: LoadMoreListener,
     ) {
@@ -62,7 +62,7 @@ abstract class LoadMoreAdapter : RecyclerView.Adapter<BaseBindingViewHolder<List
             loadMoreListener = loadMoreListener,
             autoShowLoadingItem = autoShowLoadingItem,
             loadingThreshold = loadingThreshold,
-            pageSize = pageSize
+            pageSize = pageSize ?: 0
         )
     }
 
@@ -77,13 +77,6 @@ abstract class LoadMoreAdapter : RecyclerView.Adapter<BaseBindingViewHolder<List
 
     fun setNextPageUrl(nextPageUrl: String?) {
         mLoadMoreHelper?.nextPageUrl = nextPageUrl
-    }
-
-    /**
-     * Use this method to control enabling/disabling the load-more
-     */
-    fun setLoadMoreEnabled(isEnabled: Boolean) {
-        mLoadMoreHelper?.let { it.isLoadMoreEnabled = isEnabled } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**

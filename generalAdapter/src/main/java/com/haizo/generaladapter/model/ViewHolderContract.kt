@@ -17,19 +17,19 @@ package com.haizo.generaladapter.model
 
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.ItemTypesPool
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.interfaces.ViewHolderExtras
+import com.haizo.generaladapter.utils.ContractsPool
 
 /**
  * Create by Farouq Afghani
  * @param viewHolderClass: The class of the ViewHolder that will be used with the view [layoutResId]
  * @param layoutResId: The layout resource for the view that will be associated with the passed ViewHolder [viewHolderClass]
- * @param itemName: This name will be helpful in debugging phase to know which ListItemType you are using for the selected ListItem
+ * @param itemName: This name will be helpful in debugging only to know which ViewHolderContract you are using for the selected ListItem
  * @param callbackClass: The class of the BaseActionCallback that will be used in the [viewHolderClass]
  * @param extrasClass: The class of the ViewHolderExtras that will be used in the view [viewHolderClass]
  */
-class ListItemType @JvmOverloads constructor(
+class ViewHolderContract @JvmOverloads constructor(
     val viewHolderClass: Class<out RecyclerView.ViewHolder>,
     @LayoutRes val layoutResId: Int,
     val itemName: String = viewHolderClass.simpleName,
@@ -41,7 +41,7 @@ class ListItemType @JvmOverloads constructor(
 
     init {
         this.mItemViewType = type++
-        ItemTypesPool.put(mItemViewType, this)
+        ContractsPool.put(mItemViewType, this)
     }
 
     override fun hashCode(): Int {
@@ -49,7 +49,7 @@ class ListItemType @JvmOverloads constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other === this || other is ListItemType && mItemViewType == other.mItemViewType
+        return other === this || other is ViewHolderContract && mItemViewType == other.mItemViewType
     }
 
     companion object {

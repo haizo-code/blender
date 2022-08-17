@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter
+package com.haizo.generaladapter.utils
 
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.generaladapter.viewholders.BlankViewHolder
-import com.haizo.generaladapter.viewholders.LoadingViewHolder
+import android.util.SparseArray
+import com.haizo.generaladapter.MainViewHolderContracts
+import com.haizo.generaladapter.model.ViewHolderContract
 
-object MainListItemTypes {
-    var NONE = ListItemType(BlankViewHolder::class.java, R.layout.row_blank)
-    var LOADING = ListItemType(LoadingViewHolder::class.java, R.layout.row_loading)
+internal object ContractsPool {
+
+    private val mContractsMap = SparseArray<ViewHolderContract>()
+
+    fun getViewHolderContract(type: Int): ViewHolderContract {
+        return mContractsMap.get(type) ?: MainViewHolderContracts.NONE
+    }
+
+    fun put(itemViewType: Int, viewHolderContract: ViewHolderContract) {
+        mContractsMap.put(itemViewType, viewHolderContract)
+    }
 }

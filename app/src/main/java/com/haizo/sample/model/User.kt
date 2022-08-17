@@ -1,8 +1,7 @@
 package com.haizo.sample.model
 
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.model.ListItemType
-import com.haizo.sample.util.ListItemTypes
+import com.haizo.sample.ui.viewholder.USER_VIEW_HOLDER_CONTRACT
 
 data class User constructor(
     val id: String,
@@ -11,7 +10,7 @@ data class User constructor(
     val location: String,
     val imageUrl: String
 ) : ListItem {
-    override var listItemType: ListItemType = ListItemTypes.ITEM_USER_CARD
+    override var viewHolderContract = USER_VIEW_HOLDER_CONTRACT
 
     override fun itemUniqueIdentifier(): String {
         return id

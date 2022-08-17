@@ -19,7 +19,6 @@ import android.content.Context
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.interfaces.BackwardActionCallback
 import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.interfaces.RecyclerViewAdapterCallback
 import com.haizo.generaladapter.model.ListItem
@@ -27,23 +26,16 @@ import com.haizo.generaladapter.model.ListItem
 abstract class BaseBindingViewHolder<T : ListItem> constructor(
     private val binding: ViewDataBinding,
     private val actionCallback: BaseActionCallback? = null
-) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, BackwardActionCallback, RecyclerViewAdapterCallback {
+) : RecyclerView.ViewHolder(binding.root), View.OnClickListener, RecyclerViewAdapterCallback {
 
     protected lateinit var listItem: T
 
-    protected val context: Context
-        get() = itemView.context
+    protected val context: Context get() = itemView.context
 
     protected fun attachClickListener(vararg views: View?) {
         for (view in views) {
             view?.setOnClickListener(this)
         }
-    }
-
-    abstract fun onBind(listItem: T)
-
-    override fun onViewDetachedFromWindow() {
-        itemView.clearAnimation()
     }
 
     fun draw(listItem: T) {
@@ -52,7 +44,13 @@ abstract class BaseBindingViewHolder<T : ListItem> constructor(
         binding.executePendingBindings()
     }
 
+    abstract fun onBind(listItem: T)
+
+    override fun onViewDetachedFromWindow() {
+        itemView.clearAnimation()
+    }
+
     override fun onClick(view: View) {
-        actionCallback?.onItemClicked(view, listItem, bindingAdapterPosition, this)
+        actionCallback?.onItemClicked(view, listItem, bindingAdapterPosition)
     }
 }

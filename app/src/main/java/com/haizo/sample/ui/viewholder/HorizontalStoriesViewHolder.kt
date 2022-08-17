@@ -1,13 +1,29 @@
-package com.haizo.sample.ui.viewholder.list
+package com.haizo.sample.ui.viewholder
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.listadapter.BlenderListAdapter
+import com.haizo.generaladapter.model.ViewHolderContract
 import com.haizo.generaladapter.utils.EdgeHorizontalItemPaddingDecoration
 import com.haizo.generaladapter.utils.ItemPaddingDecoration
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
+import com.haizo.sample.R
 import com.haizo.sample.callbacks.StoryActionCallback
 import com.haizo.sample.databinding.RowStoriesRvBinding
 import com.haizo.sample.model.StoriesList
+
+//####################################################//
+//#################### Contract ######################//
+//####################################################//
+
+val HORIZONTAL_STORIES_VIEW_HOLDER_CONTRACT = ViewHolderContract(
+    viewHolderClass = HorizontalStoriesViewHolder::class.java,
+    layoutResId = R.layout.row_stories_rv,
+    callbackClass = StoryActionCallback::class.java
+)
+
+//####################################################//
+//################## ViewHolder ######################//
+//####################################################//
 
 class HorizontalStoriesViewHolder constructor(
     private val viewDataBinding: RowStoriesRvBinding,
