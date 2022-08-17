@@ -87,8 +87,6 @@ Create a **ViewHolder** and let it extends the **BaseBindingViewHolder<MODEL-HER
 * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
 
 ```kotlin
-@file:Suppress("CanBeParameter")
-
 class UserViewHolder(
     private val binding: RowUserBinding,
     actionCallback: BaseActionCallback?
