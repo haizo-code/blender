@@ -50,7 +50,7 @@ Create an instance from BlenderListAdapter and bind it to your recyclerview
 
 ```kotlin
 private val adapter: BlenderListAdapter by lazy {
-    BlenderListAdapter(context = this)
+  BlenderListAdapter(context = this)
 }
 ```
 
@@ -76,6 +76,8 @@ adapter.updateList(list)
 ```
 
 ## Setup the adapter (3 steps):
+
+<img width="800" alt="blender_adapter" src="https://raw.githubusercontent.com/haizo-code/blender/master/blender_adapter_chart.png">
 
 ### 1. Create a ViewHolder
 
@@ -122,7 +124,7 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 let your model directly implements **ListItem** and override the **ViewHolderContract** variable
 
 ```kotlin
-data class UserModel(
+data class User(
     val id: String,
     val Name: String
 ) : ListItem {
@@ -183,8 +185,6 @@ data class User(
 ```
 
 * if you are using the **BlenderAdapter**, then its not supported, its recommended to switch to **BlenderListAdapter**
-
--------
 
 ## LoadMore
 
@@ -405,17 +405,14 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 )
 ````
 
-------
-
-### Adapter extra methods
+## Adapter extra methods
 
 | Method | Description |
 | ------ | ------ |
 | setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
 | setItemWidthPercentage | Set the item width percentage for the screen width |
 
-# ProGuard
---------
+## ProGuard
 You need to include the below line in your proguard-rules.pro
 
 ```pro
