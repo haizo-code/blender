@@ -17,11 +17,11 @@ package com.haizo.generaladapter.loadmore.listadapter
 
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.listadapter.DiffCallbacks
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.LoadingListItem
+import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
@@ -49,7 +49,7 @@ abstract class LoadMoreListAdapter internal constructor() :
     @JvmOverloads
     fun setupLoadMore(
         autoShowLoadingItem: Boolean = true,
-        pageSize: Int = 10,
+        pageSize: Int? = null,
         loadingThreshold: Int = 3,
         loadMoreListener: LoadMoreListener,
     ) {
@@ -63,15 +63,8 @@ abstract class LoadMoreListAdapter internal constructor() :
             loadMoreListener = loadMoreListener,
             autoShowLoadingItem = autoShowLoadingItem,
             loadingThreshold = loadingThreshold,
-            pageSize = pageSize
+            pageSize = pageSize ?: 0
         )
-    }
-
-    /**
-     * Use this method to control enabling/disabling the load-more
-     */
-    fun setLoadMoreEnabled(isEnabled: Boolean) {
-        mLoadMoreListHelper?.let { it.isLoadMoreEnabled = isEnabled } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -154,4 +147,9 @@ abstract class LoadMoreListAdapter internal constructor() :
     override fun getCurrentList(): MutableList<ListItem> {
         return super.getCurrentList()
     }
+
+    /**
+     * @return true if the list is empty, otherwise false
+     */
+    fun isEmpty() = currentList.isEmpty()
 }

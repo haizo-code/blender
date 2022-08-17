@@ -16,9 +16,9 @@
 package com.haizo.generaladapter.loadmore.legacyadapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
@@ -48,7 +48,7 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     @JvmOverloads
     fun setupLoadMore(
         autoShowLoadingItem: Boolean = true,
-        pageSize: Int = 0,
+        pageSize: Int? = null,
         loadingThreshold: Int = 3,
         loadMoreListener: LoadMoreListener,
     ) {
@@ -62,7 +62,7 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
             loadMoreListener = loadMoreListener,
             autoShowLoadingItem = autoShowLoadingItem,
             loadingThreshold = loadingThreshold,
-            pageSize = pageSize
+            pageSize = pageSize ?: 0
         )
     }
 
@@ -77,13 +77,6 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
 
     fun setNextPageUrl(nextPageUrl: String?) {
         mLoadMoreHelper?.nextPageUrl = nextPageUrl
-    }
-
-    /**
-     * Use this method to control enabling/disabling the load-more
-     */
-    fun setLoadMoreEnabled(isEnabled: Boolean) {
-        mLoadMoreHelper?.let { it.isLoadMoreEnabled = isEnabled } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**

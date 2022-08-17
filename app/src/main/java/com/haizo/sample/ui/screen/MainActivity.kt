@@ -47,12 +47,20 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
             it.addItemDecoration(EdgeVerticalItemPaddingDecoration(paddingTop = 10))
         }
 
-        adapter.setupLoadMore(loadMoreListener = object : LoadMoreListener {
-            override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
-                Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
-                demoLoadMore(nextPageNumber)
-            }
-        })
+        adapter.setupLoadMore(
+            autoShowLoadingItem = true,
+            pageSize = 10,
+            loadingThreshold = 3,
+            loadMoreListener = object : LoadMoreListener {
+                override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+                    Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
+                    demoLoadMore(nextPageNumber)
+                }
+
+                override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPageUrl: String?): Boolean {
+                    return nextPageNumber <= 4
+                }
+            })
         adapter.setLoadingListItem(LoadingItem())
     }
 
