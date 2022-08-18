@@ -134,8 +134,7 @@ data class User(
 
 ### Option 2 (InDirect)
 
-if you do not want to let your model implements the **ListItem** directly, then you can use the **
-ListItemWrapper**:
+if you do not want to let your model implements the **ListItem** directly, then you can use the **ListItemWrapper**:
 
 **Step 1.** Create a wrapper class that will hold your model in it and let it implement **ListItemWrapper**
 
@@ -156,7 +155,7 @@ BaseBindingViewHolder<UserWrapper>(viewDataBinding, actionCallback)
 ListItemWrapper.kt:
 
 ```kotlin
-val usersList: list<User> = YOUR - USERS - LIST
+val usersList: list<User> = YOUR-USERS-LIST
 val wrappedUsersList = ListItemWrapper.wrap<UserWrapper>(usersList)
 adapter.submitList(wrappedUsersList)
 ```
@@ -200,22 +199,6 @@ adapter.setupLoadMore(
 * for custom load-more, you can use this method as:
 
 ```kotlin
-adapter.setupLoadMore(
-    pageSize = 10,
-    loadingThreshold = 3,
-    autoShowLoadingItem = false,
-    loadMoreListener = object : LoadMoreListener {
-        override fun onLoadMore(pageToLoad: Int) {
-            // show your loading
-            // request load next page
-        }
-
-        override fun onLoadMoreFinished() {
-            super.onLoadMoreFinished()
-            // hide your loading
-        }
-    })
-
 adapter.setupLoadMore(
     autoShowLoadingItem = true,
     pageSize = 10,
