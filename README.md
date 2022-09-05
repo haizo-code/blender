@@ -38,7 +38,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.0'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.1'
 }
 ```
 

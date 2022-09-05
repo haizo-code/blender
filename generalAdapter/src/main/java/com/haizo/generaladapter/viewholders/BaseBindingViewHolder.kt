@@ -32,6 +32,8 @@ abstract class BaseBindingViewHolder<T : ListItem> constructor(
 
     protected val context: Context get() = itemView.context
 
+    protected val bindingAdapterPositionCompat get() = bindingAdapterPosition
+
     protected fun attachClickListener(vararg views: View?) {
         for (view in views) {
             view?.setOnClickListener(this)
