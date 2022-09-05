@@ -31,7 +31,7 @@ interface ListItemWrapper : ListItem {
          */
         fun <T> List<Any>.wrapWith(wrapperInstance: (Any) -> T): List<T> where T : ListItemWrapper {
             return ArrayList<T>().also { list ->
-                repeat(size) { list.add(wrapperInstance.invoke(this)) }
+                forEach { list.add(wrapperInstance.invoke(it)) }
             }.toList()
         }
 
