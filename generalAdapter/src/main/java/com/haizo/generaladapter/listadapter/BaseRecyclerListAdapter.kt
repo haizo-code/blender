@@ -41,15 +41,15 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
     //####################################################//
 
     @Suppress("RedundantOverride")
-    override fun getCurrentList(): MutableList<ListItem> {
+    override fun getCurrentList(): List<ListItem> {
         return super.getCurrentList()
     }
 
-    override fun submitList(list: MutableList<ListItem>?) {
+    override fun submitList(list: List<ListItem>?) {
         super.submitList(list)
     }
 
-    override fun submitList(list: MutableList<ListItem>?, commitCallback: Runnable?) {
+    override fun submitList(list: List<ListItem>?, commitCallback: Runnable?) {
         super.submitList(list, commitCallback)
     }
 
@@ -59,7 +59,7 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
         return if (isValidItemPos(pos)) super.getItem(pos) else null
     }
 
-    fun indexOf(item: ListItem): Int {
+    open fun indexOf(item: ListItem): Int {
         return currentList.indexOfFirst { oldItem ->
             oldItem.itemUniqueIdentifier() == item.itemUniqueIdentifier()
         }
@@ -69,7 +69,7 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
      * @param [forceNotify]: True if you want to force notify this item's ViewHolder
      * Used when the item has been updated by reference, so in this case the DiffUtil will not see the change,
      **/
-    fun updateItemData(item: ListItem, forceNotify: Boolean = false) {
+    open fun updateItemData(item: ListItem, forceNotify: Boolean = false) {
         val pos = indexOf(item)
         if (pos != -1) {
             currentList.toMutableList().let { newList ->
