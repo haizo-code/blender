@@ -15,24 +15,33 @@
  */
 package com.haizo.generaladapter.utils
 
+import androidx.databinding.ViewDataBinding
+import com.haizo.generaladapter.interfaces.BaseActionCallback
+import com.haizo.generaladapter.interfaces.ViewHolderExtras
 import com.haizo.generaladapter.model.ViewHolderContract
+import com.haizo.generaladapter.utils.Exceptions.BINDING_CLASS_MIS_MATCH_MESSAGE
+import com.haizo.generaladapter.utils.Exceptions.CALLBACK_CLASS_MIS_MATCH_MESSAGE
+import com.haizo.generaladapter.utils.Exceptions.EXTRAS_CLASS_MIS_MATCH_MESSAGE
+import com.haizo.generaladapter.utils.Exceptions.LOAD_MORE_NOT_INITIALIZED
+import com.haizo.generaladapter.utils.Exceptions.UN_EXPECTED_EXCEPTION_MESSAGE
+import java.lang.reflect.Constructor
 
-private const val MESSAGE_WRONG_2_ARGUMENTS =
-    """ 
-        ========================================================================
-        Issue in ViewHolder: ---> %s <----
-        ----------Tips----------
-        -> The ViewHolder's constructor should as: (Binding) OR (Binding, BaseActionCallback) OR (Binding, BaseActionCallback, ViewHolderExtras)
-        -> Make sure that your ListItem override the correct viewHolderContract
-        -> Make sure that you have passed the correct ListItem class type in your (BaseBindingViewHolder<HERE>)
-        -> Make sure that you are passing the callback instance to the adapter via constructor or by using addActionCallback(..) 
-        -> If you are using your own callback in the ViewHolder, then make sure to define it in its ViewHolderContract
-        -> Make sure the you are using the right types as defined in the ViewHolder/ViewHolderContract constructor
-        ========================================================================
-        """
+object Exceptions {
 
-private const val MESSAGE_WRONG_3_ARGUMENTS =
-    """ 
+    internal const val LOAD_MORE_NOT_INITIALIZED =
+        "You are trying to use the LoadMore's methods while the LoadMore is not initialized, call setupLoadMore() first before using the methods"
+
+    internal const val BINDING_CLASS_MIS_MATCH_MESSAGE =
+        "The Layout resource that is defined in the Contract (%s) does not match the defined Binding class in the ViewHolder %s"
+
+    internal const val CALLBACK_CLASS_MIS_MATCH_MESSAGE =
+        "The Callback class (%s) that is defined in the Contract (%s) does not match the defined in the ViewHolder of %s)"
+
+    internal const val EXTRAS_CLASS_MIS_MATCH_MESSAGE =
+        "The Extras class (%s) that is defined in the Contract (%s) does not match the defined in the ViewHolder of %s)"
+
+    internal const val UN_EXPECTED_EXCEPTION_MESSAGE =
+        """ 
         ========================================================================
         Issue in ViewHolder: ---> %s <----
         ----------Tips----------
@@ -46,21 +55,56 @@ private const val MESSAGE_WRONG_3_ARGUMENTS =
         ========================================================================
         """
 
-private const val LOAD_MORE_NOT_INITIALIZED =
-    "You are trying to use the LoadMore's methods while the LoadMore is not initialized, call setupLoadMore() first before using the methods"
+    fun isBindingException(binding: ViewDataBinding, mainConstructor: Constructor<*>): Boolean {
+        return CastingUtil.castOrNull(binding, mainConstructor.parameterTypes[0]) == null
+    }
 
-internal class Wrong2ArgumentsParamException(
+    fun isCallbackException(callback: BaseActionCallback?, mainConstructor: Constructor<*>): Boolean {
+        if (mainConstructor.parameterTypes.size >= 2) {
+            return CastingUtil.castOrNull(callback, mainConstructor.parameterTypes[1]) == null
+        }
+        return false
+    }
+
+    fun isExtrasException(extras: ViewHolderExtras?, mainConstructor: Constructor<*>): Boolean {
+        if (mainConstructor.parameterTypes.size >= 3) {
+            return CastingUtil.castOrNull(extras, mainConstructor.parameterTypes[2]) == null
+        }
+        return false
+    }
+}
+
+internal class UnExpectedException(
     e: Exception,
     viewHolderContract: ViewHolderContract
 ) : IllegalArgumentException(
-    String.format(MESSAGE_WRONG_2_ARGUMENTS, viewHolderContract.viewHolderClass, viewHolderContract.itemName), e
-)
-
-internal class Wrong3ArgumentsParamException(
-    e: Exception,
-    viewHolderContract: ViewHolderContract
-) : IllegalArgumentException(
-    String.format(MESSAGE_WRONG_3_ARGUMENTS, viewHolderContract.viewHolderClass, viewHolderContract.itemName), e
+    String.format(UN_EXPECTED_EXCEPTION_MESSAGE, viewHolderContract.viewHolderClass, viewHolderContract.itemName), e
 )
 
 class LoadMoreNotInitialized : NullPointerException(LOAD_MORE_NOT_INITIALIZED)
+
+internal class BindingClassMisMatch(e: Exception, viewHolderContract: ViewHolderContract) : IllegalArgumentException(
+    String.format(
+        BINDING_CLASS_MIS_MATCH_MESSAGE,
+        viewHolderContract.itemName,
+        viewHolderContract.viewHolderClass.simpleName
+    ), e
+)
+
+internal class CallbackClassMisMatch(e: Exception, viewHolderContract: ViewHolderContract) : IllegalArgumentException(
+    String.format(
+        CALLBACK_CLASS_MIS_MATCH_MESSAGE,
+        viewHolderContract.callbackClass?.simpleName,
+        viewHolderContract.itemName,
+        viewHolderContract.viewHolderClass.simpleName
+    ), e
+)
+
+internal class ExtrasClassMisMatch(e: Exception, viewHolderContract: ViewHolderContract) : IllegalArgumentException(
+    String.format(
+        EXTRAS_CLASS_MIS_MATCH_MESSAGE,
+        viewHolderContract.extrasClass?.simpleName,
+        viewHolderContract.itemName,
+        viewHolderContract.viewHolderClass.simpleName
+    ), e
+)

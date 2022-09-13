@@ -24,10 +24,13 @@ import com.haizo.generaladapter.interfaces.BaseActionCallback
 import com.haizo.generaladapter.interfaces.ViewHolderExtras
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.ViewHolderContract
+import com.haizo.generaladapter.utils.BindingClassMisMatch
+import com.haizo.generaladapter.utils.CallbackClassMisMatch
 import com.haizo.generaladapter.utils.CastingUtil
 import com.haizo.generaladapter.utils.ContractsPool
-import com.haizo.generaladapter.utils.Wrong2ArgumentsParamException
-import com.haizo.generaladapter.utils.Wrong3ArgumentsParamException
+import com.haizo.generaladapter.utils.Exceptions
+import com.haizo.generaladapter.utils.ExtrasClassMisMatch
+import com.haizo.generaladapter.utils.UnExpectedException
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 import com.haizo.generaladapter.viewholders.BlankViewHolder
 import kotlin.math.roundToInt
@@ -79,9 +82,17 @@ open class BlenderAdapter constructor(
                 else -> BlankViewHolder(binding, callback)
             }
         } catch (e: IllegalArgumentException) {
-            when (constructorSize) {
-                2 -> throw (Wrong2ArgumentsParamException(e, viewHolderContract))
-                3 -> throw (Wrong3ArgumentsParamException(e, viewHolderContract))
+            when {
+                Exceptions.isBindingException(binding, mainConstructor) -> {
+                    throw BindingClassMisMatch(e, viewHolderContract)
+                }
+                Exceptions.isCallbackException(callback, mainConstructor) && constructorSize >= 2 -> {
+                    throw CallbackClassMisMatch(e, viewHolderContract)
+                }
+                Exceptions.isExtrasException(viewHolderExtras, mainConstructor) && constructorSize == 3 -> {
+                    throw ExtrasClassMisMatch(e, viewHolderContract)
+                }
+                else -> throw (UnExpectedException(e, viewHolderContract))
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -77,6 +77,20 @@ abstract class LoadMoreListAdapter internal constructor() :
     }
 
     /**
+     * Adds a loading item in the list
+     */
+    fun addLoadingItem() {
+        mLoadMoreListHelper?.addLoadMoreView() ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
+     * Remove the loading item from the list (if exists)
+     */
+    fun removeLoadingItem() {
+        mLoadMoreListHelper?.removeLoadMoreIfExists() ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
      * The added param here will be passed to the LoadMore callback when the onLoadMore method is triggered
      */
     fun setNextPageUrl(nextPageUrl: String?) {

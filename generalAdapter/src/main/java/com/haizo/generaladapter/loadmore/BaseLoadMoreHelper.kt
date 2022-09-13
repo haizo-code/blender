@@ -15,9 +15,9 @@
  */
 package com.haizo.generaladapter.loadmore
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.kotlin.findLastCompletelyVisibleItemPosition
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.LoadingListItem
 
@@ -52,23 +52,20 @@ internal abstract class BaseLoadMoreHelper {
         this.loadMoreListener = loadMoreListener
         this.mItems = items
         this.pageSize = pageSize
-        if (recyclerView.layoutManager is LinearLayoutManager) {
-            val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (linearLayoutManager!!.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
-                        if (!loadMoreListener.isShouldTriggerLoadMore(currentPage + 1, nextPageUrl)) return
-                        if (isLoadingInProgress) return
-                        if (isSpammingCalls()) return
-                        if (!isHasNextPage()) return
-                        isLoadingInProgress = true
-                        if (autoShowLoadingItem && !isLoadingItemAdded()) addLoadMoreView()
-                        loadMoreListener.onLoadMore(++currentPage, nextPageUrl)
-                    }
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (recyclerView.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
+                    if (!loadMoreListener.isShouldTriggerLoadMore(currentPage + 1, nextPageUrl)) return
+                    if (isLoadingInProgress) return
+                    if (isSpammingCalls()) return
+                    if (!isHasNextPage()) return
+                    isLoadingInProgress = true
+                    if (autoShowLoadingItem && !isLoadingItemAdded()) addLoadMoreView()
+                    loadMoreListener.onLoadMore(++currentPage, nextPageUrl)
                 }
-            })
-        }
+            }
+        })
     }
 
     fun setLoadingListItem(loadingListItem: LoadingListItem?) {

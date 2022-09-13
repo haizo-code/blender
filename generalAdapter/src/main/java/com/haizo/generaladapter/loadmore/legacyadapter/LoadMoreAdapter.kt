@@ -101,6 +101,20 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
         mLoadMoreHelper?.let { it.currentPage = pageNumber } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
+    /**
+     * Adds a loading item in the list
+     */
+    fun addLoadingItem() {
+        mLoadMoreHelper?.addLoadMoreView() ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
+     * Remove the loading item from the list (if exists)
+     */
+    fun removeLoadingItem() {
+        mLoadMoreHelper?.removeLoadMoreIfExists() ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView

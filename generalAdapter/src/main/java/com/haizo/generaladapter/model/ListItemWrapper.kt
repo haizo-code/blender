@@ -24,24 +24,13 @@ package com.haizo.generaladapter.model
 interface ListItemWrapper : ListItem {
 
     companion object {
-
-        /**
-         * This method allows you to build your ListItemWrapper with different constructor params as you need
-         * @param [wrapperInstance] pass an instance of your wrapper item here
-         */
-        fun <T> List<Any>.wrapWith(wrapperInstance: (Any) -> T): List<T> where T : ListItemWrapper {
-            return ArrayList<T>().also { list ->
-                forEach { list.add(wrapperInstance.invoke(it)) }
-            }.toList()
-        }
-
         /**
          * Helper method to wrap any items with a listItemWrapper
          */
         @Deprecated(
             "This method requests that your ListItemWrapper should have only one parameters and this is a limitation" +
-                ", to solve this use the new method above wrapWith()",
-            replaceWith = ReplaceWith("ListItemWrapper.wrapWith()")
+                ", to solve this use the list.map() in kotlin methods. For java use ListItemWrapper.wrapWith()",
+            replaceWith = ReplaceWith("List.map()")
         )
         inline fun <reified T : ListItemWrapper> wrap(items: List<*>?): List<T> {
             return ArrayList<T>().also { list ->
