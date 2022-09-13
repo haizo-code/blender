@@ -156,7 +156,7 @@ ListItemWrapper.kt:
 
 ```kotlin
 val usersList: list<User> = YOUR-USERS-LIST
-val wrappedUsersList = ListItemWrapper.wrap<UserWrapper>(usersList)
+val wrappedUsersList = usersList.map { UserWrapper(it) }
 adapter.submitList(wrappedUsersList)
 ```
 
