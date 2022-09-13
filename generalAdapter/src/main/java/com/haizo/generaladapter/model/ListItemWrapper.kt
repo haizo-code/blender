@@ -27,6 +27,11 @@ interface ListItemWrapper : ListItem {
         /**
          * Helper method to wrap any items with a listItemWrapper
          */
+        @Deprecated(
+            "This method requests that your ListItemWrapper should have only one parameters and this is a limitation" +
+                ", to solve this use the list.map() in kotlin methods. For java use ListItemWrapper.wrapWith()",
+            replaceWith = ReplaceWith("List.map()")
+        )
         inline fun <reified T : ListItemWrapper> wrap(items: List<*>?): List<T> {
             return ArrayList<T>().also { list ->
                 items?.forEach { item ->

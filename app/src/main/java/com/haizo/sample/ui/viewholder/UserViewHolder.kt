@@ -16,7 +16,7 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
     viewHolderClass = UserViewHolder::class.java,
     layoutResId = R.layout.row_user_card,
     itemName = "ITEM_USER_CARD",
-    UserActionCallback::class.java
+    callbackClass = UserActionCallback::class.java
 )
 
 //####################################################//

@@ -38,7 +38,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.0'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.4'
 }
 ```
 
@@ -50,7 +50,7 @@ Create an instance from BlenderListAdapter and bind it to your recyclerview
 
 ```kotlin
 private val adapter: BlenderListAdapter by lazy {
-    BlenderListAdapter(context = this)
+  BlenderListAdapter(context = this)
 }
 ```
 
@@ -77,6 +77,8 @@ adapter.updateList(list)
 
 ## Setup the adapter (3 steps):
 
+<img width="800" alt="blender_adapter" src="https://raw.githubusercontent.com/haizo-code/blender/master/blender_adapter_chart.png">
+
 ### 1. Create a ViewHolder
 
 Create a **ViewHolder** and let it extends the **BaseBindingViewHolder<MODEL-HERE>**, params as:
@@ -85,8 +87,6 @@ Create a **ViewHolder** and let it extends the **BaseBindingViewHolder<MODEL-HER
 * **BaseActionCallback**: Note that you can add your custom action callback (must implements BaseActionCallback)
 
 ```kotlin
-@file:Suppress("CanBeParameter")
-
 class UserViewHolder(
     private val binding: RowUserBinding,
     actionCallback: BaseActionCallback?
@@ -122,7 +122,7 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 let your model directly implements **ListItem** and override the **ViewHolderContract** variable
 
 ```kotlin
-data class UserModel(
+data class User(
     val id: String,
     val Name: String
 ) : ListItem {
@@ -134,8 +134,7 @@ data class UserModel(
 
 ### Option 2 (InDirect)
 
-if you do not want to let your model implements the **ListItem** directly, then you can use the **
-ListItemWrapper**:
+if you do not want to let your model implements the **ListItem** directly, then you can use the **ListItemWrapper**:
 
 **Step 1.** Create a wrapper class that will hold your model in it and let it implement **ListItemWrapper**
 
@@ -156,8 +155,8 @@ BaseBindingViewHolder<UserWrapper>(viewDataBinding, actionCallback)
 ListItemWrapper.kt:
 
 ```kotlin
-val usersList: list<User> = YOUR - USERS - LIST
-val wrappedUsersList = ListItemWrapper.wrap<UserWrapper>(usersList)
+val usersList: list<User> = YOUR-USERS-LIST
+val wrappedUsersList = usersList.map { UserWrapper(it) }
 adapter.submitList(wrappedUsersList)
 ```
 
@@ -184,8 +183,6 @@ data class User(
 
 * if you are using the **BlenderAdapter**, then its not supported, its recommended to switch to **BlenderListAdapter**
 
--------
-
 ## LoadMore
 
 * for default usage, you can use this method as:
@@ -202,22 +199,6 @@ adapter.setupLoadMore(
 * for custom load-more, you can use this method as:
 
 ```kotlin
-adapter.setupLoadMore(
-    pageSize = 10,
-    loadingThreshold = 3,
-    autoShowLoadingItem = false,
-    loadMoreListener = object : LoadMoreListener {
-        override fun onLoadMore(pageToLoad: Int) {
-            // show your loading
-            // request load next page
-        }
-
-        override fun onLoadMoreFinished() {
-            super.onLoadMoreFinished()
-            // hide your loading
-        }
-    })
-
 adapter.setupLoadMore(
     autoShowLoadingItem = true,
     pageSize = 10,
@@ -405,17 +386,14 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 )
 ````
 
-------
-
-### Adapter extra methods
+## Adapter extra methods
 
 | Method | Description |
 | ------ | ------ |
 | setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
 | setItemWidthPercentage | Set the item width percentage for the screen width |
 
-# ProGuard
---------
+## ProGuard
 You need to include the below line in your proguard-rules.pro
 
 ```pro

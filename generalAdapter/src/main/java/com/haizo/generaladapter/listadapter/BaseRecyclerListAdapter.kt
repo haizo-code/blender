@@ -16,6 +16,8 @@
 package com.haizo.generaladapter.listadapter
 
 import com.haizo.generaladapter.loadmore.listadapter.LoadMoreListAdapter
+import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdapter() {
 
@@ -26,5 +28,58 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
     override fun getItemViewType(index: Int): Int {
         val item = currentList[index]
         return item.viewHolderContract.mItemViewType
+    }
+
+    override fun onFailedToRecycleView(holder: BaseBindingViewHolder<ListItem>): Boolean {
+        // NOTE: this is a workaround to not create more ViewHolder instances while scrolling RecyclerView and
+        //  there is something in the ViewHolder denying the RecyclerView from caching it
+        return true
+    }
+
+    //####################################################//
+    //################## Exposed Methods #################//
+    //####################################################//
+
+    @Suppress("RedundantOverride")
+    override fun getCurrentList(): List<ListItem> {
+        return super.getCurrentList()
+    }
+
+    override fun submitList(list: List<ListItem>?) {
+        super.submitList(list)
+    }
+
+    override fun submitList(list: List<ListItem>?, commitCallback: Runnable?) {
+        super.submitList(list, commitCallback)
+    }
+
+    //####################################################//
+
+    fun getListItem(pos: Int): ListItem? {
+        return if (isValidItemPos(pos)) super.getItem(pos) else null
+    }
+
+    open fun indexOf(item: ListItem): Int {
+        return currentList.indexOfFirst { oldItem ->
+            oldItem.itemUniqueIdentifier() == item.itemUniqueIdentifier()
+        }
+    }
+
+    /**
+     * @param [forceNotify]: True if you want to force notify this item's ViewHolder
+     * Used when the item has been updated by reference, so in this case the DiffUtil will not see the change,
+     **/
+    open fun updateItemData(item: ListItem, forceNotify: Boolean = false) {
+        val pos = indexOf(item)
+        if (pos != -1) {
+            currentList.toMutableList().let { newList ->
+                newList[pos] = item
+                submitList(newList) { if (forceNotify) notifyItemChanged(pos) }
+            }
+        }
+    }
+
+    private fun isValidItemPos(pos: Int): Boolean {
+        return pos in 0 until itemCount
     }
 }

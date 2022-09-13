@@ -73,14 +73,28 @@ abstract class LoadMoreListAdapter internal constructor() :
      *       and will be removed once the loading is finished
      */
     fun setLoadingListItem(loadingListItem: LoadingListItem?) {
-        mLoadMoreListHelper?.setLoadingListItem(loadingListItem)
+        mLoadMoreListHelper?.setLoadingListItem(loadingListItem) ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
+     * Adds a loading item in the list
+     */
+    fun addLoadingItem() {
+        mLoadMoreListHelper?.addLoadMoreView() ?: kotlin.run { throw LoadMoreNotInitialized() }
+    }
+
+    /**
+     * Remove the loading item from the list (if exists)
+     */
+    fun removeLoadingItem() {
+        mLoadMoreListHelper?.removeLoadMoreIfExists() ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
      * The added param here will be passed to the LoadMore callback when the onLoadMore method is triggered
      */
     fun setNextPageUrl(nextPageUrl: String?) {
-        mLoadMoreListHelper?.nextPageUrl = nextPageUrl
+        mLoadMoreListHelper?.let { it.nextPageUrl = nextPageUrl } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -141,11 +155,6 @@ abstract class LoadMoreListAdapter internal constructor() :
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
-    }
-
-    @Suppress("RedundantOverride")
-    override fun getCurrentList(): MutableList<ListItem> {
-        return super.getCurrentList()
     }
 
     /**

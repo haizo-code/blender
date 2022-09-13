@@ -22,14 +22,30 @@ import com.haizo.sample.model.Story
 import com.haizo.sample.model.User
 import java.util.Collections.emptyList
 
-class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallback {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private val viewModel: MainViewModel by viewModels()
 
     private val adapter: BlenderListAdapter by lazy {
-        BlenderListAdapter(context = this, this)
+        BlenderListAdapter(context = this, userCallback, storyActionCallback)
+    }
+
+    private val userCallback = object : UserActionCallback {
+        override fun onAvatarClicked(user: User) {
+            Toast.makeText(this@MainActivity, "User Avatar clicked: ${user.name}", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onCallClicked(user: User) {
+            Toast.makeText(this@MainActivity, "User Call clicked: ${user.name}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val storyActionCallback = object : StoryActionCallback {
+        override fun onStoryClicked(story: Story) {
+            Toast.makeText(this@MainActivity, "Story clicked id: ${story.id}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,17 +97,5 @@ class MainActivity : AppCompatActivity(), UserActionCallback, StoryActionCallbac
                 } else emptyList()
             adapter.submitMoreListItems(list, "Next Page URL $pageToLoad")
         }, 1000)
-    }
-
-    override fun onStoryClicked(story: Story) {
-        Toast.makeText(this@MainActivity, "Story clicked id: ${story.id}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onAvatarClicked(user: User) {
-        Toast.makeText(this@MainActivity, "User Avatar clicked: ${user.name}", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onCallClicked(user: User) {
-        Toast.makeText(this@MainActivity, "User Call clicked: ${user.name}", Toast.LENGTH_SHORT).show()
     }
 }
