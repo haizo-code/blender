@@ -33,6 +33,10 @@ internal class LoadMoreListHelper constructor(
     fun updateListItems(collection: Collection<ListItem>?) {
         removeLoadMoreIfExists()
         resetPage()
+        updateMainList(collection)
+    }
+
+    fun updateMainList(collection: Collection<ListItem>?) {
         mItems.clear()
         collection?.let { mItems.addAll(it) }
     }

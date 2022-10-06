@@ -38,8 +38,6 @@ abstract class LoadMoreListAdapter internal constructor() :
      */
     protected lateinit var recyclerView: RecyclerView
 
-    private val loadMoreList: MutableList<ListItem> = ArrayList()
-
     /**
      * @param loadMoreListener: load more listener callbacks
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
@@ -59,7 +57,7 @@ abstract class LoadMoreListAdapter internal constructor() :
         }
         mLoadMoreListHelper?.setupLoadMore(
             recyclerView = recyclerView,
-            items = loadMoreList,
+            items = currentList.toMutableList(),
             loadMoreListener = loadMoreListener,
             autoShowLoadingItem = autoShowLoadingItem,
             loadingThreshold = loadingThreshold,
@@ -93,8 +91,8 @@ abstract class LoadMoreListAdapter internal constructor() :
     /**
      * The added param here will be passed to the LoadMore callback when the onLoadMore method is triggered
      */
-    fun setNextPageUrl(nextPageUrl: String?) {
-        mLoadMoreListHelper?.let { it.nextPageUrl = nextPageUrl } ?: kotlin.run { throw LoadMoreNotInitialized() }
+    fun setNextPagePayload(nextPagePayload: String?) {
+        mLoadMoreListHelper?.let { it.nextPagePayload = nextPagePayload } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
     /**
@@ -102,9 +100,9 @@ abstract class LoadMoreListAdapter internal constructor() :
      * Use this method to submit the first page
      */
     @JvmOverloads
-    fun submitListItems(list: List<ListItem>?, nextPageUrl: String? = null, commitCallback: Runnable? = null) {
+    fun submitListItems(list: List<ListItem>?, nextPagePayload: String? = null, commitCallback: Runnable? = null) {
         mLoadMoreListHelper?.let {
-            it.nextPageUrl = nextPageUrl
+            it.nextPagePayload = nextPagePayload
             it.updateListItems(list)
         }
         super.submitList(list, commitCallback)
@@ -119,9 +117,9 @@ abstract class LoadMoreListAdapter internal constructor() :
      * @param [list]: new items to add on the main list
      */
     @JvmOverloads
-    fun submitMoreListItems(list: List<ListItem>, nextPageUrl: String? = null, commitCallback: Runnable? = null) {
+    fun submitMoreListItems(list: List<ListItem>, nextPagePayload: String? = null, commitCallback: Runnable? = null) {
         mLoadMoreListHelper?.let {
-            it.nextPageUrl = nextPageUrl
+            it.nextPagePayload = nextPagePayload
             it.addMoreItems(list, commitCallback)
         } ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
@@ -146,6 +144,13 @@ abstract class LoadMoreListAdapter internal constructor() :
     }
 
     /**
+     * Reset current page number
+     */
+    fun resetPageNumber() {
+        setCurrentPageNumber(1)
+    }
+
+    /**
      * Use this method to clear the current 'loadMoreHelper' instance
      */
     fun clearLoadMoreInstance() {
@@ -161,4 +166,13 @@ abstract class LoadMoreListAdapter internal constructor() :
      * @return true if the list is empty, otherwise false
      */
     fun isEmpty() = currentList.isEmpty()
+
+    override fun submitList(list: List<ListItem>?) {
+        submitList(list, null)
+    }
+
+    override fun submitList(list: List<ListItem>?, commitCallback: Runnable?) {
+        mLoadMoreListHelper?.updateMainList(list)
+        super.submitList(list, commitCallback)
+    }
 }

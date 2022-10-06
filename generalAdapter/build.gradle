@@ -3,16 +3,15 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
-var libVersion = "2.3.4"
+var libVersion = "2.3.5"
 
 android {
+    namespace 'com.haizo.generaladapter'
     compileSdkVersion 32
 
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 32
-        versionCode 6
-        versionName libVersion
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -34,7 +33,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

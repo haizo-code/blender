@@ -20,20 +20,20 @@ interface LoadMoreListener {
     /**
      * Triggered after the current adapter position satisfy the threshold and before the [onLoadMore] is triggered
      * @param nextPageNumber: The next page to load
-     * @param nextPageUrl: The next page url, you need to pass it when you submit the listItems in
+     * @param nextPagePayload: The next page url, you need to pass it when you submit the listItems in
      * these methods: submitListItems(..) | submitMoreListItems(..)
      */
-    fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPageUrl: String?): Boolean {
+    fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPagePayload: String?): Boolean {
         return true
     }
 
     /**
      * Triggered when the current adapter position satisfy the threshold logic
      * @param nextPageNumber: The next page to load
-     * @param nextPageUrl: The next page url, you need to pass it when you submit the listItems in
+     * @param nextPagePayload: The next page url, you need to pass it when you submit the listItems in
      * these methods: submitListItems(..) | submitMoreListItems(..)
      */
-    fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?)
+    fun onLoadMore(nextPageNumber: Int, nextPagePayload: String?)
 
     /**
      * Triggered when loading finished (when removing the load-more item from the list)

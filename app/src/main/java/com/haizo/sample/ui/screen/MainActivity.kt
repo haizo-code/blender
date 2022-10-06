@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onCallClicked(user: User) {
+            val ss = user.copy(name = user.name + " Edited")
+            adapter.updateItemData(ss, true)
             Toast.makeText(this@MainActivity, "User Call clicked: ${user.name}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -68,12 +70,12 @@ class MainActivity : AppCompatActivity() {
             pageSize = 10,
             loadingThreshold = 3,
             loadMoreListener = object : LoadMoreListener {
-                override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
-                    Toast.makeText(this@MainActivity, "$nextPageUrl", Toast.LENGTH_SHORT).show()
+                override fun onLoadMore(nextPageNumber: Int, nextPagePayload: String?) {
+                    Toast.makeText(this@MainActivity, "$nextPagePayload", Toast.LENGTH_SHORT).show()
                     demoLoadMore(nextPageNumber)
                 }
 
-                override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPageUrl: String?): Boolean {
+                override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPagePayload: String?): Boolean {
                     return nextPageNumber <= 4
                 }
             })
