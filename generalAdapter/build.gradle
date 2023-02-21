@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
-var libVersion = "2.3.5"
+var libVersion = "2.3.6"
 
 android {
     compileSdkVersion 33
@@ -13,7 +13,7 @@ android {
         targetSdkVersion 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        versionCode 5
+        versionCode 6
         versionName libVersion
     }
 
