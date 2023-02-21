@@ -60,9 +60,41 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
     }
 
     open fun indexOf(item: ListItem): Int {
-        return currentList.indexOfFirst { oldItem ->
-            oldItem.itemUniqueIdentifier() == item.itemUniqueIdentifier()
+        return currentList.indexOfFirst { it.itemUniqueIdentifier() == item.itemUniqueIdentifier() }
+    }
+
+    open fun indexOf(itemUniqueIdentifier: String): Int {
+        return currentList.indexOfFirst { it.itemUniqueIdentifier() == itemUniqueIdentifier }
+    }
+
+    //####################################################//
+    //################# Helper Methods ###################//
+    //####################################################//
+
+    fun removeItemFromList(listItem: ListItem, commitCallback: Runnable? = null) {
+        val list = currentList.toMutableList().also { listItems ->
+            val item = indexOf(listItem)
+            listItems.removeAt(item)
         }
+        submitList(list, commitCallback)
+    }
+
+    fun removeItemFromList(itemUniqueIdentifier: String, commitCallback: Runnable? = null) {
+        val list = currentList.toMutableList().also { listItems ->
+            val item = indexOf(itemUniqueIdentifier)
+            listItems.removeAt(item)
+        }
+        submitList(list, commitCallback)
+    }
+
+    fun addItemToList(index: Int, listItem: ListItem, commitCallback: Runnable? = null) {
+        val list = currentList.toMutableList().also { it.add(index, listItem) }
+        submitList(list, commitCallback)
+    }
+
+    fun addItemToList(listItem: ListItem, commitCallback: Runnable? = null) {
+        val list = currentList.toMutableList().also { it.add(listItem) }
+        submitList(list, commitCallback)
     }
 
     /**
