@@ -28,7 +28,7 @@ internal abstract class BaseLoadMoreHelper {
     protected var isLoadingInProgress: Boolean = false
     private var pageSize: Int = 0
     var currentPage = 1
-    var nextPageUrl: String? = null
+    var nextPagePayload: String? = null
 
     /**
      * Setup the loadMore behavior
@@ -56,13 +56,13 @@ internal abstract class BaseLoadMoreHelper {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (recyclerView.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
-                    if (!loadMoreListener.isShouldTriggerLoadMore(currentPage + 1, nextPageUrl)) return
+                    if (!loadMoreListener.isShouldTriggerLoadMore(currentPage + 1, nextPagePayload)) return
                     if (isLoadingInProgress) return
                     if (isSpammingCalls()) return
                     if (!isHasNextPage()) return
                     isLoadingInProgress = true
                     if (autoShowLoadingItem && !isLoadingItemAdded()) addLoadMoreView()
-                    loadMoreListener.onLoadMore(++currentPage, nextPageUrl)
+                    loadMoreListener.onLoadMore(++currentPage, nextPagePayload)
                 }
             }
         })

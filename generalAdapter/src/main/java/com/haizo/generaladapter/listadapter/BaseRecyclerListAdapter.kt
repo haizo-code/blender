@@ -45,14 +45,6 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
         return super.getCurrentList()
     }
 
-    override fun submitList(list: List<ListItem>?) {
-        super.submitList(list)
-    }
-
-    override fun submitList(list: List<ListItem>?, commitCallback: Runnable?) {
-        super.submitList(list, commitCallback)
-    }
-
     //####################################################//
 
     fun getListItem(pos: Int): ListItem? {

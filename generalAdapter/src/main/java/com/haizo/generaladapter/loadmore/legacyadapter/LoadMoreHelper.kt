@@ -54,11 +54,11 @@ internal class LoadMoreHelper constructor(
     /**
      * Add more items to the main listItem for the adapter
      */
-    fun addMoreItems(collection: Collection<ListItem>, nextPageUrl: String?) {
+    fun addMoreItems(collection: Collection<ListItem>, nextPagePayload: String?) {
         removeLoadMoreIfExists()
         val positionStart = mItems.size + 1
         mItems.addAll(collection)
         adapter.notifyItemRangeInserted(positionStart, mItems.size)
-        this.nextPageUrl = nextPageUrl
+        this.nextPagePayload = nextPagePayload
     }
 }

@@ -190,7 +190,7 @@ data class User(
 ```kotlin
 adapter.setupLoadMore(
     loadMoreListener = object : LoadMoreListener {
-        override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+        override fun onLoadMore(nextPageNumber: Int, nextPagePayload: String?) {
             // request load next page
         }
     })
@@ -204,11 +204,11 @@ adapter.setupLoadMore(
     pageSize = 10,
     loadingThreshold = 3,
     loadMoreListener = object : LoadMoreListener {
-        override fun onLoadMore(nextPageNumber: Int, nextPageUrl: String?) {
+        override fun onLoadMore(nextPageNumber: Int, nextPagePayload: String?) {
             // request load next page
         }
 
-        override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPageUrl: String?): Boolean {
+        override fun isShouldTriggerLoadMore(nextPageNumber: Int, nextPagePayload: String?): Boolean {
             // You can control here if the loadMore should be triggered or not
         }
     })
@@ -232,10 +232,10 @@ Use this method to submit more items to the current list
 ```kotlin
 adapter.submitMoreListItems(list)
 // or
-adapter.submitMoreListItems(list = list, nextPageUrl = "your-next-page-url-here")
+adapter.submitMoreListItems(list = list, nextPagePayload = "your-next-page-url-here")
 
 // you can also send the next page url by using this method
-// adapter.setNextPageUrl("your-next-page-url-here")
+// adapter.setNextPagePayload("your-next-page-url-here")
 
 // ### if you are using the BlenderAdapter (legacy adapter), then you should used this method
 // adapter.addMoreItems(list)

@@ -71,12 +71,15 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
      * @param [list]: new items to add on the main list
      */
     @JvmOverloads
-    fun addMoreItems(list: Collection<ListItem>, nextPageUrl: String? = null) {
-        mLoadMoreHelper?.addMoreItems(list, nextPageUrl) ?: kotlin.run { throw LoadMoreNotInitialized() }
+    fun addMoreItems(list: Collection<ListItem>, nextPagePayload: String? = null) {
+        mLoadMoreHelper?.addMoreItems(list, nextPagePayload) ?: kotlin.run { throw LoadMoreNotInitialized() }
     }
 
-    fun setNextPageUrl(nextPageUrl: String?) {
-        mLoadMoreHelper?.nextPageUrl = nextPageUrl
+    /**
+     * @param [nextPagePayload]: could be next page (url/offset/cursor)
+     */
+    fun setNextPagePayload(nextPagePayload: String?) {
+        mLoadMoreHelper?.nextPagePayload = nextPagePayload
     }
 
     /**
