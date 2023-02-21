@@ -392,6 +392,8 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 | ------ | ------ |
 | setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
 | setItemWidthPercentage | Set the item width percentage for the screen width |
+| removeItemFromList | Remove item from the main list and resubmit the list internally |
+| addItemToList | Add item into the main list and resubmit the list internally |
 
 ## ProGuard
 You need to include the below line in your proguard-rules.pro
