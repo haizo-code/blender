@@ -15,6 +15,7 @@
  */
 package com.haizo.generaladapter.listadapter
 
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.loadmore.listadapter.LoadMoreListAdapter
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
@@ -79,11 +80,18 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
         submitList(list, commitCallback)
     }
 
+    /**
+     * Add items to the list in specific index and submit it
+     * Note: this method have a fallback in case index is out-of-boundary, which it will add the item as the last item
+     */
     fun addItemToList(index: Int, listItem: ListItem, commitCallback: Runnable? = null) {
-        val list = currentList.toMutableList().also { it.add(index, listItem) }
+        val list = currentList.toMutableList().also { it.add(index.coerceAtMost(it.size), listItem) }
         submitList(list, commitCallback)
     }
 
+    /**
+     * Add items to the list and submit it
+     */
     fun addItemToList(listItem: ListItem, commitCallback: Runnable? = null) {
         val list = currentList.toMutableList().also { it.add(listItem) }
         submitList(list, commitCallback)
@@ -100,6 +108,22 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
                 newList[pos] = item
                 submitList(newList) { if (forceNotify) notifyItemChanged(pos) }
             }
+        }
+    }
+
+    /**
+     * This method will [notifyItemRangeChanged]" for (previous x items) to (next x items) using the current item as a pivot
+     * This method can be defined as the light-version of [notifyDataSetChanged]
+     */
+    fun notifyItemRangeChangedForSurroundingItems(range: Int = 5) {
+        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+        val currentPosition = layoutManager.findFirstVisibleItemPosition()
+
+        val start = (currentPosition - range).coerceAtLeast(0)
+        val end = (currentPosition + range).coerceAtMost(itemCount - 1)
+
+        if (start <= end) {
+            notifyItemRangeChanged(start, end - start + 1)
         }
     }
 
