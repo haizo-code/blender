@@ -38,7 +38,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.5'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.7'
 }
 ```
 
@@ -388,10 +388,14 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 
 ## Adapter extra methods
 
-| Method | Description |
-| ------ | ------ |
-| setItemsToFitInScreen | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
-| setItemWidthPercentage | Set the item width percentage for the screen width |
+| Method                                     | Description                                                                                                                             |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| setItemsToFitInScreen                      | Set the number of the items that will fit in the screen (Horizontally), for ex, 1.5f will show one item and the half of the second item |
+| setItemWidthPercentage                     | Set the item width percentage for the screen width                                                                                      |
+| removeItemFromList                         | Remove item from the currentList and resubmit the change                                                                                |
+| addItemToList                              | Add item to the currentList and resubmit the change                                                                                     |
+| updateItemData                             | Used when the item has been updated by reference, so in this case the DiffUtil wont see the change                                      |
+| notifyItemRangeChangedForSurroundingItems  | This method will [notifyItemRangeChanged] for (previous x items) to (next x items) using the current item as a pivot                    |
 
 ## ProGuard
 You need to include the below line in your proguard-rules.pro
