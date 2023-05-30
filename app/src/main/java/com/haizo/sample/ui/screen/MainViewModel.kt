@@ -13,25 +13,24 @@ class MainViewModel : ViewModel() {
     fun getDummyItems(): MutableList<ListItem> {
         // Adding a mix of all the types of the viewHolders
         return mutableListOf(
-            getDummyHorizontalItem(),
+            getDummyHorizontalItem("A"),
             getMockUser(),
             getMockUser(),
-            getDummyHorizontalItem(),
+            getDummyHorizontalItem("B"),
             getMockUser(),
             getMockUser(),
-            getDummyHorizontalItem(),
+            getDummyHorizontalItem("C"),
             getMockUser(),
             getMockUser(),
-            getMockStory(),
             getMockUser(),
             getMockUser(),
         )
     }
 
-    private fun getDummyHorizontalItem(): StoriesList {
+    private fun getDummyHorizontalItem(uniqueIdentifier: String): StoriesList {
         val list: MutableList<Story> = ArrayList()
-        list.let { for (i in 1..10) it.add(getMockStory()) }
-        return StoriesList(list)
+        list.let { for (i in 1..10) it.add(getMockStory(uniqueIdentifier)) }
+        return StoriesList(uniqueIdentifier, list)
     }
 
     companion object {
@@ -48,8 +47,9 @@ class MainViewModel : ViewModel() {
         }
 
         /*For testing only*/
-        fun getMockStory(): Story {
+        fun getMockStory(containerID: String? = null): Story {
             return Story(
+                containerId = containerID,
                 id = UUID.randomUUID().toString(),
                 imageUrl = sampleBackgrounds.random()
             )

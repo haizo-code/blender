@@ -17,7 +17,9 @@
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp">
 
-        <FrameLayout
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -29,6 +31,13 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/backgrounds/scenic"/>
-        </FrameLayout>
+
+            <TextView
+                android:text="@{String.valueOf(model.clicksCount)}"
+                tools:text="Name here"
+                android:layout_margin="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

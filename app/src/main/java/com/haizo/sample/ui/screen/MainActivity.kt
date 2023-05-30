@@ -7,8 +7,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.interfaces.LoadMoreListener
+import com.haizo.generaladapter.kotlin.setupVertical
 import com.haizo.generaladapter.listadapter.BlenderListAdapter
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.utils.EdgeVerticalItemPaddingDecoration
@@ -46,7 +46,9 @@ class MainActivity : AppCompatActivity() {
 
     private val storyActionCallback = object : StoryActionCallback {
         override fun onStoryClicked(story: Story) {
-            Toast.makeText(this@MainActivity, "Story clicked id: ${story.id}", Toast.LENGTH_SHORT).show()
+            val updatedStory = story.copy(clicksCount = story.clicksCount + 1)
+            val containerId = story.containerId ?: ""
+            adapter.updateInnerListItem(containerId, updatedStory)
         }
     }
 
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         binding.recyclerView.let {
-            it.layoutManager = LinearLayoutManager(this)
+            it.setupVertical()
             it.adapter = adapter
             it.addItemDecoration(ItemPaddingDecoration(bottom = 10))
             it.addItemDecoration(EdgeVerticalItemPaddingDecoration(paddingTop = 10))
