@@ -38,7 +38,7 @@ allprojects {
 
 ```gradle
 dependencies {
-	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.3.7'
+	implementation 'com.github.haizo-code:recyclerview-general-adapter:v2.4.0'
 }
 ```
 
@@ -161,6 +161,37 @@ adapter.submitList(wrappedUsersList)
 ```
 
 And that's it :)
+
+## List Item Container
+if you have a inner RecyclerView in your main recyclerview, such as horizontal list section in main vertical list, then its
+recommended to follow these steps:
+
+**1- Setup the container model**
+
+let your model that holds the inner list implement **ListItemContainer** instead of using **ListItem/ListItemWrapper**
+
+```kotlin
+data class StoriesList constructor(
+        var list: MutableList<Story>
+) : ListItemsContainer<Story> {
+
+  override fun getInnerList() = list
+  override fun itemUniqueIdentifier() = "my_container_id"
+  ...
+}
+```
+then use this model normally as you are using ListItem
+
+**2- Use helper methods**
+
+to update an item in your inner list, use this method **updateInnerListItem(..)**:
+
+```kotlin
+val updatedItem = myItem.copy(..) // the updated item should have different reference, so you can do its using the copy(..) method
+adapter.updateInnerListItem(my_container_id, updateListItem)
+```
+- Note that the targeted listItem will be updated using the its 'itemUniqueIdentifier' so make sure to set it.
+- Make sure to set your Recyclerview with (supportsChangeAnimations = false) to avoid flicking the whole inner list
 
 ## List Adapter DiffUtil
 
@@ -395,6 +426,7 @@ val USER_VIEW_HOLDER_CONTRACT = ViewHolderContract(
 | removeItemFromList                         | Remove item from the currentList and resubmit the change                                                                                |
 | addItemToList                              | Add item to the currentList and resubmit the change                                                                                     |
 | updateItemData                             | Used when the item has been updated by reference, so in this case the DiffUtil wont see the change                                      |
+| updateInnerListItem                        | Used to update an inner item in sub recyclerView list                                                                                   |
 | notifyItemRangeChangedForSurroundingItems  | This method will [notifyItemRangeChanged] for (previous x items) to (next x items) using the current item as a pivot                    |
 
 ## ProGuard

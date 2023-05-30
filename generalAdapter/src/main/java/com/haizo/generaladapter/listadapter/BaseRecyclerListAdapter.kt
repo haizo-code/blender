@@ -18,6 +18,7 @@ package com.haizo.generaladapter.listadapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.haizo.generaladapter.loadmore.listadapter.LoadMoreListAdapter
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.model.ListItemsContainer
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdapter() {
@@ -50,6 +51,10 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
 
     fun getListItem(pos: Int): ListItem? {
         return if (isValidItemPos(pos)) super.getItem(pos) else null
+    }
+
+    fun getListItem(itemUniqueIdentifier: String): ListItem? {
+        return getListItem(indexOf(itemUniqueIdentifier))
     }
 
     open fun indexOf(item: ListItem): Int {
@@ -109,6 +114,47 @@ abstract class BaseRecyclerListAdapter internal constructor() : LoadMoreListAdap
                 submitList(newList) { if (forceNotify) notifyItemChanged(pos) }
             }
         }
+    }
+
+    /**
+     * @param [container]: the container listItem that holds the sub ListItem
+     * @param [innerListItem]: the updated inner listItem
+     * Used when the item has been updated by reference, so in this case the DiffUtil will not see the change
+     *
+     * ---> Make sure to set your Recyclerview with (supportsChangeAnimations = false) to avoid flicking the whole inner list
+     */
+    open fun <T : ListItem> updateInnerListItem(container: ListItemsContainer<T>, innerListItem: T) {
+        container.updateItemInList(updatedListItem = innerListItem)
+        updateItemData(item = container, forceNotify = true)
+    }
+
+    /**
+     * @param [containerUniqueId]: the container listItem Unique ID that holds the sub ListItem
+     * @param [innerListItem]: the updated inner listItem
+     * Used when the item has been updated by reference, so in this case the DiffUtil will not see the change
+     *
+     * ---> Make sure to set your Recyclerview with (supportsChangeAnimations = false) to avoid flicking the whole inner list
+     */
+    @Suppress("UNCHECKED_CAST")
+    open fun <T : ListItem> updateInnerListItem(containerUniqueId: String, innerListItem: T) {
+        val container = getListItem(containerUniqueId) as? ListItemsContainer<T>
+        container?.let { updateInnerListItem(it, innerListItem) }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    open fun <T : ListItem> getInnerListItem(containerUniqueId: String, innerItemUniqueId: String): T? {
+        val container = getListItem(containerUniqueId) as? ListItemsContainer<T>
+        return container?.let {
+            it.getInnerList().first { innerList -> innerList.itemUniqueIdentifier() == innerItemUniqueId }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    open fun getInnerListItemIndex(containerUniqueId: String, innerItemUniqueId: String): Int {
+        val container = getListItem(containerUniqueId) as? ListItemsContainer<ListItem>
+        return container?.let {
+            it.getInnerList().indexOfFirst { innerList -> innerList.itemUniqueIdentifier() == innerItemUniqueId }
+        } ?: -1
     }
 
     /**
