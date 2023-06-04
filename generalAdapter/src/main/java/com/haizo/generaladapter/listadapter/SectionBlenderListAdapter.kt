@@ -10,15 +10,7 @@ abstract class SectionBlenderListAdapter constructor(
     vararg actionCallbacks: BaseActionCallback,
 ) : BlenderListAdapter(context, *actionCallbacks) {
 
-    abstract val sectionsList: List<ListItem>
-
-    private fun getSectionList(): List<ListItem> {
-        return sectionsList
-    }
-
-    init {
-        submitList(getSectionList())
-    }
+    abstract var sectionsList: MutableList<ListItem>
 
     fun getItemsUnderSection(section: MockListItem, includeSection: Boolean = false): List<ListItem> {
         val diff = if (includeSection) 0 else 1
