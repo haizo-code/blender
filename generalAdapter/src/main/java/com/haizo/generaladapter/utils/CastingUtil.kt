@@ -22,7 +22,6 @@ object CastingUtil {
         return if (toClass?.isInstance(instance) == true) instance as T else null
     }
 
-    @Suppress("UNCHECKED_CAST")
     inline fun <reified T> castOrNull(instance: Any?): T? {
         return instance as? T
     }

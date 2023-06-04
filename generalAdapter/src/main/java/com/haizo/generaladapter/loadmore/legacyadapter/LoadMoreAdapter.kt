@@ -18,7 +18,6 @@ package com.haizo.generaladapter.loadmore.legacyadapter
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.model.ListItem
-import com.haizo.generaladapter.utils.LoadMoreNotInitialized
 import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
 
 /**
@@ -26,7 +25,7 @@ import com.haizo.generaladapter.viewholders.BaseBindingViewHolder
  */
 abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<BaseBindingViewHolder<ListItem>>() {
 
-    private var mLoadMoreHelper: LoadMoreHelper? = null
+    private val mLoadMoreHelper: LoadMoreHelper by lazy { LoadMoreHelper(this) }
 
     /**
      *  adapter items: to be overridden and initialized in subClasses
@@ -41,28 +40,21 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
 
     /**
      * @param autoShowLoadingItem: True to show the loading indicator when triggering the loadMore for next page
-     * @param pageSize: the page size for the list, this is used to know when to trigger the next page
-     * @param loadingThreshold: when to call the next page (ex. 3: when reaching the 7th item ([pageSize] - [loadingThreshold]) then call the next page)
+     * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
      * @param loadMoreListener: load more listener callbacks
      */
     @JvmOverloads
     fun setupLoadMore(
         autoShowLoadingItem: Boolean = true,
-        pageSize: Int? = null,
         loadingThreshold: Int = 3,
         loadMoreListener: LoadMoreListener,
     ) {
-        if (mLoadMoreHelper == null) {
-            // prevent the reInitialization of the helper to avoid losing the current page number
-            mLoadMoreHelper = LoadMoreHelper(this)
-        }
-        mLoadMoreHelper?.setupLoadMore(
+        mLoadMoreHelper.setupLoadMore(
             recyclerView = recyclerView,
             items = items,
             loadMoreListener = loadMoreListener,
             autoShowLoadingItem = autoShowLoadingItem,
             loadingThreshold = loadingThreshold,
-            pageSize = pageSize ?: 0
         )
     }
 
@@ -72,28 +64,28 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
      */
     @JvmOverloads
     fun addMoreItems(list: Collection<ListItem>, nextPagePayload: String? = null) {
-        mLoadMoreHelper?.addMoreItems(list, nextPagePayload) ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreHelper.addMoreItems(list, nextPagePayload)
     }
 
     /**
      * @param [nextPagePayload]: could be next page (url/offset/cursor)
      */
     fun setNextPagePayload(nextPagePayload: String?) {
-        mLoadMoreHelper?.nextPagePayload = nextPagePayload
+        mLoadMoreHelper.nextPagePayload = nextPagePayload
     }
 
     /**
      * Remove the loading indicator if exists and triggers the callback for @see [LoadMoreListener.onLoadMoreFinished]
      */
     fun removeLoadMoreIfExists() {
-        mLoadMoreHelper?.removeLoadMoreIfExists()
+        mLoadMoreHelper.removeLoadMoreIfExists()
     }
 
     /**
      * Reset the current page number to Page = 1
      */
     fun resetPageNumber() {
-        mLoadMoreHelper?.resetPage()
+        mLoadMoreHelper.resetPage()
     }
 
     /**
@@ -101,21 +93,26 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
      * @param pageNumber
      */
     fun setCurrentPageNumber(pageNumber: Int) {
-        mLoadMoreHelper?.let { it.currentPage = pageNumber } ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreHelper.currentPage = pageNumber
     }
 
     /**
      * Adds a loading item in the list
      */
     fun addLoadingItem() {
-        mLoadMoreHelper?.addLoadMoreView() ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreHelper.addLoadMoreView()
     }
+
+    /**
+     * @return true if the loading is in progress
+     */
+    fun isLoading(): Boolean = mLoadMoreHelper.isLoadingInProgress
 
     /**
      * Remove the loading item from the list (if exists)
      */
     fun removeLoadingItem() {
-        mLoadMoreHelper?.removeLoadMoreIfExists() ?: kotlin.run { throw LoadMoreNotInitialized() }
+        mLoadMoreHelper.removeLoadMoreIfExists()
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
