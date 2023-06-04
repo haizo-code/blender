@@ -17,10 +17,10 @@ package com.haizo.generaladapter.viewholders
 
 import androidx.databinding.ViewDataBinding
 import com.haizo.generaladapter.interfaces.BaseActionCallback
-import com.haizo.generaladapter.loadmore.LoadingObj
+import com.haizo.generaladapter.listitems.MockLoadingListItem
 
 class LoadingViewHolder constructor(
     binding: ViewDataBinding, actionCallback: BaseActionCallback?
-) : BaseBindingViewHolder<LoadingObj>(binding, actionCallback) {
-    override fun onBind(listItem: LoadingObj) {}
+) : BaseBindingViewHolder<MockLoadingListItem>(binding, actionCallback) {
+    override fun onBind(listItem: MockLoadingListItem) {}
 }

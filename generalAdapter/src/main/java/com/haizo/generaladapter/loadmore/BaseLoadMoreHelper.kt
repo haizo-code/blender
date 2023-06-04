@@ -18,15 +18,16 @@ package com.haizo.generaladapter.loadmore
 import androidx.recyclerview.widget.RecyclerView
 import com.haizo.generaladapter.interfaces.LoadMoreListener
 import com.haizo.generaladapter.kotlin.findLastCompletelyVisibleItemPosition
+import com.haizo.generaladapter.listitems.MockLoadingListItem
 import com.haizo.generaladapter.model.ListItem
 import com.haizo.generaladapter.model.LoadingListItem
 
 internal abstract class BaseLoadMoreHelper {
     protected var mItems: MutableList<ListItem> = ArrayList()
     protected var loadMoreListener: LoadMoreListener? = null
-    protected var loadingListItem: ListItem = LoadingObj()
-    protected var isLoadingInProgress: Boolean = false
-    private var pageSize: Int = 0
+    protected var loadingListItem: ListItem = MockLoadingListItem()
+    var isLoadingInProgress: Boolean = false
+    private var mScrollListener: RecyclerView.OnScrollListener? = null
     var currentPage = 1
     var nextPagePayload: String? = null
 
@@ -37,7 +38,6 @@ internal abstract class BaseLoadMoreHelper {
      * @param [loadMoreListener]
      * @param [autoShowLoadingItem]
      * @param [loadingThreshold]: on index(n) from the end of the list, trigger the loadMore
-     * @param [pageSize]: page size: Passing this value as 0 will require you to handle the "hasNextPage" logic
      * <p> by override the [LoadMoreListener.isShouldTriggerLoadMore] method in the [LoadMoreListener] since the [LoadMoreListener.onLoadMore]
      * <p> will always be triggered since it satisfy the threshold logic
      */
@@ -47,37 +47,32 @@ internal abstract class BaseLoadMoreHelper {
         loadMoreListener: LoadMoreListener,
         autoShowLoadingItem: Boolean,
         loadingThreshold: Int,
-        pageSize: Int,
     ) {
         this.loadMoreListener = loadMoreListener
         this.mItems = items
-        this.pageSize = pageSize
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        mScrollListener?.let { recyclerView.removeOnScrollListener(it) }
+        mScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (recyclerView.findLastCompletelyVisibleItemPosition() >= items.size - loadingThreshold) {
                     if (!loadMoreListener.isShouldTriggerLoadMore(currentPage + 1, nextPagePayload)) return
                     if (isLoadingInProgress) return
                     if (isSpammingCalls()) return
-                    if (!isHasNextPage()) return
                     isLoadingInProgress = true
                     if (autoShowLoadingItem && !isLoadingItemAdded()) addLoadMoreView()
                     loadMoreListener.onLoadMore(++currentPage, nextPagePayload)
                 }
             }
-        })
+        }
+        recyclerView.addOnScrollListener(mScrollListener!!)
     }
 
     fun setLoadingListItem(loadingListItem: LoadingListItem?) {
-        this.loadingListItem = loadingListItem ?: LoadingObj()
+        this.loadingListItem = loadingListItem ?: MockLoadingListItem()
     }
 
     protected fun isLoadingItemAdded(): Boolean {
         return mItems.isNotEmpty() && mItems.last() is LoadingListItem
-    }
-
-    private fun isHasNextPage(): Boolean {
-        return mItems.size >= currentPage * pageSize
     }
 
     abstract fun addLoadMoreView()

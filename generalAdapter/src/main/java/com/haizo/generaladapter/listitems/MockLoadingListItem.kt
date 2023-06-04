@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.haizo.generaladapter.loadmore
+package com.haizo.generaladapter.listitems
 
 import com.haizo.generaladapter.MainViewHolderContracts
 import com.haizo.generaladapter.model.LoadingListItem
 import com.haizo.generaladapter.model.ViewHolderContract
 
-class LoadingObj : LoadingListItem {
+class MockLoadingListItem constructor() : LoadingListItem {
     override val viewHolderContract: ViewHolderContract = MainViewHolderContracts.LOADING
 }

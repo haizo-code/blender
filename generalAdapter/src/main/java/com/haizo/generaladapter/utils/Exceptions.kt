@@ -26,21 +26,21 @@ import com.haizo.generaladapter.utils.Exceptions.LOAD_MORE_NOT_INITIALIZED
 import com.haizo.generaladapter.utils.Exceptions.UN_EXPECTED_EXCEPTION_MESSAGE
 import java.lang.reflect.Constructor
 
-object Exceptions {
+internal object Exceptions {
 
-    internal const val LOAD_MORE_NOT_INITIALIZED =
+    const val LOAD_MORE_NOT_INITIALIZED =
         "You are trying to use the LoadMore's methods while the LoadMore is not initialized, call setupLoadMore() first before using the methods"
 
-    internal const val BINDING_CLASS_MIS_MATCH_MESSAGE =
+    const val BINDING_CLASS_MIS_MATCH_MESSAGE =
         "The Layout resource that is defined in the Contract (%s) does not match the defined Binding class in the ViewHolder %s"
 
-    internal const val CALLBACK_CLASS_MIS_MATCH_MESSAGE =
+    const val CALLBACK_CLASS_MIS_MATCH_MESSAGE =
         "The Callback class (%s) that is defined in the Contract (%s) does not match the defined in the ViewHolder of %s)"
 
-    internal const val EXTRAS_CLASS_MIS_MATCH_MESSAGE =
+    const val EXTRAS_CLASS_MIS_MATCH_MESSAGE =
         "The Extras class (%s) that is defined in the Contract (%s) does not match the defined in the ViewHolder of %s)"
 
-    internal const val UN_EXPECTED_EXCEPTION_MESSAGE =
+    const val UN_EXPECTED_EXCEPTION_MESSAGE =
         """ 
         ========================================================================
         Issue in ViewHolder: ---> %s <----
@@ -81,7 +81,7 @@ internal class UnExpectedException(
     String.format(UN_EXPECTED_EXCEPTION_MESSAGE, viewHolderContract.viewHolderClass, viewHolderContract.itemName), e
 )
 
-class LoadMoreNotInitialized : NullPointerException(LOAD_MORE_NOT_INITIALIZED)
+internal class LoadMoreNotInitialized : NullPointerException(LOAD_MORE_NOT_INITIALIZED)
 
 internal class BindingClassMisMatch(e: Exception, viewHolderContract: ViewHolderContract) : IllegalArgumentException(
     String.format(

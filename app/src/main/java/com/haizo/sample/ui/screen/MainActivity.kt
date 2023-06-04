@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
 
         adapter.setupLoadMore(
             autoShowLoadingItem = true,
-            pageSize = 10,
             loadingThreshold = 3,
             loadMoreListener = object : LoadMoreListener {
                 override fun onLoadMore(nextPageNumber: Int, nextPagePayload: String?) {

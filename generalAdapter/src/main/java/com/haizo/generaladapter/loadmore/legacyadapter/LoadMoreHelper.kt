@@ -16,8 +16,8 @@
 package com.haizo.generaladapter.loadmore.legacyadapter
 
 import androidx.recyclerview.widget.RecyclerView
+import com.haizo.generaladapter.listitems.MockLoadingListItem
 import com.haizo.generaladapter.loadmore.BaseLoadMoreHelper
-import com.haizo.generaladapter.loadmore.LoadingObj
 import com.haizo.generaladapter.model.ListItem
 
 /**
@@ -32,6 +32,7 @@ internal class LoadMoreHelper constructor(
      * Add loadMore view to the recyclerView
      */
     override fun addLoadMoreView() {
+        if (isLoadingItemAdded()) return
         mItems.add(loadingListItem)
         adapter.notifyItemInserted(mItems.size - 1)
     }
@@ -42,7 +43,7 @@ internal class LoadMoreHelper constructor(
     override fun removeLoadMoreIfExists() {
         if (mItems.isNotEmpty()) {
             val lastIndex = mItems.lastIndex
-            if (mItems[lastIndex] is LoadingObj) {
+            if (mItems[lastIndex] is MockLoadingListItem) {
                 mItems.removeAt(lastIndex)
                 adapter.notifyItemRemoved(lastIndex)
             }
