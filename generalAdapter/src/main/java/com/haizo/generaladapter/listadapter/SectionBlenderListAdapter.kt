@@ -28,9 +28,9 @@ abstract class SectionBlenderListAdapter constructor(
         val startIndexForSection = indexOf(section) + 1
 
         val remainingSections = sectionsList.let { it.subList(it.indexOf(section) + 1, it.size) }
-        val endIndex = remainingSections.firstOrNull()?.let { indexOf(it) } ?: -1
+        val endIndex = remainingSections.firstOrNull()?.let { indexOf(it) } ?: itemCount
 
-        if (startIndexForSection != endIndex && startIndexForSection != -1 && endIndex != -1) {
+        if (startIndexForSection != -1 && startIndexForSection != endIndex) {
             // Remove the range of items
             mItems.subList(startIndexForSection, endIndex).clear()
         }

@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
 
-var libVersion = "2.5.1"
+var libVersion = "2.5.2"
 
 android {
     compileSdkVersion 33
