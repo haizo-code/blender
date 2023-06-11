@@ -92,8 +92,8 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     /**
      * Adds a loading item in the list
      */
-    fun addLoadingItem() {
-        mLoadMoreHelper.addLoadMoreView()
+    fun addLoadingItem(commitCallback: Runnable?) {
+        mLoadMoreHelper.addLoadMoreView(commitCallback)
     }
 
     /**
