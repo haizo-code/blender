@@ -71,7 +71,7 @@ abstract class LoadMoreListAdapter internal constructor() :
     /**
      * Adds a loading item in the list
      */
-    fun addLoadingItem(commitCallback: Runnable?) {
+    fun addLoadingItem(commitCallback: Runnable? ) {
         mLoadMoreListHelper.addLoadMoreView(commitCallback)
     }
 
