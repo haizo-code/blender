@@ -16,9 +16,9 @@
 package com.haizo.generaladapter.loadmore.legacyadapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.haizo.generaladapter.listitems.MockLoadingListItem
 import com.haizo.generaladapter.loadmore.BaseLoadMoreHelper
 import com.haizo.generaladapter.model.ListItem
+import com.haizo.generaladapter.model.LoadingListItem
 
 /**
  * This class will handle the loadMore process
@@ -31,23 +31,23 @@ internal class LoadMoreHelper constructor(
     /**
      * Add loadMore view to the recyclerView
      */
-    override fun addLoadMoreView() {
+    override fun addLoadMoreView(commitCallback: Runnable?) {
         if (isLoadingItemAdded()) return
         mItems.add(loadingListItem)
         adapter.notifyItemInserted(mItems.size - 1)
+        commitCallback?.run()
     }
 
     /**
      * Remove the loadMore view if exists / Trigger onLoadMoreFinished()
      */
-    override fun removeLoadMoreIfExists() {
-        if (mItems.isNotEmpty()) {
-            val lastIndex = mItems.lastIndex
-            if (mItems[lastIndex] is MockLoadingListItem) {
-                mItems.removeAt(lastIndex)
-                adapter.notifyItemRemoved(lastIndex)
-            }
+    override fun removeLoadMoreIfExists(commitCallback: Runnable?) {
+        val index = mItems.indexOfFirst { it is LoadingListItem }
+        if (index != -1) {
+            mItems.removeAt(index)
+            adapter.notifyItemRemoved(index)
         }
+        commitCallback?.run()
         isLoadingInProgress = false
         loadMoreListener?.onLoadMoreFinished()
     }

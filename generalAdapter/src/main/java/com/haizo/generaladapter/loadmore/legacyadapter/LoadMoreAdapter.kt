@@ -75,13 +75,6 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     }
 
     /**
-     * Remove the loading indicator if exists and triggers the callback for @see [LoadMoreListener.onLoadMoreFinished]
-     */
-    fun removeLoadMoreIfExists() {
-        mLoadMoreHelper.removeLoadMoreIfExists()
-    }
-
-    /**
      * Reset the current page number to Page = 1
      */
     fun resetPageNumber() {
@@ -111,8 +104,8 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     /**
      * Remove the loading item from the list (if exists)
      */
-    fun removeLoadingItem() {
-        mLoadMoreHelper.removeLoadMoreIfExists()
+    fun removeLoadingItem(commitCallback: Runnable? = null) {
+        mLoadMoreHelper.removeLoadMoreIfExists(commitCallback)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
