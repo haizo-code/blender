@@ -26,8 +26,8 @@ internal abstract class BaseLoadMoreHelper {
     protected var mItems: MutableList<ListItem> = ArrayList()
     protected var loadMoreListener: LoadMoreListener? = null
     protected var loadingListItem: ListItem = MockLoadingListItem()
-    var isLoadingInProgress: Boolean = false
     private var mScrollListener: RecyclerView.OnScrollListener? = null
+    var isLoadingInProgress: Boolean = false
     var currentPage = 1
     var nextPagePayload: String? = null
 
@@ -72,11 +72,11 @@ internal abstract class BaseLoadMoreHelper {
     }
 
     protected fun isLoadingItemAdded(): Boolean {
-        return mItems.isNotEmpty() && mItems.last() is LoadingListItem
+        return mItems.firstOrNull { it is LoadingListItem } != null
     }
 
-    abstract fun addLoadMoreView()
-    abstract fun removeLoadMoreIfExists()
+    abstract fun addLoadMoreView(commitCallback: Runnable? = null)
+    abstract fun removeLoadMoreIfExists(commitCallback: Runnable? = null)
 
     fun resetPage() {
         currentPage = 1

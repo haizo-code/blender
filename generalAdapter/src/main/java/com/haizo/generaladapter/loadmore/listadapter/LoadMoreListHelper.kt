@@ -43,22 +43,25 @@ internal class LoadMoreListHelper constructor(
 
     /*** Add more items to the main listItem for the adapter */
     fun addMoreItems(collection: Collection<ListItem>, commitCallback: Runnable?) {
-        removeLoadMoreIfExists()
-        mItems.addAll(collection)
+        removeLoadMoreIfExists {
+            mItems.addAll(collection)
+            adapter.submitList(mItems.toList(), commitCallback)
+        }
+    }
+
+    override fun addLoadMoreView(commitCallback: Runnable?) {
+        if (isLoadingItemAdded()) return
+        mItems.add(loadingListItem)
         adapter.submitList(mItems.toList(), commitCallback)
     }
 
-    override fun addLoadMoreView() {
-        mItems.add(loadingListItem)
-        adapter.submitList(mItems.toList())
-    }
-
-    override fun removeLoadMoreIfExists() {
-        if (mItems.isNotEmpty()) {
-            if (mItems.last() is LoadingListItem) {
-                mItems.removeLast()
-                adapter.submitList(mItems.toList())
-            }
+    override fun removeLoadMoreIfExists(commitCallback: Runnable?) {
+        val index = mItems.indexOfFirst { it is LoadingListItem }
+        if (index != -1) {
+            mItems.removeAt(index)
+            adapter.submitList(mItems.toList(), commitCallback)
+        } else {
+            commitCallback?.run()
         }
         isLoadingInProgress = false
         loadMoreListener?.onLoadMoreFinished()

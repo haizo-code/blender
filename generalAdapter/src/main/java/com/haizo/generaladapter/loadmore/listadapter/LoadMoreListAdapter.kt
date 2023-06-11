@@ -78,8 +78,8 @@ abstract class LoadMoreListAdapter internal constructor() :
     /**
      * Remove the loading item from the list (if exists)
      */
-    fun removeLoadingItem() {
-        mLoadMoreListHelper.removeLoadMoreIfExists()
+    fun removeLoadingItem(commitCallback: Runnable? = null) {
+        mLoadMoreListHelper.removeLoadMoreIfExists(commitCallback)
     }
 
     /**
