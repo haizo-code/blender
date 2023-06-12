@@ -92,6 +92,7 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     /**
      * Adds a loading item in the list
      */
+    @JvmOverloads
     fun addLoadingItem(commitCallback: Runnable? = null) {
         mLoadMoreHelper.addLoadMoreView(commitCallback)
     }
@@ -104,6 +105,7 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     /**
      * Remove the loading item from the list (if exists)
      */
+    @JvmOverloads
     fun removeLoadingItem(commitCallback: Runnable? = null) {
         mLoadMoreHelper.removeLoadMoreIfExists(commitCallback)
     }

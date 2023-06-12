@@ -43,10 +43,9 @@ internal class LoadMoreListHelper constructor(
 
     /*** Add more items to the main listItem for the adapter */
     fun addMoreItems(collection: Collection<ListItem>, commitCallback: Runnable?) {
-        removeLoadMoreIfExists {
-            mItems.addAll(collection)
-            adapter.submitList(mItems.toList(), commitCallback)
-        }
+        removeLoadMoreIfExists()
+        mItems.addAll(collection)
+        adapter.submitList(mItems.toList(), commitCallback)
     }
 
     override fun addLoadMoreView(commitCallback: Runnable?) {

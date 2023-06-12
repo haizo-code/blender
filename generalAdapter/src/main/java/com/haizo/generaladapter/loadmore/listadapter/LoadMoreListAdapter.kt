@@ -71,6 +71,7 @@ abstract class LoadMoreListAdapter internal constructor() :
     /**
      * Adds a loading item in the list
      */
+    @JvmOverloads
     fun addLoadingItem(commitCallback: Runnable? = null) {
         mLoadMoreListHelper.addLoadMoreView(commitCallback)
     }
@@ -78,6 +79,7 @@ abstract class LoadMoreListAdapter internal constructor() :
     /**
      * Remove the loading item from the list (if exists)
      */
+    @JvmOverloads
     fun removeLoadingItem(commitCallback: Runnable? = null) {
         mLoadMoreListHelper.removeLoadMoreIfExists(commitCallback)
     }
