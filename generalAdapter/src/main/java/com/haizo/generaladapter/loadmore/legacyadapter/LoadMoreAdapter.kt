@@ -75,7 +75,7 @@ abstract class LoadMoreAdapter internal constructor() : RecyclerView.Adapter<Bas
     }
 
     /**
-     * Reset the current page number to Page = 1
+     * Reset the current page number to Page = 0
      */
     fun resetPageNumber() {
         mLoadMoreHelper.resetPage()

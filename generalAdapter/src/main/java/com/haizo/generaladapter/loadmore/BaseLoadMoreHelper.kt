@@ -28,7 +28,7 @@ internal abstract class BaseLoadMoreHelper {
     protected var loadingListItem: ListItem = MockLoadingListItem()
     private var mScrollListener: RecyclerView.OnScrollListener? = null
     var isLoadingInProgress: Boolean = false
-    var currentPage = 1
+    var currentPage = 0
     var nextPagePayload: String? = null
 
     /**
@@ -79,7 +79,7 @@ internal abstract class BaseLoadMoreHelper {
     abstract fun removeLoadMoreIfExists(commitCallback: Runnable? = null)
 
     fun resetPage() {
-        currentPage = 1
+        currentPage = 0
     }
 
     private var lastTriggerTime: Long = 0
